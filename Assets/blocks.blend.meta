@@ -1,0 +1,219 @@
+fileFormatVersion: 2
+guid: bf7aa0ba24309344696e173dd5bbc873
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Rig
+    100004: Tile
+    100006: Tile_001
+    100008: Tile_002
+    100010: Tile_003
+    100012: Tile_004
+    100014: Tile_005
+    100016: Tile_006
+    100018: Tile_007
+    100020: Tile_008
+    100022: Tile_010
+    100024: Container
+    100026: Tile_009
+    100028: Floor
+    100030: Railing
+    100032: Railing_Corner
+    100034: Railing_Corner_2
+    100036: Solid
+    100038: Stairs
+    100040: Stairs_Bottom
+    100042: Stairs_Top
+    100044: Wall
+    100046: Wall_Corner
+    100048: Wall_Corner_2
+    100050: Floor_nr
+    100052: Solid_nr
+    400000: //RootNode
+    400002: Rig
+    400004: Tile
+    400006: Tile_001
+    400008: Tile_002
+    400010: Tile_003
+    400012: Tile_004
+    400014: Tile_005
+    400016: Tile_006
+    400018: Tile_007
+    400020: Tile_008
+    400022: Tile_010
+    400024: Container
+    400026: Tile_009
+    400028: Floor
+    400030: Railing
+    400032: Railing_Corner
+    400034: Railing_Corner_2
+    400036: Solid
+    400038: Stairs
+    400040: Stairs_Bottom
+    400042: Stairs_Top
+    400044: Wall
+    400046: Wall_Corner
+    400048: Wall_Corner_2
+    400050: Floor_nr
+    400052: Solid_nr
+    2100000: unnamed
+    2300000: Rig
+    2300002: Tile
+    2300004: Tile_001
+    2300006: Tile_002
+    2300008: Tile_003
+    2300010: Tile_004
+    2300012: Tile_005
+    2300014: Tile_006
+    2300016: Tile_007
+    2300018: Tile_008
+    2300020: Tile_010
+    2300022: Tile_009
+    2300024: Floor
+    2300026: Railing
+    2300028: Railing_Corner
+    2300030: Railing_Corner_2
+    2300032: Solid
+    2300034: Stairs
+    2300036: Stairs_Bottom
+    2300038: Stairs_Top
+    2300040: Wall
+    2300042: Wall_Corner
+    2300044: Wall_Corner_2
+    2300046: Floor_nr
+    2300048: Solid_nr
+    3300000: Rig
+    3300002: Tile
+    3300004: Tile_001
+    3300006: Tile_002
+    3300008: Tile_003
+    3300010: Tile_004
+    3300012: Tile_005
+    3300014: Tile_006
+    3300016: Tile_007
+    3300018: Tile_008
+    3300020: Tile_010
+    3300022: Tile_009
+    3300024: Floor
+    3300026: Railing
+    3300028: Railing_Corner
+    3300030: Railing_Corner_2
+    3300032: Solid
+    3300034: Stairs
+    3300036: Stairs_Bottom
+    3300038: Stairs_Top
+    3300040: Wall
+    3300042: Wall_Corner
+    3300044: Wall_Corner_2
+    3300046: Floor_nr
+    3300048: Solid_nr
+    4300000: Tile_008
+    4300002: Tile_007
+    4300004: Tile_010
+    4300006: Tile_006
+    4300008: Tile_004
+    4300010: Tile_005
+    4300012: Tile_003
+    4300014: Tile_002
+    4300016: Tile_001
+    4300018: Tile
+    4300020: Rig
+    4300022: Tile_009
+    4300024: Solid
+    4300026: Floor
+    4300028: Stairs_Top
+    4300030: Stairs
+    4300032: Stairs_Bottom
+    4300034: Railing_Corner_2
+    4300036: Railing
+    4300038: Railing_Corner
+    4300040: Wall_Corner_2
+    4300042: Wall_Corner
+    4300044: Wall
+    4300046: Solid_nr
+    4300048: Floor_nr
+    7400000: Default Take
+    9500000: //RootNode
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
