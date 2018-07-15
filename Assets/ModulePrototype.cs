@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class ModulePrototype : MonoBehaviour {
 	[System.Serializable]
@@ -58,6 +59,8 @@ public class ModulePrototype : MonoBehaviour {
 	public VerticalFaceDetails Up;
 	public HorizontalFaceDetails Forward;
 
+	public bool CreateRotatedVariants;
+
 	public FaceDetails[] Faces {
 		get {
 			return new FaceDetails[] {
@@ -94,13 +97,13 @@ public class ModulePrototype : MonoBehaviour {
 		ModulePrototype.style.normal.textColor = Color.black;
 		for (int i = 0; i < 6; i++) {
 			var face = modulePrototype.Faces[i];
-			Handles.Label(position + Orientations.All[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString());
+			Handles.Label(position + Orientations.All[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString(), ModulePrototype.style);
 		}
 	}
 
 	public void EnsureFingerprints() {
 		var faces = this.Faces;
-		if (faces[0].Fingerprint != null && false) {
+		if (faces[0].Fingerprint != null) {
 			return;
 		}
 		
@@ -192,11 +195,60 @@ public class ModulePrototype : MonoBehaviour {
 				}
 			}			
 		}
+
+		this.CreateRotatedVariants = !(this.Up.Invariant
+			&& this.Down.Invariant
+			&& (this.Forward.Connector == this.Back.Connector && this.Left.Connector == this.Right.Connector && this.Forward.Connector == this.Left.Connector)
+			&& (this.Forward.Symmetric || (this.Forward.Flipped == this.Back.Flipped && this.Left.Flipped == this.Right.Flipped && this.Forward.Flipped == this.Right.Flipped)));
 	}
 
 	private int getNewConnector(Dictionary<int, Fingerprint> dict) {
 		int result = 0;
 		while (dict.ContainsKey(result)) result++;
 		return result;
+	}
+
+	public static List<Module> CreateModules(MapGenerator mapGenerator) {
+		var result = new List<Module>();
+
+		var horizontalFaces = new int[] { 0, 2, 3, 5 };
+
+		var prototypes = ModulePrototype.GetAll().ToArray();
+		int connectors = prototypes.SelectMany(p => p.Faces.Select(f => f.Connector)).Max();
+
+		foreach (var prototype in prototypes) {
+			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
+				var module = new Module(prototype.GetMesh(), rotation, mapGenerator);
+				module.Connectors = new int[6];
+
+				for (int i = 0; i < 6; i++) {
+					if (horizontalFaces.Contains(i)) {
+						var face = prototype.Faces[horizontalFaces[(Array.IndexOf(horizontalFaces, i) + rotation) % 4]] as HorizontalFaceDetails;
+						int connector = face.Connector;
+						if (!face.Symmetric) {
+							connector *= (face.Flipped ? -1 : 1) * (i > 2 ? -1 : 1);
+						}
+						module.Connectors[i] = connector;
+					} else {
+						var face = prototype.Faces[i] as VerticalFaceDetails;
+						int connector = face.Connector;
+						if (!face.Invariant) {
+							connector += ((face.Rotation + rotation) % 4) * connectors;
+						}
+						module.Connectors[i] = connector;
+					}
+				}
+
+				result.Add(module);
+			}
+		}
+
+		return result;
+	}
+
+	public static IEnumerable<ModulePrototype> GetAll() {
+		foreach (Transform transform in GameObject.FindObjectOfType<ModulePrototype>().transform.parent) {
+			yield return transform.GetComponent<ModulePrototype>();
+		}
 	}
 }

@@ -6,24 +6,20 @@ using System.Linq;
 
 [System.Serializable]
 public class Module {
-	public readonly Quaternion Orientation;
+	public Quaternion Orientation {
+		get {
+			return Quaternion.Euler(Vector3.up * this.Rotation * 90f);
+		}
+	}
 
-	public readonly Mesh mesh;
+	public int Rotation;
 
-	public Fingerprint[] Fingerprints;
+	public Mesh mesh;
 
 	public int[] Connectors;	
 
-	public Module(Mesh mesh, Quaternion orientation, MapGenerator mapGenerator) {
+	public Module(Mesh mesh, int rotation, MapGenerator mapGenerator) {
 		this.mesh = mesh;
-		this.Orientation = orientation;
-
-		//this.Fingerprints = Enumerable.Range(0, 6).Select(i => this.getFingerprint(i)).ToArray();
-		this.Connectors = this.Fingerprints.Select(fingerprint => mapGenerator.GetConnector(fingerprint)).ToArray();
-	}
-
-	public static Module CreateEmpty(MapGenerator mapGenerator) {
-		var mesh = new Mesh();
-		return new Module(mesh, Quaternion.identity, mapGenerator);
+		this.Rotation = rotation;
 	}
 }

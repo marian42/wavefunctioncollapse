@@ -14,8 +14,6 @@ public class MapGenerator : MonoBehaviour {
 
 	public Material Material;
 
-	private List<Fingerprint> connectors;
-
 	[HideInInspector]
 	public Module[] Modules;
 
@@ -59,26 +57,10 @@ public class MapGenerator : MonoBehaviour {
 		this.destroyChildren();
 		this.createModules();
 		this.showModules();
-
-		Debug.Log(this.connectors.Count + " unique connectors.");
 	}
 
 	private void createModules() {
-		var modules = new List<Module>();
-		this.connectors = new List<Fingerprint>();
-
-		modules.Add(Module.CreateEmpty(this));
-
-		foreach (Transform blueprint in this.BlueprintContainer) {
-			var meshFilter = blueprint.GetComponent<MeshFilter>();
-			if (meshFilter == null) {
-				continue;
-			}
-			for (int i = 0; i < (blueprint.gameObject.name.Contains("nr") ? 1 : 4); i++) {
-				modules.Add(new Module(meshFilter.sharedMesh, Quaternion.Euler(Vector3.up * 90f * i), this));
-			}
-		}
-		this.Modules = modules.ToArray();
+		this.Modules = ModulePrototype.CreateModules(this).ToArray();
 	}
 
 	public IEnumerator Generate() {

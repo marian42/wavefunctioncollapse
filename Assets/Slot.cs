@@ -136,7 +136,7 @@ public class Slot {
 	private void markRed() {
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.parent = this.mapGenerator.transform;
-		cube.GetComponent<MeshRenderer>().material.color = Color.red;
+		cube.GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
 		cube.transform.position = this.GetPosition();
 	}
 
