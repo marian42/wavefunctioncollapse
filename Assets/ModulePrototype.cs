@@ -61,6 +61,8 @@ public class ModulePrototype : MonoBehaviour {
 
 	public bool CreateRotatedVariants;
 
+	public float Probability = 1.0f;
+
 	public FaceDetails[] Faces {
 		get {
 			return new FaceDetails[] {
@@ -218,7 +220,7 @@ public class ModulePrototype : MonoBehaviour {
 
 		foreach (var prototype in prototypes) {
 			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
-				var module = new Module(prototype.GetMesh(), rotation, mapGenerator);
+				var module = new Module(prototype, rotation, mapGenerator);
 				module.Connectors = new int[6];
 
 				for (int i = 0; i < 6; i++) {
@@ -248,7 +250,12 @@ public class ModulePrototype : MonoBehaviour {
 
 	public static IEnumerable<ModulePrototype> GetAll() {
 		foreach (Transform transform in GameObject.FindObjectOfType<ModulePrototype>().transform.parent) {
-			yield return transform.GetComponent<ModulePrototype>();
+			var item = transform.GetComponent<ModulePrototype>();
+			if (item != null && item.enabled) {
+				yield return item;
+			}
 		}
 	}
+
+	void Update() { }
 }

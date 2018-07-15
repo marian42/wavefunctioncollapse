@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
 public class Slot {
 	public int X;
 	public int Y;
@@ -86,8 +85,18 @@ public class Slot {
 		if (this.Collapsed) {
 			throw new Exception("Slot is already collapsed.");
 		}
-		int i = UnityEngine.Random.Range(0, this.Modules.Count);
-		this.Collapse(this.Modules.ElementAt(i));
+		var candidates = this.Modules.ToList();
+		float max = candidates.Select(i => this.mapGenerator.Modules[i].Prototype.Probability).Sum();
+		float roll = UnityEngine.Random.Range(0f, max);
+		float p = 0;
+		foreach (var candidate in candidates) {
+			p += this.mapGenerator.Modules[candidate].Prototype.Probability;
+			if (p >= roll) {
+				this.Collapse(candidate);
+				return;
+			}			
+		}
+		this.Collapse(candidates.First());
 	}
 
 	public void RemoveModules(List<int> modules) {

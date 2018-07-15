@@ -16,10 +16,13 @@ public class Module {
 
 	public Mesh mesh;
 
-	public int[] Connectors;	
+	public int[] Connectors;
 
-	public Module(Mesh mesh, int rotation, MapGenerator mapGenerator) {
-		this.mesh = mesh;
+	public ModulePrototype Prototype;
+
+	public Module(ModulePrototype prototype, int rotation, MapGenerator mapGenerator) {
+		this.Prototype = prototype;
+		this.mesh = prototype.GetMesh();
 		this.Rotation = rotation;
 	}
 }
