@@ -14,7 +14,7 @@ public class MapGenerator : MonoBehaviour {
 
 	public Material Material;
 
-	private List<Module.Fingerprint> connectors;
+	private List<Fingerprint> connectors;
 
 	[HideInInspector]
 	public Module[] Modules;
@@ -51,15 +51,8 @@ public class MapGenerator : MonoBehaviour {
 		
 	}
 
-	public int GetConnector(Module.Fingerprint fingerprint) {
-		for (int i = 0; i < this.connectors.Count; i++) {
-			if (Module.CompareFingerprints(this.connectors[i], fingerprint)) {
-				return i;
-			}
-		}
-
-		this.connectors.Add(fingerprint);
-		return this.connectors.Count - 1;
+	public int GetConnector(Fingerprint fingerprint) {
+		return 0;
 	}
 
 	public void ShowModules() {
@@ -72,7 +65,7 @@ public class MapGenerator : MonoBehaviour {
 
 	private void createModules() {
 		var modules = new List<Module>();
-		this.connectors = new List<Module.Fingerprint>();
+		this.connectors = new List<Fingerprint>();
 
 		modules.Add(Module.CreateEmpty(this));
 
