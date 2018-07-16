@@ -31,6 +31,14 @@ ModelImporter:
     100050: Floor_nr
     100052: Solid_nr
     100054: Wall_Window
+    100056: Bridge_Start
+    100058: Bridge
+    100060: Well
+    100062: High_Wall
+    100064: Railing_Wall
+    100066: Railing_Wall_2
+    100068: Railing_Wall_3
+    100070: Railing_Wall_4
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -59,6 +67,14 @@ ModelImporter:
     400050: Floor_nr
     400052: Solid_nr
     400054: Wall_Window
+    400056: Bridge_Start
+    400058: Bridge
+    400060: Well
+    400062: High_Wall
+    400064: Railing_Wall
+    400066: Railing_Wall_2
+    400068: Railing_Wall_3
+    400070: Railing_Wall_4
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -86,6 +102,14 @@ ModelImporter:
     2300046: Floor_nr
     2300048: Solid_nr
     2300050: Wall_Window
+    2300052: Bridge_Start
+    2300054: Bridge
+    2300056: Well
+    2300058: High_Wall
+    2300060: Railing_Wall
+    2300062: Railing_Wall_2
+    2300064: Railing_Wall_3
+    2300066: Railing_Wall_4
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -112,6 +136,14 @@ ModelImporter:
     3300046: Floor_nr
     3300048: Solid_nr
     3300050: Wall_Window
+    3300052: Bridge_Start
+    3300054: Bridge
+    3300056: Well
+    3300058: High_Wall
+    3300060: Railing_Wall
+    3300062: Railing_Wall_2
+    3300064: Railing_Wall_3
+    3300066: Railing_Wall_4
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -138,6 +170,14 @@ ModelImporter:
     4300046: Solid_nr
     4300048: Floor_nr
     4300050: Wall_Window
+    4300052: Bridge_Start
+    4300054: Bridge
+    4300056: Well
+    4300058: High_Wall
+    4300060: Railing_Wall_2
+    4300062: Railing_Wall_4
+    4300064: Railing_Wall_3
+    4300066: Railing_Wall
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
