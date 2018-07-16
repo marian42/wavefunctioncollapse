@@ -39,6 +39,14 @@ ModelImporter:
     100066: Railing_Wall_2
     100068: Railing_Wall_3
     100070: Railing_Wall_4
+    100072: Roof_Corner
+    100074: Roof_End
+    100076: Roof_Side
+    100078: Roof_Single
+    100080: Water_Fountain
+    100082: Wall_Corner_Fountain
+    100084: Wall_Door
+    100086: Tunnel
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -75,6 +83,14 @@ ModelImporter:
     400066: Railing_Wall_2
     400068: Railing_Wall_3
     400070: Railing_Wall_4
+    400072: Roof_Corner
+    400074: Roof_End
+    400076: Roof_Side
+    400078: Roof_Single
+    400080: Water_Fountain
+    400082: Wall_Corner_Fountain
+    400084: Wall_Door
+    400086: Tunnel
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -110,6 +126,14 @@ ModelImporter:
     2300062: Railing_Wall_2
     2300064: Railing_Wall_3
     2300066: Railing_Wall_4
+    2300068: Roof_Corner
+    2300070: Roof_End
+    2300072: Roof_Side
+    2300074: Roof_Single
+    2300076: Water_Fountain
+    2300078: Wall_Corner_Fountain
+    2300080: Wall_Door
+    2300082: Tunnel
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -144,6 +168,14 @@ ModelImporter:
     3300062: Railing_Wall_2
     3300064: Railing_Wall_3
     3300066: Railing_Wall_4
+    3300068: Roof_Corner
+    3300070: Roof_End
+    3300072: Roof_Side
+    3300074: Roof_Single
+    3300076: Water_Fountain
+    3300078: Wall_Corner_Fountain
+    3300080: Wall_Door
+    3300082: Tunnel
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -178,6 +210,14 @@ ModelImporter:
     4300062: Railing_Wall_4
     4300064: Railing_Wall_3
     4300066: Railing_Wall
+    4300068: Roof_End
+    4300070: Roof_Single
+    4300072: Roof_Side
+    4300074: Roof_Corner
+    4300076: Water_Fountain
+    4300078: Wall_Corner_Fountain
+    4300080: Wall_Door
+    4300082: Tunnel
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
