@@ -60,6 +60,7 @@ public class ModulePrototype : MonoBehaviour {
 	public HorizontalFaceDetails Forward;
 
 	public bool CreateRotatedVariants;
+	public bool Spawn = true;
 
 	public float Probability = 1.0f;
 
@@ -211,41 +212,26 @@ public class ModulePrototype : MonoBehaviour {
 	}
 
 	public static List<Module> CreateModules(MapGenerator mapGenerator) {
-		var result = new List<Module>();
+		var modules = new List<Module>();
 
-		var horizontalFaces = new int[] { 0, 2, 3, 5 };
-
+		
 		var prototypes = ModulePrototype.GetAll().ToArray();
-		int connectors = prototypes.SelectMany(p => p.Faces.Select(f => f.Connector)).Max();
 
 		foreach (var prototype in prototypes) {
 			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
-				var module = new Module(prototype, rotation, mapGenerator);
-				module.Connectors = new int[6];
-
-				for (int i = 0; i < 6; i++) {
-					if (horizontalFaces.Contains(i)) {
-						var face = prototype.Faces[horizontalFaces[(Array.IndexOf(horizontalFaces, i) + rotation) % 4]] as HorizontalFaceDetails;
-						int connector = face.Connector;
-						if (!face.Symmetric) {
-							connector *= (face.Flipped ? -1 : 1) * (i > 2 ? -1 : 1);
-						}
-						module.Connectors[i] = connector;
-					} else {
-						var face = prototype.Faces[i] as VerticalFaceDetails;
-						int connector = face.Connector;
-						if (!face.Invariant) {
-							connector += ((face.Rotation + rotation) % 4) * connectors;
-						}
-						module.Connectors[i] = connector;
-					}
-				}
-
-				result.Add(module);
+				modules.Add(new Module(prototype, rotation, mapGenerator));
 			}
 		}
 
-		return result;
+		foreach (var module in modules) {
+			module.PossibleNeighbours = Enumerable.Range(0, 6).
+				Select(direction => Enumerable.Range(0, modules.Count).
+					Where(i => module.Fits(direction, modules[i]))
+					.ToArray())
+				.ToArray();
+		}
+
+		return modules;
 	}
 
 	public static IEnumerable<ModulePrototype> GetAll() {

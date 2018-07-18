@@ -49,16 +49,6 @@ public class MapGenerator : MonoBehaviour {
 		
 	}
 
-	public int GetConnector(Fingerprint fingerprint) {
-		return 0;
-	}
-
-	public void ShowModules() {
-		this.destroyChildren();
-		this.createModules();
-		this.showModules();
-	}
-
 	private void createModules() {
 		this.Modules = ModulePrototype.CreateModules(this).ToArray();
 	}
@@ -80,10 +70,28 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
+		var slotNeighboursInitialState = new int[6][];
+		for (int i = 0; i < 6; i++) {
+			slotNeighboursInitialState[i] = new int[this.Modules.Length];
+			foreach (var module in this.Modules) {
+				foreach (int possibleNeighbour in module.PossibleNeighbours[i]) {
+					slotNeighboursInitialState[i][possibleNeighbour]++;
+				}
+			}
+		}
+
+		for (int d = 0; d < 6; d++) {
+			for (int i = 0; i < this.Modules.Count(); i++) {
+				if (slotNeighboursInitialState[d][i] == 0) {
+					throw new Exception("Module " + this.Modules[i].Prototype.name + " cannot be reached from direction " + d + " (" + this.Modules[i].Prototype.Faces[d].ToString() + ")!");
+				}
+			}
+		}
+
 		foreach (var slot in this.FlatMap) {
 			slot.InitializeNeighbours();
+			slot.PossibleNeighbours = slotNeighboursInitialState.Select(a => a.ToArray()).ToArray();
 		}
-		this.createBehaviours();
 
 		this.SlotsFilled = 0;
 		int total = this.SizeX * this.SizeY * this.SizeZ;
@@ -123,21 +131,6 @@ public class MapGenerator : MonoBehaviour {
 		}
 		foreach (var child in children) {
 			GameObject.DestroyImmediate(child.gameObject);
-		}
-	}
-
-	private void showModules() {
-		int j = 0;
-		int w = Mathf.FloorToInt(Mathf.Sqrt(this.Modules.Length));
-		foreach (var module in this.Modules) {
-			var gameObject = new GameObject();
-			var moduleBehaviour = gameObject.AddComponent<ModuleBehaviour>();
-			moduleBehaviour.Initialize(module, this.Material);
-			moduleBehaviour.Number = Array.IndexOf(this.Modules, module);
-			moduleBehaviour.Debug = true;
-			gameObject.transform.parent = this.transform;
-			gameObject.transform.position = Vector3.right * (float)(j / w) * MapGenerator.BlockSize * 2f + Vector3.forward * (float)(j % w) * MapGenerator.BlockSize * 2f + Vector3.up * MapGenerator.BlockSize / 2f;
-			j++;
 		}
 	}
 

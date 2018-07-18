@@ -17,6 +17,8 @@ public class Slot {
 
 	public Slot[] Neighbours;
 
+	public int[][] PossibleNeighbours;
+
 	public bool Collapsed {
 		get {
 			return this.Module != null;
@@ -59,23 +61,34 @@ public class Slot {
 		}
 	}
 
-	public bool HasConnector(int direction, int connector) {
-		return this.Modules.Any(i => this.mapGenerator.Modules[i].Connectors[direction] == connector);
-	}
-
 	public void Collapse(int index) {
+		
+
 		this.Module = this.mapGenerator.Modules[index];
 		this.Build();
 		this.mapGenerator.SlotsFilled++;
 
-		if (!this.Modules.Contains(index)) {
-			this.markRed();
-			throw new Exception("Illegal collapse!");
-		}
+		this.checkConsistency(index);
 
 		var toRemove = this.Modules.ToList();
 		toRemove.Remove(index);
 		this.RemoveModules(toRemove);
+	}
+
+	private void checkConsistency(int index) {
+		for (int d = 0; d < 6; d++) {
+			if (this.Neighbours[d] != null && this.Neighbours[d].Module != null && !this.Neighbours[d].Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
+				this.markRed();
+				// This would be a result of inconsistent code, should not be possible.
+				throw new Exception("Illegal collapse, not in neighbour list.");
+			}
+		}
+
+		if (!this.Modules.Contains(index)) {
+			this.markRed();
+			// This would be a result of inconsistent code, should not be possible.
+			throw new Exception("Illegal collapse!");
+		}
 	}
 
 	public void CollapseRandom() {
@@ -100,44 +113,26 @@ public class Slot {
 	}
 
 	public void RemoveModules(List<int> modules) {
-		if (!this.Modules.Any()) {
-			return;
-		}
+		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<int>()).ToArray();
 
-		var affectedConnectors = new HashSet<int>[6];
-		for (int i = 0; i < 6; i++) {
-			affectedConnectors[i] = new HashSet<int>();
-		}
-
-		foreach (var i in modules) {
-			if (this.Modules.Contains(i)) {
-				for (int j = 0; j < 6; j++) {
-					affectedConnectors[j].Add(this.mapGenerator.Modules[i].Connectors[j]);
-				}
-			}
-		}
-
-		foreach (var i in modules) {
-			this.Modules.Remove(i);
-		}
-
-		if (this.Modules.Count == 0) {
-			this.markRed();
-			throw new Exception("No more modules allowed.");
-		}		
-
-		for (int d = 0; d < 6; d++) {
-			if (this.Neighbours[d] == null || !affectedConnectors[d].Any()) {
+		foreach (int module in modules) {
+			if (!this.Modules.Contains(module)) {
 				continue;
 			}
-
-			foreach (var connector in affectedConnectors[d].ToArray()) {
-				if (this.HasConnector(d, connector)) {
-					affectedConnectors[d].Remove(connector);
+			for (int d = 0; d < 6; d++) {
+				foreach (int possibleNeighbour in this.mapGenerator.Modules[module].PossibleNeighbours[d]) {
+					if (this.PossibleNeighbours[d][possibleNeighbour] == 1) {
+						affectedNeighbouredModules[d].Add(possibleNeighbour);
+					}
+					this.PossibleNeighbours[d][possibleNeighbour]--;
 				}
 			}
-			if (affectedConnectors[d].Any()) {
-				this.Neighbours[d].RemoveConnectors((d + 3) % 6, affectedConnectors[d]);
+			this.Modules.Remove(module);
+		}
+
+		for (int d = 0; d < 6; d++) {
+			if (affectedNeighbouredModules[d].Any() && this.Neighbours[d] != null) {
+				this.Neighbours[d].RemoveModules(affectedNeighbouredModules[d]);
 			}
 		}
 	}
@@ -149,21 +144,17 @@ public class Slot {
 		cube.transform.position = this.GetPosition();
 	}
 
-	public void RemoveConnectors(int direction, HashSet<int> connectors) {
-		this.RemoveModules(this.Modules.Where(module => connectors.Contains(this.mapGenerator.Modules[module].Connectors[direction])).ToList());
-	}
-
 	public void Build() {
-		if (this.Module == null) {
+		if (this.Module == null || this.Module.Prototype.Spawn == false) {
 			return;
 		}
 
-		var gameObject = new GameObject();
-		var moduleBehaviour = gameObject.AddComponent<ModuleBehaviour>();
-		moduleBehaviour.Initialize(this.Module, this.mapGenerator.Material);
-		moduleBehaviour.Number = Array.IndexOf(this.mapGenerator.Modules, this.Module);
+		var gameObject = GameObject.Instantiate(this.Module.Prototype.gameObject);
+		var prototype = gameObject.GetComponent<ModulePrototype>();
+		GameObject.DestroyImmediate(prototype);
 		gameObject.transform.parent = this.mapGenerator.transform;
 		gameObject.transform.position = this.GetPosition();
+		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
 	}
 
 	public Vector3 GetPosition() {

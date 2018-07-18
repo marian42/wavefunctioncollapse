@@ -18,9 +18,5 @@ public class MapGeneratorEditor : Editor {
 				while (innerRoutine.MoveNext());
 			}
 		}
-
-		if (GUILayout.Button("Show Modules")) {
-			generator.ShowModules();
-		}
 	}
 }
