@@ -23,14 +23,12 @@ public class Module {
 		this.Rotation = rotation;
 	}
 
-	private static readonly int[] horizontalFaces = { 0, 2, 3, 5 };
-
 	public bool Fits(int direction, Module module) {
 		int otherDirection = (direction + 3) % 6;
 
-		if (horizontalFaces.Contains(direction)) {
-			var f1 = this.Prototype.Faces[horizontalFaces[(Array.IndexOf(horizontalFaces, direction) + this.Rotation) % 4]] as ModulePrototype.HorizontalFaceDetails;
-			var f2 = module.Prototype.Faces[horizontalFaces[(Array.IndexOf(horizontalFaces, otherDirection) + module.Rotation) % 4]] as ModulePrototype.HorizontalFaceDetails;
+		if (Orientations.IsHorizontal(direction)) {
+			var f1 = this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)] as ModulePrototype.HorizontalFaceDetails;
+			var f2 = module.Prototype.Faces[Orientations.Rotate(otherDirection, module.Rotation)] as ModulePrototype.HorizontalFaceDetails;
 			return f1.Connector == f2.Connector && (f1.Symmetric || f1.Flipped != f2.Flipped);
 		} else {
 			var f1 = this.Prototype.Faces[direction] as ModulePrototype.VerticalFaceDetails;

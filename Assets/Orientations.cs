@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class Orientations {
 	private static Quaternion[] items;
@@ -23,5 +25,18 @@ public class Orientations {
 			Quaternion.LookRotation(Vector3.up),
 			Quaternion.LookRotation(Vector3.forward)
 		};
+	}
+
+	private static readonly int[] horizontalFaces = { 0, 2, 3, 5 };
+
+	public static int Rotate(int direction, int rotations) {
+		if (direction == 1 || direction == 4) {
+			return direction;
+		}
+		return horizontalFaces[(Array.IndexOf(horizontalFaces, direction) + rotations) % 4];
+	}
+
+	public static bool IsHorizontal(int orientation) {
+		return orientation != 1 && orientation != 4;
 	}
 }

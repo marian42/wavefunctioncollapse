@@ -18,6 +18,8 @@ public class ModulePrototype : MonoBehaviour {
 		public virtual void ResetConnector() {
 			this.Connector = 0;
 		}
+
+		public ModulePrototype[] ExcludedNeighbours;
 	}
 
 	[System.Serializable]
@@ -226,7 +228,10 @@ public class ModulePrototype : MonoBehaviour {
 		foreach (var module in modules) {
 			module.PossibleNeighbours = Enumerable.Range(0, 6).
 				Select(direction => Enumerable.Range(0, modules.Count).
-					Where(i => module.Fits(direction, modules[i]))
+					Where(i => module.Fits(direction, modules[i]) 
+						&& !module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)].ExcludedNeighbours.Contains(modules[i].Prototype)
+						&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype)
+					)
 					.ToArray())
 				.ToArray();
 		}
