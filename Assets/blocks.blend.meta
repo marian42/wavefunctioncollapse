@@ -47,6 +47,18 @@ ModelImporter:
     100082: Wall_Corner_Fountain
     100084: Wall_Door
     100086: Tunnel
+    100088: Bridge_Wall
+    100090: Tunnel_Corner
+    100092: Pillars
+    100094: Pillars_Corner
+    100096: Pillars_Corner_2
+    100098: Railing_Pillars
+    100100: Wall_with_Roof
+    100102: Wall_with_Roof_2
+    100104: Wall_with_Roof_3
+    100106: Wall_with_Roof_Adapter
+    100108: Railing_Pillars_2
+    100110: Wall_with_Roof_Adapter_2
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -91,6 +103,18 @@ ModelImporter:
     400082: Wall_Corner_Fountain
     400084: Wall_Door
     400086: Tunnel
+    400088: Bridge_Wall
+    400090: Tunnel_Corner
+    400092: Pillars
+    400094: Pillars_Corner
+    400096: Pillars_Corner_2
+    400098: Railing_Pillars
+    400100: Wall_with_Roof
+    400102: Wall_with_Roof_2
+    400104: Wall_with_Roof_3
+    400106: Wall_with_Roof_Adapter
+    400108: Railing_Pillars_2
+    400110: Wall_with_Roof_Adapter_2
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -134,6 +158,18 @@ ModelImporter:
     2300078: Wall_Corner_Fountain
     2300080: Wall_Door
     2300082: Tunnel
+    2300084: Bridge_Wall
+    2300086: Tunnel_Corner
+    2300088: Pillars
+    2300090: Pillars_Corner
+    2300092: Pillars_Corner_2
+    2300094: Railing_Pillars
+    2300096: Wall_with_Roof
+    2300098: Wall_with_Roof_2
+    2300100: Wall_with_Roof_3
+    2300102: Wall_with_Roof_Adapter
+    2300104: Railing_Pillars_2
+    2300106: Wall_with_Roof_Adapter_2
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -176,6 +212,18 @@ ModelImporter:
     3300078: Wall_Corner_Fountain
     3300080: Wall_Door
     3300082: Tunnel
+    3300084: Bridge_Wall
+    3300086: Tunnel_Corner
+    3300088: Pillars
+    3300090: Pillars_Corner
+    3300092: Pillars_Corner_2
+    3300094: Railing_Pillars
+    3300096: Wall_with_Roof
+    3300098: Wall_with_Roof_2
+    3300100: Wall_with_Roof_3
+    3300102: Wall_with_Roof_Adapter
+    3300104: Railing_Pillars_2
+    3300106: Wall_with_Roof_Adapter_2
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -218,6 +266,18 @@ ModelImporter:
     4300078: Wall_Corner_Fountain
     4300080: Wall_Door
     4300082: Tunnel
+    4300084: Bridge_Wall
+    4300086: Tunnel_Corner
+    4300088: Railing_Pillars
+    4300090: Wall_with_Roof_Adapter
+    4300092: Pillars_Corner_2
+    4300094: Pillars_Corner
+    4300096: Wall_with_Roof_3
+    4300098: Wall_with_Roof_2
+    4300100: Wall_with_Roof
+    4300102: Pillars
+    4300104: Railing_Pillars_2
+    4300106: Wall_with_Roof_Adapter_2
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
