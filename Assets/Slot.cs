@@ -62,9 +62,8 @@ public class Slot {
 	}
 
 	public void Collapse(int index) {
-		
-
 		this.Module = this.mapGenerator.Modules[index];
+		this.mapGenerator.LatestFilled = this;
 		this.Build();
 		this.mapGenerator.SlotsFilled++;
 

@@ -26,8 +26,9 @@ public class MapGenerator : MonoBehaviour {
 	[HideInInspector]
 	public int SizeZ;
 
-	[HideInInspector]
 	public int SlotsFilled = 0;
+
+	public Slot LatestFilled;
 
 	public IEnumerable<Slot> FlatMap {
 		get {
@@ -100,7 +101,9 @@ public class MapGenerator : MonoBehaviour {
 
 		while (this.SlotsFilled < total) {
 			this.Collapse();
-			yield return new WaitForSeconds(0.5f);
+			if (this.LatestFilled.Module.Prototype.Spawn) {
+				yield return new WaitForSeconds(0.1f);
+			}
 		}
 	}
 
