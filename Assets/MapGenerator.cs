@@ -31,6 +31,10 @@ public class MapGenerator : MonoBehaviour {
 	public Slot LatestFilled;
 
 	public int UpConnector;
+	public int DownConnector;
+
+	public bool BorderConstraints = true;
+	public bool AllowExclusions = true;
 
 	public IEnumerable<Slot> FlatMap {
 		get {
@@ -96,9 +100,12 @@ public class MapGenerator : MonoBehaviour {
 			slot.PossibleNeighbours = slotNeighboursInitialState.Select(a => a.ToArray()).ToArray();
 		}
 
-		for (int x = 0; x < this.SizeX; x++) {
-			for (int z = 0; z < this.SizeZ; z++) {
-				this.Map[x, this.SizeY - 1, z].EnforeConnector(4, this.UpConnector);
+		if (this.BorderConstraints) {
+			for (int x = 0; x < this.SizeX; x++) {
+				for (int z = 0; z < this.SizeZ; z++) {
+					this.Map[x, this.SizeY - 1, z].EnforeConnector(4, this.UpConnector);
+					this.Map[x, 0, z].EnforeConnector(1, this.DownConnector);
+				}
 			}
 		}
 

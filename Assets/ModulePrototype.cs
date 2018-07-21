@@ -227,14 +227,16 @@ public class ModulePrototype : AbstractModulePrototype {
 		}
 
 		foreach (var module in modules) {
-			module.PossibleNeighbours = Enumerable.Range(0, 6).
-				Select(direction => Enumerable.Range(0, modules.Count).
-					Where(i => module.Fits(direction, modules[i]) 
-						&& !module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)].ExcludedNeighbours.Contains(modules[i].Prototype)
-						&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype)
+			module.PossibleNeighbours = new int[6][];
+			for (int direction = 0; direction < 6; direction++) {
+				module.PossibleNeighbours[direction] = Enumerable.Range(0, modules.Count).
+					Where(i => module.Fits(direction, modules[i])
+						&& (!mapGenerator.AllowExclusions || (
+							!module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)].ExcludedNeighbours.Contains(modules[i].Prototype)
+							&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype)))
 					)
-					.ToArray())
-				.ToArray();
+					.ToArray();
+			}
 			module.Probability = module.Models.Sum(model => model.Probability);
 		}
 
