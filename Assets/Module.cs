@@ -18,9 +18,15 @@ public class Module {
 
 	public ModulePrototype Prototype;
 
+	public List<AbstractModulePrototype> Models;
+
+	public float Probability;
+
 	public Module(ModulePrototype prototype, int rotation, MapGenerator mapGenerator) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
+		this.Models = new List<AbstractModulePrototype>();
+		this.Models.Add(prototype);
 	}
 
 	public bool Fits(int direction, Module module) {

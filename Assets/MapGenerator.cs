@@ -146,16 +146,4 @@ public class MapGenerator : MonoBehaviour {
 			GameObject.DestroyImmediate(child.gameObject);
 		}
 	}
-
-	private void createBehaviours() {
-		var container = new GameObject("slots").transform;
-		container.parent = this.transform;
-		foreach (var slot in this.FlatMap) {
-			var gameObject = new GameObject();
-			var slotBehaviour = gameObject.AddComponent<SlotBehaviour>();
-			slotBehaviour.Slot = slot;
-			gameObject.transform.parent = container;
-			gameObject.transform.position = slot.GetPosition();
-		}
-	}
 }
