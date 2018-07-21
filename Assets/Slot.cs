@@ -115,7 +115,7 @@ public class Slot {
 		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<int>()).ToArray();
 
 		foreach (int module in modules) {
-			if (!this.Modules.Contains(module)) {
+			if (!this.Modules.Contains(module) || this.mapGenerator.Modules[module] == this.Module) {
 				continue;
 			}
 			for (int d = 0; d < 6; d++) {
@@ -127,6 +127,11 @@ public class Slot {
 				}
 			}
 			this.Modules.Remove(module);
+		}
+
+		if (this.Modules.Count == 0) {
+			this.markRed();
+			throw new Exception("Wavefunction collapse failed.");
 		}
 
 		for (int d = 0; d < 6; d++) {
