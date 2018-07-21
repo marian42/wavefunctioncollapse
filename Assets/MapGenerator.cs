@@ -30,6 +30,8 @@ public class MapGenerator : MonoBehaviour {
 
 	public Slot LatestFilled;
 
+	public int UpConnector;
+
 	public IEnumerable<Slot> FlatMap {
 		get {
 			for (int y = this.SizeY - 1; y >= 0; y--) {
@@ -94,6 +96,12 @@ public class MapGenerator : MonoBehaviour {
 			slot.PossibleNeighbours = slotNeighboursInitialState.Select(a => a.ToArray()).ToArray();
 		}
 
+		for (int x = 0; x < this.SizeX; x++) {
+			for (int z = 0; z < this.SizeZ; z++) {
+				this.Map[x, this.SizeY - 1, z].EnforeConnector(4, this.UpConnector);
+			}
+		}
+
 		this.SlotsFilled = 0;
 		int total = this.SizeX * this.SizeY * this.SizeZ;
 
@@ -105,6 +113,8 @@ public class MapGenerator : MonoBehaviour {
 				yield return new WaitForSeconds(0.1f);
 			}
 		}
+
+		Debug.Log("Map generation complete.");
 	}
 
 	public void Collapse() {

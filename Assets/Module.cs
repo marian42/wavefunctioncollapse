@@ -36,4 +36,14 @@ public class Module {
 			return f1.Connector == f2.Connector && (f1.Invariant || (f1.Rotation + this.Rotation) % 4 == (f2.Rotation + module.Rotation) % 4);
 		}
 	}
+
+	public bool Fits(int direction, int connector) {
+		if (Orientations.IsHorizontal(direction)) {
+			var f = this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)] as ModulePrototype.HorizontalFaceDetails;
+			return f.Connector == connector;
+		} else {
+			var f = this.Prototype.Faces[direction] as ModulePrototype.VerticalFaceDetails;
+			return f.Connector == connector;
+		}
+	}
 }

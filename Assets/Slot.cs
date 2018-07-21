@@ -159,4 +159,9 @@ public class Slot {
 	public Vector3 GetPosition() {
 		return this.mapGenerator.GetWorldspacePosition(this.X, this.Y, this.Z);
 	}
+
+	public void EnforeConnector(int direction, int connector) {
+		var toRemove = this.Modules.Where(i => !this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
+		this.RemoveModules(toRemove);
+	}
 }
