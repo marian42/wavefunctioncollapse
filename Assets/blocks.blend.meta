@@ -59,6 +59,17 @@ ModelImporter:
     100106: Wall_with_Roof_Adapter
     100108: Railing_Pillars_2
     100110: Wall_with_Roof_Adapter_2
+    100112: Roof_Corner_2
+    100114: Wall_Stairs
+    100116: Wall_Stairs_Railing
+    100118: Wall_Stairs_Railing_2
+    100120: Wall_Stairs_Railing_Up
+    100122: Wall_Stairs_Up
+    100124: Wall_Stairs_M
+    100126: Wall_Stairs_Railing_M
+    100128: Wall_Stairs_Railing_M_2
+    100130: Wall_Stairs_Railing_Up_M
+    100132: Wall_Stairs_Up_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -115,6 +126,17 @@ ModelImporter:
     400106: Wall_with_Roof_Adapter
     400108: Railing_Pillars_2
     400110: Wall_with_Roof_Adapter_2
+    400112: Roof_Corner_2
+    400114: Wall_Stairs
+    400116: Wall_Stairs_Railing
+    400118: Wall_Stairs_Railing_2
+    400120: Wall_Stairs_Railing_Up
+    400122: Wall_Stairs_Up
+    400124: Wall_Stairs_M
+    400126: Wall_Stairs_Railing_M
+    400128: Wall_Stairs_Railing_M_2
+    400130: Wall_Stairs_Railing_Up_M
+    400132: Wall_Stairs_Up_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -170,6 +192,17 @@ ModelImporter:
     2300102: Wall_with_Roof_Adapter
     2300104: Railing_Pillars_2
     2300106: Wall_with_Roof_Adapter_2
+    2300108: Roof_Corner_2
+    2300110: Wall_Stairs
+    2300112: Wall_Stairs_Railing
+    2300114: Wall_Stairs_Railing_2
+    2300116: Wall_Stairs_Railing_Up
+    2300118: Wall_Stairs_Up
+    2300120: Wall_Stairs_M
+    2300122: Wall_Stairs_Railing_M
+    2300124: Wall_Stairs_Railing_M_2
+    2300126: Wall_Stairs_Railing_Up_M
+    2300128: Wall_Stairs_Up_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -224,6 +257,17 @@ ModelImporter:
     3300102: Wall_with_Roof_Adapter
     3300104: Railing_Pillars_2
     3300106: Wall_with_Roof_Adapter_2
+    3300108: Roof_Corner_2
+    3300110: Wall_Stairs
+    3300112: Wall_Stairs_Railing
+    3300114: Wall_Stairs_Railing_2
+    3300116: Wall_Stairs_Railing_Up
+    3300118: Wall_Stairs_Up
+    3300120: Wall_Stairs_M
+    3300122: Wall_Stairs_Railing_M
+    3300124: Wall_Stairs_Railing_M_2
+    3300126: Wall_Stairs_Railing_Up_M
+    3300128: Wall_Stairs_Up_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -278,6 +322,17 @@ ModelImporter:
     4300102: Pillars
     4300104: Railing_Pillars_2
     4300106: Wall_with_Roof_Adapter_2
+    4300108: Roof_Corner_2
+    4300110: Wall_Stairs_Railing_2
+    4300112: Wall_Stairs_Railing_Up
+    4300114: Wall_Stairs_Railing
+    4300116: Wall_Stairs_Up
+    4300118: Wall_Stairs
+    4300120: Wall_Stairs_Up_M
+    4300122: Wall_Stairs_Railing_Up_M
+    4300124: Wall_Stairs_Railing_M_2
+    4300126: Wall_Stairs_Railing_M
+    4300128: Wall_Stairs_M
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
