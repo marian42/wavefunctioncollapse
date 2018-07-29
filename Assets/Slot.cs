@@ -172,6 +172,17 @@ public class Slot {
 		gameObject.transform.parent = this.mapGenerator.transform;
 		gameObject.transform.position = this.GetPosition();
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
+		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
+		this.mapGenerator.Blocks[this] = blockBehaviour;
+		blockBehaviour.Prototype = this.Module.Prototype;
+		blockBehaviour.Neighbours = new BlockBehaviour[6];
+		for (int i = 0; i < 6; i++) {
+			if (this.Neighbours[i] != null && this.mapGenerator.Blocks.ContainsKey(this.Neighbours[i])) {
+				var otherBlock = this.mapGenerator.Blocks[this.Neighbours[i]];
+				blockBehaviour.Neighbours[i] = otherBlock;
+				otherBlock.Neighbours[(i + 3) % 6] = blockBehaviour;
+			}
+		}
 	}
 
 	public Vector3 GetPosition() {

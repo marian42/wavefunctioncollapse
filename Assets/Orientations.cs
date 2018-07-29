@@ -29,6 +29,8 @@ public class Orientations {
 
 	private static readonly int[] horizontalFaces = { 0, 2, 3, 5 };
 
+	public static readonly string[] Names = { "-red", "-green", "-blue", "red", "green", "blue" };
+
 	public static int Rotate(int direction, int rotations) {
 		if (direction == 1 || direction == 4) {
 			return direction;

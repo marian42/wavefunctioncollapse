@@ -19,6 +19,8 @@ public class MapGenerator : MonoBehaviour {
 
 	public Slot[, ,] Map;
 
+	public Dictionary<Slot, BlockBehaviour> Blocks;
+
 	[HideInInspector]
 	public int SizeX;
 	[HideInInspector]
@@ -68,6 +70,7 @@ public class MapGenerator : MonoBehaviour {
 		this.SizeY = (int)this.MapSize.y;
 		this.SizeZ = (int)this.MapSize.z;
 		this.Map = new Slot[SizeX, SizeY, SizeZ];
+		this.Blocks = new Dictionary<Slot, BlockBehaviour>();
 
 		for (int x = 0; x < this.SizeX; x++) {
 			for (int y = 0; y < this.SizeY; y++) {
