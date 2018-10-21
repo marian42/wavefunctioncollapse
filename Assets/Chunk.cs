@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 public class Chunk : MonoBehaviour {
 	[System.Serializable]
@@ -68,7 +69,7 @@ public class Chunk : MonoBehaviour {
 
 		for (int i = 0; i < 4; i++) {
 			if (this.Neighbors[i] != null) {
-				this.Connectors[i] = this.Neighbors[i].Connectors[(i + 2) % 4] + (this.Size - 1) * (i < 2 ? 1 : 1) * getDirection(i);
+				this.Connectors[i] = this.Neighbors[i].Connectors[(i + 2) % 4] + (this.Size - 1) * getDirection(i);
 			} else {
 				int vertical = this.Size / 2; //Random.Range(1, this.Size - 2);
 				// TODO improve variation of connector positions
@@ -103,6 +104,53 @@ public class Chunk : MonoBehaviour {
 		generator.EnforceWalkway(this.Connectors[1], 5);
 		generator.EnforceWalkway(this.Connectors[2], 0);
 		generator.EnforceWalkway(this.Connectors[3], 2);
+
+		for (int direction = 0; direction < 4; direction++) {
+			if (this.Neighbors[direction] == null) {
+				continue;
+			}
+			var adjacentMapGenerator = this.Neighbors[direction].MapGenerator;
+
+			int direction3D = Orientations.Get(getDirection(direction).ToVector3());
+			Vector3i start;
+			Vector3i horizontal;
+			var vertical = new Vector3i(0, 1, 0);
+
+			switch (direction) {
+				case 0:
+					start = new Vector3i(this.Size - 1, 0, 0);
+					horizontal = new Vector3i(0, 0, 1);
+					break;
+				case 1:
+					start = new Vector3i(this.Size - 1, 0, this.Size - 1);
+					horizontal = new Vector3i(-1, 0, 0);
+					break;
+				case 2:
+					start = new Vector3i(0, 0, this.Size - 1);
+					horizontal = new Vector3i(0, 0, -1);
+					break;
+				case 3:
+					start = new Vector3i(0, 0, 0);
+					horizontal = new Vector3i(1, 0, 0);
+					break;
+				default: throw new System.NotImplementedException();
+			}
+
+			if (adjacentMapGenerator.SlotsFilled != this.Size * this.Size * this.Size) {
+				continue;
+			}
+
+			for (int a = 0; a < this.Size; a++) {
+				for (int b = 0; b < this.Size; b++) {
+					var index = start + a * horizontal + b * vertical;
+					var cell = this.MapGenerator.Map[index.X, index.Y, index.Z];
+					var adjacentIndex = index - (this.Size - 1) * getDirection(direction);
+					var adjacentCell = adjacentMapGenerator.Map[adjacentIndex.X, adjacentIndex.Y, adjacentIndex.Z];
+					var toRemove = cell.Modules.Where(i => !this.MapGenerator.Modules[i].Fits(direction3D, adjacentCell.Module)).ToList();
+					cell.RemoveModules(toRemove);
+				}
+			}
+		}
 	}
 
 	private void createPath(Vector3i source, Vector3i destination) {
