@@ -30,9 +30,31 @@ public class Chunk : MonoBehaviour {
 
 	public MapGenerator MapGenerator;
 
+	public World World;
+
 	public void Initialize() {
-		if (this.Neighbors == null || this.Neighbors.Length != 4) {
-			this.Neighbors = new Chunk[4];
+		if (this.World == null) {
+			this.World = this.transform.parent.GetComponent<World>();
+		}
+		this.World.AddChunk(this);
+
+		this.Neighbors = new Chunk[4];
+		for (int i = 0; i < 4; i++) {
+			int x = this.X;
+			int z = this.Z;
+
+			switch (i) {
+				case 0: x++; break;
+				case 1: z++; break;
+				case 2: x--; break;
+				case 3: z--; break;
+				default: throw new System.NotImplementedException();
+			}
+			
+			this.Neighbors[i] = this.World.GetChunk(x, z);
+			if (this.Neighbors[i] != null) {
+				this.Neighbors[i].Neighbors[(i + 2) % 4] = this;
+			}
 		}
 
 		this.transform.position = new Vector3(this.X * this.Size * MapGenerator.BlockSize, 0, this.Z * this.Size * MapGenerator.BlockSize);
@@ -66,6 +88,7 @@ public class Chunk : MonoBehaviour {
 		this.MapGenerator = this.GetComponent<MapGenerator>();
 		if (this.MapGenerator == null) {
 			this.MapGenerator = this.gameObject.AddComponent<MapGenerator>();
+			this.MapGenerator.AllowExclusions = false;
 		}
 		this.MapGenerator.MapSize = Vector3.one * this.Size;
 		this.MapGenerator.UpConnector = 0;
@@ -122,11 +145,8 @@ public class Chunk : MonoBehaviour {
 
 		var gameObject = new GameObject();
 		var chunk = gameObject.AddComponent<Chunk>();
-		this.Neighbors[direction] = chunk;
-		chunk.Neighbors = new Chunk[4];
-		chunk.Neighbors[(direction + 2) % 4] = this;
 		chunk.X = this.X;
-		chunk.Z = this.X;
+		chunk.Z = this.Z;
 		switch (direction) {
 			case 0: chunk.X++; break;
 			case 1: chunk.Z++; break;
@@ -134,6 +154,8 @@ public class Chunk : MonoBehaviour {
 			case 3: chunk.Z--; break;
 			default: throw new System.NotImplementedException();
 		}
+		chunk.World = this.World;
+		chunk.transform.parent = this.World.transform;
 		chunk.Initialize();
 	}
 
