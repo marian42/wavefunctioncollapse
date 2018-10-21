@@ -46,7 +46,7 @@ public class Chunk : MonoBehaviour {
 
 		for (int i = 0; i < 4; i++) {
 			if (this.Neighbors[i] != null) {
-				this.Connectors[i] = this.Neighbors[i].Connectors[(i + 2) % 4] - (this.Size - 1) * getDirection(i);
+				this.Connectors[i] = this.Neighbors[i].Connectors[(i + 2) % 4] + (this.Size - 1) * (i < 2 ? 1 : 1) * getDirection(i);
 			} else {
 				int vertical = this.Size / 2; //Random.Range(1, this.Size - 2);
 				// TODO improve variation of connector positions
@@ -113,6 +113,28 @@ public class Chunk : MonoBehaviour {
 			case 3: return new Vector3i(0, 0, -1);
 			default: throw new System.NotImplementedException();
 		}
+	}
+
+	public void Expand(int direction) {
+		if (this.Neighbors[direction] != null) {
+			return;
+		}
+
+		var gameObject = new GameObject();
+		var chunk = gameObject.AddComponent<Chunk>();
+		this.Neighbors[direction] = chunk;
+		chunk.Neighbors = new Chunk[4];
+		chunk.Neighbors[(direction + 2) % 4] = this;
+		chunk.X = this.X;
+		chunk.Z = this.X;
+		switch (direction) {
+			case 0: chunk.X++; break;
+			case 1: chunk.Z++; break;
+			case 2: chunk.X--; break;
+			case 3: chunk.Z--; break;
+			default: throw new System.NotImplementedException();
+		}
+		chunk.Initialize();
 	}
 
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]

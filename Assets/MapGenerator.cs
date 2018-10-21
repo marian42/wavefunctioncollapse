@@ -5,9 +5,6 @@ using System.Linq;
 using System;
 
 public class MapGenerator : MonoBehaviour {
-
-	public Transform BlueprintContainer;
-
 	public const float BlockSize = 2f;
 
 	public Vector3 MapSize;
