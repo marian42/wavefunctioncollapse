@@ -45,11 +45,15 @@ public class Module {
 
 	public bool Fits(int direction, int connector) {
 		if (Orientations.IsHorizontal(direction)) {
-			var f = this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)] as ModulePrototype.HorizontalFaceDetails;
+			var f = this.GetFace(direction) as ModulePrototype.HorizontalFaceDetails;
 			return f.Connector == connector;
 		} else {
 			var f = this.Prototype.Faces[direction] as ModulePrototype.VerticalFaceDetails;
 			return f.Connector == connector;
 		}
+	}
+
+	public ModulePrototype.FaceDetails GetFace(int direction) {
+		return this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)];
 	}
 }

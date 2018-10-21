@@ -102,6 +102,13 @@ public class ModulePrototype : AbstractModulePrototype {
 			var face = modulePrototype.Faces[i];
 			Handles.Label(position + Orientations.All[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString(), ModulePrototype.style);
 		}
+
+		for (int i = 0; i < 6; i++) {
+			if (modulePrototype.Faces[i].Walkable) {
+				Gizmos.color = Color.red;
+				Gizmos.DrawLine(modulePrototype.transform.position + Vector3.down * 0.1f, modulePrototype.transform.position + Orientations.All[i] * Vector3.forward + Vector3.down * 0.1f);
+			}
+		}
 	}
 
 	public void EnsureFingerprints() {

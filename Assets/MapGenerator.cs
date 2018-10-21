@@ -12,8 +12,6 @@ public class MapGenerator : MonoBehaviour {
 
 	public Vector3 MapSize;
 
-	public Material Material;
-
 	[HideInInspector]
 	public Module[] Modules;
 
@@ -48,14 +46,6 @@ public class MapGenerator : MonoBehaviour {
 				}
 			}
 		}
-	}
-
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
 	}
 
 	private void createModules() {
@@ -112,10 +102,16 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
+		var chunk = this.GetComponent<Chunk>();
+
+		if (chunk != null) {
+			chunk.ExcludeModules(this);
+		}
+
 		this.SlotsFilled = 0;
 		int total = this.SizeX * this.SizeY * this.SizeZ;
 
-		this.Map[0, 0, 0].CollapseRandom();
+		//this.Map[0, 0, 0].CollapseRandom();
 
 		while (this.SlotsFilled < total) {
 			this.Collapse();
@@ -155,5 +151,17 @@ public class MapGenerator : MonoBehaviour {
 		foreach (var child in children) {
 			GameObject.DestroyImmediate(child.gameObject);
 		}
+	}
+
+	public void EnforceWalkway(Vector3i start, int direction) {
+		var slot = this.Map[start.X, start.Y, start.Z];
+		var toRemove = slot.Modules.Where(i => !this.Modules[i].GetFace(direction).Walkable).ToList();
+		slot.RemoveModules(toRemove);
+	}
+
+	public void EnforceWalkway(Vector3i start, Vector3i destination) {
+		int direction = Orientations.Get((destination - start).ToVector3());
+		this.EnforceWalkway(start, direction);
+		this.EnforceWalkway(destination, (direction + 3) % 6);
 	}
 }

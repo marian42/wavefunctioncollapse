@@ -41,4 +41,20 @@ public class Orientations {
 	public static bool IsHorizontal(int orientation) {
 		return orientation != 1 && orientation != 4;
 	}
+
+	public static int Get(Vector3 direction) {
+		if (direction.x < 0) {
+			return 0;
+		} else if (direction.y < 0) {
+			return 1;
+		} else if (direction.z < 0) {
+			return 2;
+		} else if (direction.x > 0) {
+			return 3;
+		} else if (direction.y > 0) {
+			return 4;
+		} else {
+			return 5;
+		}
+	}
 }

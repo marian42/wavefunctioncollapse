@@ -17,9 +17,11 @@ public class BlockBehaviourEditor : Editor {
 				var list2 = p2.Faces[(i + 3) % 6].ExcludedNeighbours;
 				if (!list1.Contains(p2)) {
 					p1.Faces[i].ExcludedNeighbours = list1.Concat(new ModulePrototype[] {p2}).ToArray();
+					Debug.Log("Added exclusion rule.");
 				}
 				if (!list2.Contains(p1)) {
-					p2.Faces[(i+3) % 6].ExcludedNeighbours = list2.Concat(new ModulePrototype[] { p1 }).ToArray();
+					p2.Faces[(i + 3) % 6].ExcludedNeighbours = list2.Concat(new ModulePrototype[] { p1 }).ToArray();
+					Debug.Log("Added exclusion rule.");
 				}
 			}
 		}
