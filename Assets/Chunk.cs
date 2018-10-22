@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -147,6 +147,45 @@ public class Chunk : MonoBehaviour {
 					var adjacentIndex = index - (this.Size - 1) * getDirection(direction);
 					var adjacentCell = adjacentMapGenerator.Map[adjacentIndex.X, adjacentIndex.Y, adjacentIndex.Z];
 					var toRemove = cell.Modules.Where(i => !this.MapGenerator.Modules[i].Fits(direction3D, adjacentCell.Module)).ToList();
+					cell.RemoveModules(toRemove);
+				}
+			}
+		}
+
+		var borderConnectors = this.World.GetBorderConnectors();
+
+		for (int direction = 0; direction < 4; direction++) {
+			int direction3D = Orientations.Get(getDirection(direction).ToVector3());
+			Vector3i start;
+			Vector3i horizontal;
+			var vertical = new Vector3i(0, 1, 0);
+
+			switch (direction) {
+				case 0:
+					start = new Vector3i(this.Size - 1, 0, 0);
+					horizontal = new Vector3i(0, 0, 1);
+					break;
+				case 1:
+					start = new Vector3i(this.Size - 1, 0, this.Size - 1);
+					horizontal = new Vector3i(-1, 0, 0);
+					break;
+				case 2:
+					start = new Vector3i(0, 0, this.Size - 1);
+					horizontal = new Vector3i(0, 0, -1);
+					break;
+				case 3:
+					start = new Vector3i(0, 0, 0);
+					horizontal = new Vector3i(1, 0, 0);
+					break;
+				default: throw new System.NotImplementedException();
+			}
+
+			for (int a = 0; a < this.Size; a++) {
+				for (int b = 0; b < this.Size; b++) {
+					var index = start + a * horizontal + b * vertical;
+					var cell = this.MapGenerator.Map[index.X, index.Y, index.Z];
+					var toRemove = cell.Modules.Where(i => !borderConnectors.Contains(this.MapGenerator.Modules[i].GetFace(direction3D).Connector)).ToList();
+					//Debug.Log(string.Join(", ", toRemove.Select(i => this.MapGenerator.Modules[i].Prototype.gameObject.name).ToArray()));
 					cell.RemoveModules(toRemove);
 				}
 			}
