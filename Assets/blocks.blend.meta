@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: bf7aa0ba24309344696e173dd5bbc873
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     100002: Rig
@@ -70,6 +70,11 @@ ModelImporter:
     100128: Wall_Stairs_Railing_M_2
     100130: Wall_Stairs_Railing_Up_M
     100132: Wall_Stairs_Up_M
+    100134: Stairs_collider
+    100136: Stairs_Railing_Collider
+    100138: Stairs_Collider
+    100140: Water_Fountain_Collider
+    100142: Wall_Cornrer_Fountain_Collider
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -137,6 +142,11 @@ ModelImporter:
     400128: Wall_Stairs_Railing_M_2
     400130: Wall_Stairs_Railing_Up_M
     400132: Wall_Stairs_Up_M
+    400134: Stairs_collider
+    400136: Stairs_Railing_Collider
+    400138: Stairs_Collider
+    400140: Water_Fountain_Collider
+    400142: Wall_Cornrer_Fountain_Collider
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -203,6 +213,11 @@ ModelImporter:
     2300124: Wall_Stairs_Railing_M_2
     2300126: Wall_Stairs_Railing_Up_M
     2300128: Wall_Stairs_Up_M
+    2300130: Stairs_collider
+    2300132: Stairs_Railing_Collider
+    2300134: Stairs_Collider
+    2300136: Water_Fountain_Collider
+    2300138: Wall_Cornrer_Fountain_Collider
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -268,6 +283,11 @@ ModelImporter:
     3300124: Wall_Stairs_Railing_M_2
     3300126: Wall_Stairs_Railing_Up_M
     3300128: Wall_Stairs_Up_M
+    3300130: Stairs_collider
+    3300132: Stairs_Railing_Collider
+    3300134: Stairs_Collider
+    3300136: Water_Fountain_Collider
+    3300138: Wall_Cornrer_Fountain_Collider
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -333,6 +353,11 @@ ModelImporter:
     4300124: Wall_Stairs_Railing_M_2
     4300126: Wall_Stairs_Railing_M
     4300128: Wall_Stairs_M
+    4300130: Stairs_Railing_Collider
+    4300132: Stairs_collider
+    4300134: Stairs_Collider
+    4300136: Water_Fountain_Collider
+    4300138: Wall_Cornrer_Fountain_Collider
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
@@ -387,6 +412,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -406,7 +433,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
