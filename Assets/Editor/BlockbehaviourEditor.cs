@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using System.Linq;
 
@@ -10,7 +10,7 @@ public class BlockBehaviourEditor : Editor {
 
 		BlockBehaviour block = (BlockBehaviour)target;
 		for (int i = 0; i < 6; i++) {
-			if (block.Neighbours[i] != null && GUILayout.Button("Exclude neighbor " + block.Neighbours[i].Prototype.gameObject.name + " (" + Orientations.Names[i] + ")")) {
+			if (block.Neighbours != null && block.Neighbours[i] != null && GUILayout.Button("Exclude neighbor " + block.Neighbours[i].Prototype.gameObject.name + " (" + Orientations.Names[i] + ")")) {
 				var p1 = block.Prototype;
 				var p2 = block.Neighbours[i].Prototype;
 				var list1 = p1.Faces[i].ExcludedNeighbours;
