@@ -88,6 +88,8 @@ public class ModulePrototype : AbstractModulePrototype {
 
 	private static GUIStyle style;
 
+	
+#if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmoForMyScript(ModulePrototype modulePrototype, GizmoType gizmoType) {
 		Vector3 position = modulePrototype.transform.position;
@@ -110,6 +112,7 @@ public class ModulePrototype : AbstractModulePrototype {
 			}
 		}
 	}
+#endif
 
 	public void EnsureFingerprints() {
 		var faces = this.Faces;
