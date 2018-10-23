@@ -90,6 +90,8 @@ ModelImporter:
     100168: Spiral_Stairs_Entrance_M
     100170: Spiral_Stairs_M
     100172: Spiral_Stairs_Railing_M
+    100174: Spiral_Stairs_Collider
+    100176: Spiral_Stairs_Collider_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -177,6 +179,8 @@ ModelImporter:
     400168: Spiral_Stairs_Entrance_M
     400170: Spiral_Stairs_M
     400172: Spiral_Stairs_Railing_M
+    400174: Spiral_Stairs_Collider
+    400176: Spiral_Stairs_Collider_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -263,6 +267,8 @@ ModelImporter:
     2300164: Spiral_Stairs_Entrance_M
     2300166: Spiral_Stairs_M
     2300168: Spiral_Stairs_Railing_M
+    2300170: Spiral_Stairs_Collider
+    2300172: Spiral_Stairs_Collider_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -348,6 +354,8 @@ ModelImporter:
     3300164: Spiral_Stairs_Entrance_M
     3300166: Spiral_Stairs_M
     3300168: Spiral_Stairs_Railing_M
+    3300170: Spiral_Stairs_Collider
+    3300172: Spiral_Stairs_Collider_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -433,6 +441,8 @@ ModelImporter:
     4300164: Spiral_Stairs_Entrance_2
     4300166: Spiral_Stairs_Bow
     4300168: Spiral_Stairs_Railing_M
+    4300170: Spiral_Stairs_Collider_M
+    4300172: Spiral_Stairs_Collider
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
