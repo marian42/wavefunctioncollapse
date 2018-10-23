@@ -75,6 +75,21 @@ ModelImporter:
     100138: Stairs_Collider
     100140: Water_Fountain_Collider
     100142: Wall_Cornrer_Fountain_Collider
+    100144: Spiral_Stairs
+    100146: Spiral_Stairs_001
+    100148: Spiral_Stairs_Entrance
+    100150: Spiral_Stairs_Railing
+    100152: Spiral_STairs_Transform
+    100154: Wall_001
+    100156: Spiral_Stairs_Bow
+    100158: Spiral_Stairs_Bow_2
+    100160: Spiral_Stairs_Bow_2_M
+    100162: Spiral_Stairs_Bow_M
+    100164: Spiral_Stairs_Entrance_2
+    100166: Spiral_Stairs_Entrance_2_M
+    100168: Spiral_Stairs_Entrance_M
+    100170: Spiral_Stairs_M
+    100172: Spiral_Stairs_Railing_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -147,6 +162,21 @@ ModelImporter:
     400138: Stairs_Collider
     400140: Water_Fountain_Collider
     400142: Wall_Cornrer_Fountain_Collider
+    400144: Spiral_Stairs
+    400146: Spiral_Stairs_001
+    400148: Spiral_Stairs_Entrance
+    400150: Spiral_Stairs_Railing
+    400152: Spiral_STairs_Transform
+    400154: Wall_001
+    400156: Spiral_Stairs_Bow
+    400158: Spiral_Stairs_Bow_2
+    400160: Spiral_Stairs_Bow_2_M
+    400162: Spiral_Stairs_Bow_M
+    400164: Spiral_Stairs_Entrance_2
+    400166: Spiral_Stairs_Entrance_2_M
+    400168: Spiral_Stairs_Entrance_M
+    400170: Spiral_Stairs_M
+    400172: Spiral_Stairs_Railing_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -218,6 +248,21 @@ ModelImporter:
     2300134: Stairs_Collider
     2300136: Water_Fountain_Collider
     2300138: Wall_Cornrer_Fountain_Collider
+    2300140: Spiral_Stairs
+    2300142: Spiral_Stairs_001
+    2300144: Spiral_Stairs_Entrance
+    2300146: Spiral_Stairs_Railing
+    2300148: Spiral_STairs_Transform
+    2300150: Wall_001
+    2300152: Spiral_Stairs_Bow
+    2300154: Spiral_Stairs_Bow_2
+    2300156: Spiral_Stairs_Bow_2_M
+    2300158: Spiral_Stairs_Bow_M
+    2300160: Spiral_Stairs_Entrance_2
+    2300162: Spiral_Stairs_Entrance_2_M
+    2300164: Spiral_Stairs_Entrance_M
+    2300166: Spiral_Stairs_M
+    2300168: Spiral_Stairs_Railing_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -288,6 +333,21 @@ ModelImporter:
     3300134: Stairs_Collider
     3300136: Water_Fountain_Collider
     3300138: Wall_Cornrer_Fountain_Collider
+    3300140: Spiral_Stairs
+    3300142: Spiral_Stairs_001
+    3300144: Spiral_Stairs_Entrance
+    3300146: Spiral_Stairs_Railing
+    3300148: Spiral_STairs_Transform
+    3300150: Wall_001
+    3300152: Spiral_Stairs_Bow
+    3300154: Spiral_Stairs_Bow_2
+    3300156: Spiral_Stairs_Bow_2_M
+    3300158: Spiral_Stairs_Bow_M
+    3300160: Spiral_Stairs_Entrance_2
+    3300162: Spiral_Stairs_Entrance_2_M
+    3300164: Spiral_Stairs_Entrance_M
+    3300166: Spiral_Stairs_M
+    3300168: Spiral_Stairs_Railing_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -358,6 +418,21 @@ ModelImporter:
     4300134: Stairs_Collider
     4300136: Water_Fountain_Collider
     4300138: Wall_Cornrer_Fountain_Collider
+    4300140: Spiral_Stairs_Entrance
+    4300142: Wall_001
+    4300144: Spiral_Stairs_Railing
+    4300146: Spiral_STairs_Transform
+    4300148: Spiral_Stairs_001
+    4300150: Spiral_Stairs
+    4300152: Spiral_Stairs_Entrance_2_M
+    4300154: Spiral_Stairs_Entrance_M
+    4300156: Spiral_Stairs_Bow_2_M
+    4300158: Spiral_Stairs_M
+    4300160: Spiral_Stairs_Bow_M
+    4300162: Spiral_Stairs_Bow_2
+    4300164: Spiral_Stairs_Entrance_2
+    4300166: Spiral_Stairs_Bow
+    4300168: Spiral_Stairs_Railing_M
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
