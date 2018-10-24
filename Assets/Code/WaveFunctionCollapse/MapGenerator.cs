@@ -100,13 +100,6 @@ public class MapGenerator : MonoBehaviour {
 		}
 
 		this.SlotsFilled = 0;
-
-		var chunk = this.GetComponent<Chunk>();
-
-		if (chunk != null) {
-			chunk.ExcludeModules(this);
-		}
-
 		int total = this.SizeX * this.SizeY * this.SizeZ;
 
 		while (this.SlotsFilled < total) {
