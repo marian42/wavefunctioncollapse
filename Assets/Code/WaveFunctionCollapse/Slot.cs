@@ -20,9 +20,6 @@ public class Slot {
 	// List of modules that can still be placed here
 	public HashSet<int> Modules;
 
-	// References to neigbor slots
-	public Slot[] Neighbours;
-
 	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
 	public int[][] NeighborCandidateHealth;
 
@@ -47,26 +44,9 @@ public class Slot {
 		this.ModuleIndex = -1;
 	}
 
-	public void InitializeNeighbours() {
-		this.Neighbours = new Slot[6];
-		if (this.Position.X > 0) {
-			this.Neighbours[0] = this.mapGenerator.Map[this.Position.X - 1, this.Position.Y, this.Position.Z];
-		}
-		if (this.Position.Y > 0) {
-			this.Neighbours[1] = this.mapGenerator.Map[this.Position.X, this.Position.Y - 1, this.Position.Z];
-		}
-		if (this.Position.Z > 0) {
-			this.Neighbours[2] = this.mapGenerator.Map[this.Position.X, this.Position.Y, this.Position.Z - 1];
-		}
-		if (this.Position.X < this.mapGenerator.SizeX - 1) {
-			this.Neighbours[3] = this.mapGenerator.Map[this.Position.X + 1, this.Position.Y, this.Position.Z];
-		}
-		if (this.Position.Y < this.mapGenerator.SizeY - 1) {
-			this.Neighbours[4] = this.mapGenerator.Map[this.Position.X, this.Position.Y + 1, this.Position.Z];
-		}
-		if (this.Position.Z < this.mapGenerator.SizeZ - 1) {
-			this.Neighbours[5] = this.mapGenerator.Map[this.Position.X, this.Position.Y, this.Position.Z + 1];
-		}
+	// TODO only look up once and then cache???
+	private Slot neighbor(int direction) {
+		return this.mapGenerator.GetSlot(this.Position + Orientations.Direction[direction]);
 	}
 
 	public void Collapse(int index) {
@@ -76,7 +56,6 @@ public class Slot {
 
 		this.ModuleIndex = index;
 		this.mapGenerator.LatestFilled = this;
-		this.mapGenerator.SlotsFilled++;
 
 		this.checkConsistency(index);
 
@@ -91,7 +70,7 @@ public class Slot {
 
 	private void checkConsistency(int index) {
 		for (int d = 0; d < 6; d++) {
-			if (this.Neighbours[d] != null && this.Neighbours[d].Collapsed && !this.Neighbours[d].Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
+			if (this.neighbor(d) != null && this.neighbor(d).Collapsed && !this.neighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
 				this.markRed();
 				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list.");
@@ -150,8 +129,8 @@ public class Slot {
 		}
 
 		for (int d = 0; d < 6; d++) {
-			if (affectedNeighbouredModules[d].Any() && this.Neighbours[d] != null) {
-				this.Neighbours[d].RemoveModules(affectedNeighbouredModules[d]);
+			if (affectedNeighbouredModules[d].Any() && this.neighbor(d) != null) {
+				this.neighbor(d).RemoveModules(affectedNeighbouredModules[d]);
 			}
 		}
 	}
@@ -191,8 +170,8 @@ public class Slot {
 		blockBehaviour.Prototype = this.Module.Prototype;
 		blockBehaviour.Neighbours = new BlockBehaviour[6];
 		for (int i = 0; i < 6; i++) {
-			if (this.Neighbours[i] != null && this.Neighbours[i].BlockBehaviour != null) {
-				var otherBlock = this.Neighbours[i].BlockBehaviour;
+			if (this.neighbor(i) != null && this.neighbor(i).BlockBehaviour != null) {
+				var otherBlock = this.neighbor(i).BlockBehaviour;
 				blockBehaviour.Neighbours[i] = otherBlock;
 				otherBlock.Neighbours[(i + 3) % 6] = blockBehaviour;
 			}
@@ -200,11 +179,15 @@ public class Slot {
 	}
 
 	public Vector3 GetPosition() {
-		return this.mapGenerator.GetWorldspacePosition(this.Position.X, this.Position.Y, this.Position.Z);
+		return this.mapGenerator.GetWorldspacePosition(this.Position);
 	}
 
 	public void EnforeConnector(int direction, int connector) {
 		var toRemove = this.Modules.Where(i => !this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
 		this.RemoveModules(toRemove);
 	}
+
+	public override int GetHashCode() {
+		return this.Position.GetHashCode();
+	}
 }

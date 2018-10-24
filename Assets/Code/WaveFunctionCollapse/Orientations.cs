@@ -5,26 +5,40 @@ using System.Linq;
 using System;
 
 public class Orientations {
-	private static Quaternion[] items;
+	private static Quaternion[] rotations;
+	private static Vector3[] vectors;
+	private static Vector3i[] directions;
 
-	public static Quaternion[] All {
+	public static Quaternion[] Rotations {
 		get {
-			if (Orientations.items == null) {
+			if (Orientations.rotations == null) {
 				Orientations.initialize();
 			}
-			return Orientations.items;
+			return Orientations.rotations;
+		}
+	}
+
+	public static Vector3i[] Direction {
+		get {
+			if (Orientations.directions == null) {
+				Orientations.initialize();
+			}
+			return Orientations.directions;
 		}
 	}
 
 	private static void initialize() {
-		Orientations.items = new Quaternion[] {
-			Quaternion.LookRotation(Vector3.left),
-			Quaternion.LookRotation(Vector3.down),
-			Quaternion.LookRotation(Vector3.back),
-			Quaternion.LookRotation(Vector3.right),
-			Quaternion.LookRotation(Vector3.up),
-			Quaternion.LookRotation(Vector3.forward)
+		Orientations.vectors = new Vector3[] {
+			Vector3.left,
+			Vector3.down,
+			Vector3.back,
+			Vector3.right,
+			Vector3.up,
+			Vector3.forward
 		};
+
+		Orientations.rotations = Orientations.vectors.Select(vector => Quaternion.LookRotation(vector)).ToArray();
+		Orientations.directions = Orientations.vectors.Select(vector => new Vector3i(vector)).ToArray();
 	}
 
 	private static readonly int[] horizontalFaces = { 0, 2, 3, 5 };
@@ -42,7 +56,7 @@ public class Orientations {
 		return orientation != 1 && orientation != 4;
 	}
 
-	public static int Get(Vector3 direction) {
+	public static int GetIndex(Vector3 direction) {
 		if (direction.x < 0) {
 			return 0;
 		} else if (direction.y < 0) {

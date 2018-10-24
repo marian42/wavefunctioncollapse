@@ -102,13 +102,13 @@ public class ModulePrototype : AbstractModulePrototype {
 		ModulePrototype.style.normal.textColor = Color.black;
 		for (int i = 0; i < 6; i++) {
 			var face = modulePrototype.Faces[i];
-			Handles.Label(position + Orientations.All[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString(), ModulePrototype.style);
+			Handles.Label(position + Orientations.Rotations[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString(), ModulePrototype.style);
 		}
 
 		for (int i = 0; i < 6; i++) {
 			if (modulePrototype.Faces[i].Walkable) {
 				Gizmos.color = Color.red;
-				Gizmos.DrawLine(modulePrototype.transform.position + Vector3.down * 0.1f, modulePrototype.transform.position + Orientations.All[i] * Vector3.forward + Vector3.down * 0.1f);
+				Gizmos.DrawLine(modulePrototype.transform.position + Vector3.down * 0.1f, modulePrototype.transform.position + Orientations.Rotations[i] * Vector3.forward + Vector3.down * 0.1f);
 			}
 		}
 	}
@@ -123,7 +123,7 @@ public class ModulePrototype : AbstractModulePrototype {
 		var mesh = this.GetMesh();
 
 		for (int i = 0; i < 6; i++) {
-			faces[i].Fingerprint = new Fingerprint(mesh, Orientations.All[i], i == 4);
+			faces[i].Fingerprint = new Fingerprint(mesh, Orientations.Rotations[i], i == 4);
 		}
 	}
 
