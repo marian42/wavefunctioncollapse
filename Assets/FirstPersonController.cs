@@ -23,6 +23,7 @@ public class FirstPersonController : MonoBehaviour {
 	void Start () {
 		this.characterController = this.GetComponent<CharacterController>();
 		this.cameraTransform = this.GetComponentInChildren<Camera>().transform;
+		Cursor.visible = false;
 	}
 	
 	void Update () {

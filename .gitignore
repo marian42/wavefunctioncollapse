@@ -36,3 +36,6 @@ sysinfo.txt
 *.unitypackage
 
 *.blend1
+Assets/PostProcessing/
+
+Assets/PostProcessing\.meta
