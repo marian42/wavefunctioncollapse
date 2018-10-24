@@ -246,6 +246,7 @@ public class Chunk : MonoBehaviour {
 		chunk.Initialize();
 	}
 
+#if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmoForMyScript(Chunk chunk, GizmoType gizmoType) {
 		Gizmos.color = Color.red;
@@ -255,4 +256,5 @@ public class Chunk : MonoBehaviour {
 			Gizmos.DrawLine(chunk.transform.position + way.A.ToVector3() * MapGenerator.BlockSize + Vector3.up * 0.5f * MapGenerator.BlockSize, chunk.transform.position + way.B.ToVector3() * MapGenerator.BlockSize + Vector3.up * 0.5f * MapGenerator.BlockSize);
 		}
 	}
+#endif
 }
