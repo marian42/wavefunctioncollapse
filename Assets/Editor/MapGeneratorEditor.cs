@@ -11,12 +11,9 @@ public class MapGeneratorEditor : Editor {
 
 		MapGenerator generator = (MapGenerator)target;
 		if (GUILayout.Button("Generate")) {
-			if (Application.isPlaying) {
-				generator.StartCoroutine("Generate");
-			} else {
-				var innerRoutine = generator.Generate();
-				while (innerRoutine.MoveNext());
-			}
+			generator.Generate();
+			Debug.Log("Map generation complete.");
+			generator.Build();
 		}
 	}
 }

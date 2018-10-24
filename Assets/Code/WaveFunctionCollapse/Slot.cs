@@ -5,23 +5,30 @@ using System.Linq;
 using UnityEngine;
 
 public class Slot {
-	public int X;
-	public int Y;
-	public int Z;
+	public Vector3i Position;
 
 	private MapGenerator mapGenerator;
 
-	public Module Module;
+	public Module Module {
+		get {
+			return this.mapGenerator.Modules[this.ModuleIndex];
+		}
+	}
 
+	public int ModuleIndex;
+
+	// List of modules that can still be placed here
 	public HashSet<int> Modules;
 
+	// References to neigbor slots
 	public Slot[] Neighbours;
 
-	public int[][] PossibleNeighbours;
+	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
+	public int[][] NeighborCandidateHealth;
 
 	public bool Collapsed {
 		get {
-			return this.Module != null;
+			return this.ModuleIndex != -1;
 		}
 	}
 
@@ -31,40 +38,44 @@ public class Slot {
 		}
 	}
 
-	public Slot(int x, int y, int z, MapGenerator mapGenerator) {
-		this.X = x;
-		this.Y = y;
-		this.Z = z;
+	public BlockBehaviour BlockBehaviour;
+
+	public Slot(Vector3i position, MapGenerator mapGenerator) {
+		this.Position = position;
 		this.mapGenerator = mapGenerator;
 		this.Modules = new HashSet<int>(Enumerable.Range(0, mapGenerator.Modules.Length));
+		this.ModuleIndex = -1;
 	}
 
 	public void InitializeNeighbours() {
 		this.Neighbours = new Slot[6];
-		if (this.X > 0) {
-			this.Neighbours[0] = this.mapGenerator.Map[this.X - 1, this.Y, this.Z];
+		if (this.Position.X > 0) {
+			this.Neighbours[0] = this.mapGenerator.Map[this.Position.X - 1, this.Position.Y, this.Position.Z];
 		}
-		if (this.Y > 0) {
-			this.Neighbours[1] = this.mapGenerator.Map[this.X, this.Y - 1, this.Z];
+		if (this.Position.Y > 0) {
+			this.Neighbours[1] = this.mapGenerator.Map[this.Position.X, this.Position.Y - 1, this.Position.Z];
 		}
-		if (this.Z > 0) {
-			this.Neighbours[2] = this.mapGenerator.Map[this.X, this.Y, this.Z - 1];
+		if (this.Position.Z > 0) {
+			this.Neighbours[2] = this.mapGenerator.Map[this.Position.X, this.Position.Y, this.Position.Z - 1];
 		}
-		if (this.X < this.mapGenerator.SizeX - 1) {
-			this.Neighbours[3] = this.mapGenerator.Map[this.X + 1, this.Y, this.Z];
+		if (this.Position.X < this.mapGenerator.SizeX - 1) {
+			this.Neighbours[3] = this.mapGenerator.Map[this.Position.X + 1, this.Position.Y, this.Position.Z];
 		}
-		if (this.Y < this.mapGenerator.SizeY - 1) {
-			this.Neighbours[4] = this.mapGenerator.Map[this.X, this.Y + 1, this.Z];
+		if (this.Position.Y < this.mapGenerator.SizeY - 1) {
+			this.Neighbours[4] = this.mapGenerator.Map[this.Position.X, this.Position.Y + 1, this.Position.Z];
 		}
-		if (this.Z < this.mapGenerator.SizeZ - 1) {
-			this.Neighbours[5] = this.mapGenerator.Map[this.X, this.Y, this.Z + 1];
+		if (this.Position.Z < this.mapGenerator.SizeZ - 1) {
+			this.Neighbours[5] = this.mapGenerator.Map[this.Position.X, this.Position.Y, this.Position.Z + 1];
 		}
 	}
 
 	public void Collapse(int index) {
-		this.Module = this.mapGenerator.Modules[index];
+		if (this.Collapsed) {
+			throw new System.InvalidOperationException("Slot is already collapsed.");
+		}
+
+		this.ModuleIndex = index;
 		this.mapGenerator.LatestFilled = this;
-		this.Build();
 		this.mapGenerator.SlotsFilled++;
 
 		this.checkConsistency(index);
@@ -72,11 +83,15 @@ public class Slot {
 		var toRemove = this.Modules.ToList();
 		toRemove.Remove(index);
 		this.RemoveModules(toRemove);
+
+		if (this.mapGenerator.BuildOnCollapse) {
+			this.Build();
+		}
 	}
 
 	private void checkConsistency(int index) {
 		for (int d = 0; d < 6; d++) {
-			if (this.Neighbours[d] != null && this.Neighbours[d].Module != null && !this.Neighbours[d].Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
+			if (this.Neighbours[d] != null && this.Neighbours[d].Collapsed && !this.Neighbours[d].Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
 				this.markRed();
 				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list.");
@@ -111,19 +126,19 @@ public class Slot {
 		this.Collapse(candidates.First());
 	}
 
-	public void RemoveModules(List<int> modules) {
+	public void RemoveModules(List<int> modulesToRemove) {
 		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<int>()).ToArray();
 
-		foreach (int module in modules) {
-			if (!this.Modules.Contains(module) || this.mapGenerator.Modules[module] == this.Module) {
+		foreach (int module in modulesToRemove) {
+			if (!this.Modules.Contains(module) || module == this.ModuleIndex) {
 				continue;
 			}
 			for (int d = 0; d < 6; d++) {
 				foreach (int possibleNeighbour in this.mapGenerator.Modules[module].PossibleNeighbours[d]) {
-					if (this.PossibleNeighbours[d][possibleNeighbour] == 1) {
+					if (this.NeighborCandidateHealth[d][possibleNeighbour] == 1) {
 						affectedNeighbouredModules[d].Add(possibleNeighbour);
 					}
-					this.PossibleNeighbours[d][possibleNeighbour]--;
+					this.NeighborCandidateHealth[d][possibleNeighbour]--;
 				}
 			}
 			this.Modules.Remove(module);
@@ -149,7 +164,7 @@ public class Slot {
 	}
 
 	public void Build() {
-		if (this.Module == null || this.Module.Prototype.Spawn == false) {
+		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {
 			return;
 		}
 
@@ -173,12 +188,11 @@ public class Slot {
 		gameObject.transform.position = this.GetPosition();
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
-		this.mapGenerator.Blocks[this] = blockBehaviour;
 		blockBehaviour.Prototype = this.Module.Prototype;
 		blockBehaviour.Neighbours = new BlockBehaviour[6];
 		for (int i = 0; i < 6; i++) {
-			if (this.Neighbours[i] != null && this.mapGenerator.Blocks.ContainsKey(this.Neighbours[i])) {
-				var otherBlock = this.mapGenerator.Blocks[this.Neighbours[i]];
+			if (this.Neighbours[i] != null && this.Neighbours[i].BlockBehaviour != null) {
+				var otherBlock = this.Neighbours[i].BlockBehaviour;
 				blockBehaviour.Neighbours[i] = otherBlock;
 				otherBlock.Neighbours[(i + 3) % 6] = blockBehaviour;
 			}
@@ -186,7 +200,7 @@ public class Slot {
 	}
 
 	public Vector3 GetPosition() {
-		return this.mapGenerator.GetWorldspacePosition(this.X, this.Y, this.Z);
+		return this.mapGenerator.GetWorldspacePosition(this.Position.X, this.Position.Y, this.Position.Z);
 	}
 
 	public void EnforeConnector(int direction, int connector) {

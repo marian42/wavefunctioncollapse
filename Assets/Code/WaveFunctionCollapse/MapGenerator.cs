@@ -12,9 +12,8 @@ public class MapGenerator : MonoBehaviour {
 	[HideInInspector]
 	public Module[] Modules;
 
+	// TODO serialize this
 	public Slot[, ,] Map;
-
-	public Dictionary<Slot, BlockBehaviour> Blocks;
 
 	[HideInInspector]
 	public int SizeX;
@@ -33,6 +32,8 @@ public class MapGenerator : MonoBehaviour {
 	public bool BorderConstraints = true;
 	public bool AllowExclusions = true;
 
+	public bool BuildOnCollapse;
+
 	public IEnumerable<Slot> FlatMap {
 		get {
 			for (int y = this.SizeY - 1; y >= 0; y--) {
@@ -49,7 +50,7 @@ public class MapGenerator : MonoBehaviour {
 		this.Modules = ModulePrototype.CreateModules(this).ToArray();
 	}
 
-	public IEnumerator Generate() {
+	public void Generate() {
 		this.destroyChildren();
 		this.createModules();
 
@@ -57,12 +58,11 @@ public class MapGenerator : MonoBehaviour {
 		this.SizeY = (int)this.MapSize.y;
 		this.SizeZ = (int)this.MapSize.z;
 		this.Map = new Slot[SizeX, SizeY, SizeZ];
-		this.Blocks = new Dictionary<Slot, BlockBehaviour>();
 
 		for (int x = 0; x < this.SizeX; x++) {
 			for (int y = 0; y < this.SizeY; y++) {
 				for (int z = 0; z < this.SizeZ; z++) {
-					this.Map[x, y, z] = new Slot(x, y, z, this);
+					this.Map[x, y, z] = new Slot(new Vector3i(x, y, z), this);
 				}
 			}
 		}
@@ -87,7 +87,7 @@ public class MapGenerator : MonoBehaviour {
 
 		foreach (var slot in this.FlatMap) {
 			slot.InitializeNeighbours();
-			slot.PossibleNeighbours = slotNeighboursInitialState.Select(a => a.ToArray()).ToArray();
+			slot.NeighborCandidateHealth = slotNeighboursInitialState.Select(a => a.ToArray()).ToArray();
 		}
 
 		if (this.BorderConstraints) {
@@ -99,25 +99,19 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
+		this.SlotsFilled = 0;
+
 		var chunk = this.GetComponent<Chunk>();
 
 		if (chunk != null) {
 			chunk.ExcludeModules(this);
 		}
 
-		this.SlotsFilled = 0;
 		int total = this.SizeX * this.SizeY * this.SizeZ;
-
-		//this.Map[0, 0, 0].CollapseRandom();
 
 		while (this.SlotsFilled < total) {
 			this.Collapse();
-			if (this.LatestFilled.Module.Prototype.Spawn) {
-				yield return new WaitForSeconds(0.1f);
-			}
 		}
-
-		Debug.Log("Map generation complete.");
 	}
 
 	public void Collapse() {
@@ -160,5 +154,11 @@ public class MapGenerator : MonoBehaviour {
 		int direction = Orientations.Get((destination - start).ToVector3());
 		this.EnforceWalkway(start, direction);
 		this.EnforceWalkway(destination, (direction + 3) % 6);
+	}
+
+	public void Build() {
+		foreach (var slot in this.FlatMap) {
+			slot.Build();
+		}
 	}
 }
