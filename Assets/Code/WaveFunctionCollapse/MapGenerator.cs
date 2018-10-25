@@ -22,7 +22,6 @@ public class MapGenerator : MonoBehaviour {
 	public int UpConnector;
 	public int DownConnector;
 
-	public bool BorderConstraints = true;
 	public bool AllowExclusions = true;
 
 	public bool BuildOnCollapse;
@@ -33,11 +32,20 @@ public class MapGenerator : MonoBehaviour {
 
 	public int TestModule = 0;
 
+	private Slot[] defaultColumn;
+
+	private bool defaultColumnMode = false;
+
 	public Slot GetSlot(Vector3i position, bool create = true) {
-		if (position.Magnitude > this.RangeLimit) {
+		if (position.Y > this.HeightLimit || position.Y < -this.HeightLimit) {
 			return null;
 		}
-		if (position.Y > this.HeightLimit || position.Y < -this.HeightLimit) {
+
+		if (this.defaultColumnMode) {
+			return this.defaultColumn[this.HeightLimit + position.Y];
+		}
+
+		if (position.Magnitude > this.RangeLimit) {
 			return null;
 		}
 
@@ -59,17 +67,10 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	private void initializeSlot(Slot slot) {
-		slot.NeighborCandidateHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+		var prototype = this.defaultColumn[slot.Position.Y + this.HeightLimit];
 
-		if (this.BorderConstraints) {
-			if (slot.Position.Y == this.HeightLimit) {
-				slot.EnforeConnector(4, this.UpConnector);
-			}
-
-			if (slot.Position.Y == -this.HeightLimit) {
-				slot.EnforeConnector(1, this.DownConnector);
-			}
-		}
+		slot.NeighborCandidateHealth = prototype.NeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+		slot.Modules = new HashSet<int>(prototype.Modules);
 	}
 	
 	private void createModules() {
@@ -101,20 +102,31 @@ public class MapGenerator : MonoBehaviour {
 		}
 	}
 
+	private void prepareDefaultColumn() {
+		this.defaultColumnMode = true;
+		this.defaultColumn = new Slot[this.HeightLimit * 2 + 1];
+		for (int y = -this.HeightLimit; y <= this.HeightLimit; y++) {
+			var slot = new Slot(new Vector3i(0, y, 0), this);
+			this.defaultColumn[y + this.HeightLimit] = slot;
+			slot.NeighborCandidateHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+		}
+		
+		this.defaultColumn[this.HeightLimit * 2].EnforeConnector(Orientations.UP, this.UpConnector);
+		this.defaultColumn[0].EnforeConnector(Orientations.DOWN, this.DownConnector);
+		this.defaultColumn[0].ExcludeConnector(Orientations.FORWARD, 11);
+		this.defaultColumn[0].ExcludeConnector(Orientations.LEFT, 11);
+		this.defaultColumn[0].ExcludeConnector(Orientations.RIGHT, 11);
+		this.defaultColumn[0].ExcludeConnector(Orientations.BACK, 11);
+
+		this.defaultColumnMode = false;
+	}
+
 	public void Generate() {
 		this.destroyChildren();		
 		this.Map = new Dictionary<Vector3i, Slot>();
 
 		this.prepareModuleData();
-
-		if (this.BorderConstraints) {
-			for (int x = 0; x < this.Size.X; x++) {
-				for (int z = 0; z < this.Size.Z; z++) {
-					this.GetSlot(x, this.Size.Y - 1, z).EnforeConnector(4, this.UpConnector);
-					this.GetSlot(x, 0, z).EnforeConnector(1, this.DownConnector);
-				}
-			}
-		}
+		this.prepareDefaultColumn();
 
 		this.Collapse();
 	}
@@ -148,7 +160,9 @@ public class MapGenerator : MonoBehaviour {
 			var selected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 			selected.CollapseRandom();
 			slots.Remove(selected);
-		}	
+		}
+
+		Debug.Log("WFC complete.");
 	}
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
@@ -188,9 +202,14 @@ public class MapGenerator : MonoBehaviour {
 		}
 	}
 
+	public bool VisualizeInEditor = false;
+
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmoForMyScript(MapGenerator mapGenerator, GizmoType gizmoType) {
+		if (!mapGenerator.VisualizeInEditor) {
+			return;
+		}
 		if (mapGenerator.Map == null) {
 			return;
 		}

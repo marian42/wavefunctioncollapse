@@ -13,7 +13,7 @@ public class MapGeneratorEditor : Editor {
 		if (GUILayout.Button("Generate")) {
 			generator.Generate();
 			Debug.Log("Map generation complete.");
-			generator.Build();
+			//generator.Build();
 		}
 	}
 }

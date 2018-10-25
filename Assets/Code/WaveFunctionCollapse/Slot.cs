@@ -51,14 +51,16 @@ public class Slot {
 
 	public void Collapse(int index) {
 		if (this.Collapsed) {
-			throw new System.InvalidOperationException("Slot is already collapsed.");
+			Debug.LogWarning("Trying to collapse already collapsed slot.");
+			return;
 		}
 
 		this.ModuleIndex = index;
 		this.mapGenerator.LatestFilled = this;
 
+#if UNITY_EDITOR
 		this.checkConsistency(index);
-
+#endif
 		var toRemove = this.Modules.ToList();
 		toRemove.Remove(index);
 		this.RemoveModules(toRemove);
@@ -73,7 +75,7 @@ public class Slot {
 			if (this.neighbor(d) != null && this.neighbor(d).Collapsed && !this.neighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
 				this.markRed();
 				// This would be a result of inconsistent code, should not be possible.
-				throw new Exception("Illegal collapse, not in neighbour list.");
+				throw new Exception("Illegal collapse, not in neighbour list. (Incompatible connectors)");
 			}
 		}
 
@@ -184,6 +186,11 @@ public class Slot {
 
 	public void EnforeConnector(int direction, int connector) {
 		var toRemove = this.Modules.Where(i => !this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
+		this.RemoveModules(toRemove);
+	}
+
+	public void ExcludeConnector(int direction, int connector) {
+		var toRemove = this.Modules.Where(i => this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
 		this.RemoveModules(toRemove);
 	}
 
