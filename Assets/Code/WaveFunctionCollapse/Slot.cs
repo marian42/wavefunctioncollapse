@@ -7,21 +7,24 @@ using UnityEngine;
 public class Slot {
 	public Vector3i Position;
 
+	// List of modules that can still be placed here
+	public HashSet<int> Modules;
+
+	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
+	public int[][] NeighborCandidateHealth;
+
+	// Which modules occupies this slot, -1 for uncollapsed
+	public int ModuleIndex;
+
 	private MapGenerator mapGenerator;
+
+	private IMap map;
 
 	public Module Module {
 		get {
 			return this.mapGenerator.Modules[this.ModuleIndex];
 		}
 	}
-
-	public int ModuleIndex;
-
-	// List of modules that can still be placed here
-	public HashSet<int> Modules;
-
-	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
-	public int[][] NeighborCandidateHealth;
 
 	public bool Collapsed {
 		get {
@@ -37,16 +40,22 @@ public class Slot {
 
 	public BlockBehaviour BlockBehaviour;
 
-	public Slot(Vector3i position, MapGenerator mapGenerator) {
+	public Slot(Vector3i position, MapGenerator mapGenerator, IMap map) {
 		this.Position = position;
 		this.mapGenerator = mapGenerator;
+		this.map = map;
 		this.Modules = new HashSet<int>(Enumerable.Range(0, mapGenerator.Modules.Length));
 		this.ModuleIndex = -1;
 	}
 
+	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
+		this.NeighborCandidateHealth = prototype.NeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+		this.Modules = new HashSet<int>(prototype.Modules);
+	}
+
 	// TODO only look up once and then cache???
 	private Slot neighbor(int direction) {
-		return this.mapGenerator.GetSlot(this.Position + Orientations.Direction[direction]);
+		return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
 	}
 
 	public void Collapse(int index) {
@@ -56,7 +65,6 @@ public class Slot {
 		}
 
 		this.ModuleIndex = index;
-		this.mapGenerator.LatestFilled = this;
 
 #if UNITY_EDITOR
 		this.checkConsistency(index);
@@ -65,9 +73,7 @@ public class Slot {
 		toRemove.Remove(index);
 		this.RemoveModules(toRemove);
 
-		if (this.mapGenerator.BuildOnCollapse) {
-			this.Build();
-		}
+		this.Build();
 	}
 
 	private void checkConsistency(int index) {
@@ -196,5 +202,5 @@ public class Slot {
 
 	public override int GetHashCode() {
 		return this.Position.GetHashCode();
-	}
+	}
 }

@@ -5,6 +5,13 @@ using System.Linq;
 using System;
 
 public class Orientations {
+	public const int LEFT = 0;
+	public const int DOWN = 1;
+	public const int BACK = 2;
+	public const int RIGHT = 3;
+	public const int UP = 4;
+	public const int FORWARD = 5;
+
 	private static Quaternion[] rotations;
 	private static Vector3[] vectors;
 	private static Vector3i[] directions;
@@ -27,15 +34,6 @@ public class Orientations {
 		}
 	}
 
-
-
-	public const int LEFT = 0;
-	public const int DOWN = 1;
-	public const int BACK = 2;
-	public const int RIGHT = 3;
-	public const int UP = 4;
-	public const int FORWARD = 5;
-
 	private static void initialize() {
 		Orientations.vectors = new Vector3[] {
 			Vector3.left,
@@ -54,11 +52,11 @@ public class Orientations {
 
 	public static readonly string[] Names = { "-red", "-green", "-blue", "red", "green", "blue" };
 
-	public static int Rotate(int direction, int rotations) {
+	public static int Rotate(int direction, int amount) {
 		if (direction == 1 || direction == 4) {
 			return direction;
 		}
-		return horizontalFaces[(Array.IndexOf(horizontalFaces, direction) + rotations) % 4];
+		return horizontalFaces[(Array.IndexOf(horizontalFaces, direction) + amount) % 4];
 	}
 
 	public static bool IsHorizontal(int orientation) {
