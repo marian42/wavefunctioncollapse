@@ -20,6 +20,8 @@ public class Slot {
 
 	private IMap map;
 
+	private bool inFailureQueue = false;
+
 	public Module Module {
 		get {
 			return this.mapGenerator.Modules[this.ModuleIndex];
@@ -65,28 +67,25 @@ public class Slot {
 		}
 
 		this.ModuleIndex = index;
-
-#if UNITY_EDITOR
-		this.checkConsistency(index);
-#endif
 		var toRemove = this.Modules.ToList();
 		toRemove.Remove(index);
 		this.RemoveModules(toRemove);
 
+		this.mapGenerator.MarkSlotComplete(this);
 		this.Build();
 	}
 
 	private void checkConsistency(int index) {
 		for (int d = 0; d < 6; d++) {
 			if (this.neighbor(d) != null && this.neighbor(d).Collapsed && !this.neighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
-				this.markRed();
+				this.mark(2f, Color.red);
 				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list. (Incompatible connectors)");
 			}
 		}
 
 		if (!this.Modules.Contains(index)) {
-			this.markRed();
+			this.mark(2f, Color.red);
 			// This would be a result of inconsistent code, should not be possible.
 			throw new Exception("Illegal collapse!");
 		}
@@ -94,7 +93,8 @@ public class Slot {
 
 	public void CollapseRandom() {
 		if (!this.Modules.Any()) {
-			throw new Exception("No modules to select.");	
+			this.Fail();
+			return;
 		}
 		if (this.Collapsed) {
 			throw new Exception("Slot is already collapsed.");
@@ -108,7 +108,7 @@ public class Slot {
 			if (p >= roll) {
 				this.Collapse(candidate);
 				return;
-			}			
+			}
 		}
 		this.Collapse(candidates.First());
 	}
@@ -132,22 +132,48 @@ public class Slot {
 		}
 
 		if (this.Modules.Count == 0) {
-			this.markRed();
-			throw new Exception("Wavefunction collapse failed.");
+			this.Fail();
+			return;
 		}
 
 		for (int d = 0; d < 6; d++) {
-			if (affectedNeighbouredModules[d].Any() && this.neighbor(d) != null) {
+			if (affectedNeighbouredModules[d].Any() && this.neighbor(d) != null && !this.neighbor(d).Collapsed) {
 				this.neighbor(d).RemoveModules(affectedNeighbouredModules[d]);
 			}
 		}
 	}
 
-	private void markRed() {
+	public void Fail() {
+		this.ModuleIndex = 0;
+		this.mapGenerator.MarkSlotComplete(this);
+		this.inFailureQueue = true;
+		this.mapGenerator.OnFail(this);
+	}
+
+	public bool TryToRecoverFailure() {
+		this.inFailureQueue = false;
+		if (Enumerable.Range(0, 6).All(i => this.neighbor(i) == null || this.neighbor(i).inFailureQueue || this.neighbor(i).Collapsed)) {
+			foreach (int index in Enumerable.Range(0, this.mapGenerator.Modules.Length)) {
+				if (Enumerable.Range(0, 6).All(direction => this.neighbor(direction) == null || this.neighbor(direction).inFailureQueue || this.mapGenerator.Modules[index].Fits(direction, this.neighbor(direction).Module))) {
+					this.ModuleIndex = index;
+					this.Build();
+					return true;
+				}
+			}
+
+			this.mark(2f, Color.red);
+			return true;
+		}
+		return false;
+	}
+
+	private GameObject mark(float size, Color color) {
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.parent = this.mapGenerator.transform;
-		cube.GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+		cube.transform.localScale = Vector3.one * size;
+		cube.GetComponent<MeshRenderer>().material.color = color;
 		cube.transform.position = this.GetPosition();
+		return cube;
 	}
 
 	public void Build() {
@@ -178,6 +204,7 @@ public class Slot {
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Prototype = this.Module.Prototype;
 		blockBehaviour.Neighbours = new BlockBehaviour[6];
+		this.BlockBehaviour = blockBehaviour;
 		for (int i = 0; i < 6; i++) {
 			if (this.neighbor(i) != null && this.neighbor(i).BlockBehaviour != null) {
 				var otherBlock = this.neighbor(i).BlockBehaviour;

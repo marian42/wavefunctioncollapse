@@ -25,6 +25,10 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public BoundaryConstraint[] BoundaryConstraints;
 
+	private HashSet<Slot> workArea;
+
+	private Queue<Slot> failureQueue;
+
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
 			return null;
@@ -60,6 +64,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 	public void Initialize() {
 		this.destroyChildren();		
 		this.Map = new Dictionary<Vector3i, Slot>();
+		this.failureQueue = new Queue<Slot>();
 
 		this.createModules();
 		this.defaultColumn = new DefaultColumn(this);
@@ -84,18 +89,25 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets) {
-		var slots = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => !slot.Collapsed));
+		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => !slot.Collapsed));
 
-		while (slots.Any()) {
-			int minEntropy = slots.Min(slot => slot.Entropy);
-			if (minEntropy == 0) {
-				throw new Exception("Wavefunction collapse failed.");
-			}
-			var candidates = slots.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
+		while (this.workArea.Any()) {
+			int minEntropy = this.workArea.Min(slot => slot.Entropy);
+			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
 			
 			var selected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 			selected.CollapseRandom();
-			slots.Remove(selected);
+		}
+
+		var retry = new List<Slot>();
+		while (this.failureQueue.Any()) {
+			var failedSlot = this.failureQueue.Dequeue();
+			if (!failedSlot.TryToRecoverFailure()) {
+				retry.Add(failedSlot);
+			}
+		}
+		foreach (var item in retry) {
+			this.failureQueue.Enqueue(item);
 		}
 	}
 
@@ -128,6 +140,14 @@ public class MapGenerator : MonoBehaviour, IMap {
 		int direction = Orientations.GetIndex((destination - start).ToVector3());
 		this.EnforceWalkway(start, direction);
 		this.EnforceWalkway(destination, (direction + 3) % 6);
+	}
+
+	public void MarkSlotComplete(Slot slot) {
+		this.workArea.Remove(slot);
+	}
+
+	public void OnFail(Slot slot) {
+		this.failureQueue.Enqueue(slot);
 	}
 
 	public bool VisualizeSlots = false;

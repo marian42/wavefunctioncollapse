@@ -16,22 +16,9 @@ public class FollowPlayer : MonoBehaviour {
 
 	private HashSet<Vector3i> completedChunks;
 
-	private void initializeMap() {
-		int initTries = 10;
-		while (initTries-- > 0) {
-			try {
-				this.mapGenerator.Initialize();
-				break;
-			}
-			catch (System.Exception e) {
-				Debug.LogWarning(e);
-			}
-		}
-	}
-
 	void Start () {
 		this.mapGenerator = this.GetComponent<MapGenerator>();
-		this.initializeMap();
+		this.mapGenerator.Initialize();
 		this.completedChunks = new HashSet<Vector3i>();
 	}
 
@@ -67,12 +54,7 @@ public class FollowPlayer : MonoBehaviour {
 
 		if (any) {
 			this.completedChunks.Add(closestMissingChunk);
-			try {
-				this.mapGenerator.Collapse(closestMissingChunk * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
-			}
-			catch (Exception e) {
-				Debug.LogWarning(e);
-			}
+			this.mapGenerator.Collapse(closestMissingChunk * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
 		}
 	}
 	
