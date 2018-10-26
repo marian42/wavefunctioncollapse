@@ -170,6 +170,7 @@ public class Slot {
 		}
 
 		var gameObject = GameObject.Instantiate(model.gameObject);
+		gameObject.name = this.Module.Prototype.gameObject.name + " " + this.Position;
 		GameObject.DestroyImmediate(gameObject.GetComponent<AbstractModulePrototype>());
 		gameObject.transform.parent = this.mapGenerator.transform;
 		gameObject.transform.position = this.GetPosition();

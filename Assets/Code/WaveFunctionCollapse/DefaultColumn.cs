@@ -7,14 +7,11 @@ using System.Linq;
 public class DefaultColumn : IMap {
 	private readonly Slot[] slots;
 
-	private readonly int yOffset;
-
 	public Slot GetSlot(int y) {
-		int index = y + this.yOffset;
-		if (index < 0 || index >= this.slots.Length) {
+		if (y < 0 || y >= this.slots.Length) {
 			return null;
 		}
-		return this.slots[index];
+		return this.slots[y];
 	}
 
 	public Slot GetSlot(Vector3i position) {
@@ -43,14 +40,12 @@ public class DefaultColumn : IMap {
 	}
 
 	public DefaultColumn(MapGenerator mapGenerator) {
-		this.yOffset = mapGenerator.HeightLimit;
-
 		var initialNeighborCandidateHealth = this.createInitialNeighborCandidateHealth(mapGenerator.Modules);
 
-		this.slots = new Slot[mapGenerator.HeightLimit * 2 + 1];
-		for (int y = -mapGenerator.HeightLimit; y <= mapGenerator.HeightLimit; y++) {
+		this.slots = new Slot[mapGenerator.Height];
+		for (int y = 0; y < mapGenerator.Height; y++) {
 			var slot = new Slot(new Vector3i(0, y, 0), mapGenerator, this);
-			this.slots[y + this.yOffset] = slot;
+			this.slots[y] = slot;
 			slot.NeighborCandidateHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
 		}
 		

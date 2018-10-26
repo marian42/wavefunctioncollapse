@@ -9,11 +9,11 @@ public class AreaSelector : MonoBehaviour {
 	public Vector3i StartPosition {
 		get {
 			var start = new Vector3i((this.transform.position) / MapGenerator.BlockSize);
-			if (start.Y > this.MapGenerator.HeightLimit) {
-				start.Y = this.MapGenerator.HeightLimit;
+			if (start.Y >= this.MapGenerator.Height) {
+				start.Y = this.MapGenerator.Height - 1;
 			}
-			if (start.Y < -this.MapGenerator.HeightLimit) {
-				start.Y = -this.MapGenerator.HeightLimit;
+			if (start.Y < 0) {
+				start.Y = 0;
 			}
 			return start;
 		}
@@ -23,8 +23,8 @@ public class AreaSelector : MonoBehaviour {
 		get {
 			var start = this.StartPosition;
 			var size = new Vector3i(this.transform.localScale / MapGenerator.BlockSize);
-			if (size.Y + start.Y > this.MapGenerator.HeightLimit) {
-				size.Y = System.Math.Max(0, this.MapGenerator.HeightLimit - start.Y);
+			if (size.Y + start.Y >= this.MapGenerator.Height) {
+				size.Y = System.Math.Max(0, this.MapGenerator.Height - start.Y);
 			}
 			return size;
 		}

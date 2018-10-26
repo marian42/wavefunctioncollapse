@@ -13,9 +13,9 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public Dictionary<Vector3i, Slot> Map;
 
-	public Vector3i Size;
+	public int InitializationAreaSize = 4;
 
-	public int HeightLimit = 4;
+	public int Height = 8;
 
 	public int UpConnector;
 	public int DownConnector;
@@ -27,7 +27,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 	private DefaultColumn defaultColumn;
 
 	public Slot GetSlot(Vector3i position, bool create) {
-		if (position.Y > this.HeightLimit || position.Y < -this.HeightLimit) {
+		if (position.Y >= this.Height || position.Y < 0) {
 			return null;
 		}
 
@@ -81,7 +81,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}
 
 	public void Collapse() {
-		this.Collapse(-this.Size / 2, this.Size);
+		this.Collapse(new Vector3i(- this.InitializationAreaSize / 2, 0, - this.InitializationAreaSize / 2), new Vector3i(this.InitializationAreaSize, this.Height, this.InitializationAreaSize));
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets) {
