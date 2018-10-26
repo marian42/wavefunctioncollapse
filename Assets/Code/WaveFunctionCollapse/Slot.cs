@@ -191,7 +191,7 @@ public class Slot {
 		return this.mapGenerator.GetWorldspacePosition(this.Position);
 	}
 
-	public void EnforeConnector(int direction, int connector) {
+	public void EnforceConnector(int direction, int connector) {
 		var toRemove = this.Modules.Where(i => !this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
 		this.RemoveModules(toRemove);
 	}

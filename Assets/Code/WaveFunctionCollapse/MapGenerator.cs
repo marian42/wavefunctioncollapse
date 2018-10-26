@@ -17,14 +17,13 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public int Height = 8;
 
-	public int UpConnector;
-	public int DownConnector;
-
-	public bool AllowExclusions = true;
+	public bool RespectNeighorExclusions = true;
 
 	public int RangeLimit = 20;
 
 	private DefaultColumn defaultColumn;
+
+	public BoundaryConstraint[] BoundaryConstraints;
 
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
@@ -131,12 +130,12 @@ public class MapGenerator : MonoBehaviour, IMap {
 		this.EnforceWalkway(destination, (direction + 3) % 6);
 	}
 
-	public bool VisualizeInEditor = false;
+	public bool VisualizeSlots = false;
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmoForMyScript(MapGenerator mapGenerator, GizmoType gizmoType) {
-		if (!mapGenerator.VisualizeInEditor) {
+		if (!mapGenerator.VisualizeSlots) {
 			return;
 		}
 		if (mapGenerator.Map == null) {

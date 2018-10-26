@@ -12,6 +12,15 @@ public class Orientations {
 	public const int UP = 4;
 	public const int FORWARD = 5;
 
+	public enum Enum {
+		Left = 0,
+		Down = 1,
+		Back = 2,
+		Right = 3,
+		Up = 4,
+		Forward = 5
+	}
+
 	private static Quaternion[] rotations;
 	private static Vector3[] vectors;
 	private static Vector3i[] directions;

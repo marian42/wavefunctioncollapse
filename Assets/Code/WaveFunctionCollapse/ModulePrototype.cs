@@ -241,7 +241,7 @@ public class ModulePrototype : AbstractModulePrototype {
 			for (int direction = 0; direction < 6; direction++) {
 				module.PossibleNeighbours[direction] = Enumerable.Range(0, modules.Count).
 					Where(i => module.Fits(direction, modules[i])
-						&& (!mapGenerator.AllowExclusions || (
+						&& (!mapGenerator.RespectNeighorExclusions || (
 							!module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)].ExcludedNeighbours.Contains(modules[i].Prototype)
 							&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype)))
 					)

@@ -48,12 +48,20 @@ public class DefaultColumn : IMap {
 			this.slots[y] = slot;
 			slot.NeighborCandidateHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
 		}
-		
-		this.slots[this.slots.Length - 1].EnforeConnector(Orientations.UP, mapGenerator.UpConnector);
-		this.slots[0].EnforeConnector(Orientations.DOWN, mapGenerator.DownConnector);
-		this.slots[0].ExcludeConnector(Orientations.FORWARD, 11);
-		this.slots[0].ExcludeConnector(Orientations.LEFT, 11);
-		this.slots[0].ExcludeConnector(Orientations.RIGHT, 11);
-		this.slots[0].ExcludeConnector(Orientations.BACK, 11);
+
+		foreach (var constraint in mapGenerator.BoundaryConstraints) {
+			int y = constraint.RelativeY;
+			if (y < 0) {
+				y += mapGenerator.Height;
+			}
+			switch (constraint.Mode) {
+				case BoundaryConstraint.ConstraintMode.EnforceConnector:
+					this.slots[y].EnforceConnector((int)constraint.Direction, constraint.Connector);
+					break;
+				case BoundaryConstraint.ConstraintMode.ExcludeConnector:
+					this.slots[y].ExcludeConnector((int)constraint.Direction, constraint.Connector);
+					break;
+			}
+		}
 	}
 }
