@@ -30,7 +30,7 @@ public class AreaSelector : MonoBehaviour {
 		}
 	}
 
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmoForMyScript(AreaSelector areaSelector, GizmoType gizmoType) {
 		var size = areaSelector.Size.ToVector3() * MapGenerator.BlockSize;
@@ -38,5 +38,5 @@ public class AreaSelector : MonoBehaviour {
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireCube(areaSelector.MapGenerator.transform.position + start + size * 0.5f, size);
 	}
-//#endif
+#endif
 }

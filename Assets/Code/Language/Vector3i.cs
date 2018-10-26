@@ -35,6 +35,9 @@ public struct Vector3i {
 	public static Vector3i operator *(int f, Vector3i b) {
 		return new Vector3i(f * b.X, f * b.Y, f * b.Z);
 	}
+	public static Vector3i operator *(Vector3i b, int f) {
+		return new Vector3i(f * b.X, f * b.Y, f * b.Z);
+	}
 
 	public static Vector3i operator /(Vector3i b, int d) {
 		return new Vector3i(b.X / d, b.Y / d, b.Z / d);
