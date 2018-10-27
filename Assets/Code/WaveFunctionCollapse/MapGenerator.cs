@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -97,7 +97,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets) {
-		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => !slot.Collapsed));
+		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
 		while (this.workArea.Any()) {
 			int minEntropy = this.workArea.Min(slot => slot.Entropy);
@@ -151,7 +151,9 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}
 
 	public void MarkSlotComplete(Slot slot) {
-		this.workArea.Remove(slot);
+		if (this.workArea != null) {
+			this.workArea.Remove(slot);
+		}
 	}
 
 	public void MarkSlotForBuilding(Slot slot) {

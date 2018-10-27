@@ -225,6 +225,12 @@ public class ModulePrototype : AbstractModulePrototype {
 		var modules = new List<Module>();
 		
 		foreach (var prototype in ModulePrototype.GetAll()) {
+			for (int face = 0; face < 6; face++) {
+				if (prototype.Faces[face].ExcludedNeighbours == null) {
+					prototype.Faces[face].ExcludedNeighbours = new ModulePrototype[0];
+				}
+			}
+
 			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
 				modules.Add(new Module(prototype, rotation, mapGenerator));
 			}

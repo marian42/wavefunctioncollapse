@@ -94,6 +94,17 @@ ModelImporter:
     100176: Spiral_Stairs_Collider_M
     100178: Tunnel_Stairs
     100180: Tunnel_Stairs_Entrance
+    100182: Balcony
+    100184: Wall_Bench
+    100186: HH_Floor
+    100188: HH_Stairs
+    100190: HH_Stairs_001
+    100192: HH_Stairs_Corner
+    100194: HH_Stairs_Corner_Collider
+    100196: HH_Wall
+    100198: HH_Wall_Corner
+    100200: HH_Stairs_Wall
+    100202: HH_Stairs_Wall_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -185,6 +196,17 @@ ModelImporter:
     400176: Spiral_Stairs_Collider_M
     400178: Tunnel_Stairs
     400180: Tunnel_Stairs_Entrance
+    400182: Balcony
+    400184: Wall_Bench
+    400186: HH_Floor
+    400188: HH_Stairs
+    400190: HH_Stairs_001
+    400192: HH_Stairs_Corner
+    400194: HH_Stairs_Corner_Collider
+    400196: HH_Wall
+    400198: HH_Wall_Corner
+    400200: HH_Stairs_Wall
+    400202: HH_Stairs_Wall_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -275,6 +297,17 @@ ModelImporter:
     2300172: Spiral_Stairs_Collider_M
     2300174: Tunnel_Stairs
     2300176: Tunnel_Stairs_Entrance
+    2300178: Balcony
+    2300180: Wall_Bench
+    2300182: HH_Floor
+    2300184: HH_Stairs
+    2300186: HH_Stairs_001
+    2300188: HH_Stairs_Corner
+    2300190: HH_Stairs_Corner_Collider
+    2300192: HH_Wall
+    2300194: HH_Wall_Corner
+    2300196: HH_Stairs_Wall
+    2300198: HH_Stairs_Wall_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -364,6 +397,17 @@ ModelImporter:
     3300172: Spiral_Stairs_Collider_M
     3300174: Tunnel_Stairs
     3300176: Tunnel_Stairs_Entrance
+    3300178: Balcony
+    3300180: Wall_Bench
+    3300182: HH_Floor
+    3300184: HH_Stairs
+    3300186: HH_Stairs_001
+    3300188: HH_Stairs_Corner
+    3300190: HH_Stairs_Corner_Collider
+    3300192: HH_Wall
+    3300194: HH_Wall_Corner
+    3300196: HH_Stairs_Wall
+    3300198: HH_Stairs_Wall_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -453,6 +497,17 @@ ModelImporter:
     4300172: Spiral_Stairs_Collider
     4300174: Tunnel_Stairs_Entrance
     4300176: Tunnel_Stairs
+    4300178: Balcony
+    4300180: Wall_Bench
+    4300182: HH_Stairs_Corner_Collider
+    4300184: HH_Wall_Corner
+    4300186: HH_Stairs_001
+    4300188: HH_Wall
+    4300190: HH_Stairs_Corner
+    4300192: HH_Stairs
+    4300194: HH_Floor
+    4300196: HH_Stairs_Wall_M
+    4300198: HH_Stairs_Wall
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
