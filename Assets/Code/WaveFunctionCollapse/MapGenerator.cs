@@ -8,6 +8,8 @@ using UnityEditor;
 public class MapGenerator : MonoBehaviour, IMap {
 	public const float BlockSize = 2f;
 
+	public static System.Random Random;
+
 	[HideInInspector]
 	public Module[] Modules;
 
@@ -29,12 +31,15 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	private Queue<Slot> failureQueue;
 
+	private Queue<Slot> buildQueue;
+
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
 			return null;
 		}
 
 		if (position.Magnitude > this.RangeLimit) {
+			Debug.LogWarning("Touched Range Limit!");
 			return null;
 		}
 
@@ -62,14 +67,17 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}	
 
 	public void Initialize() {
-		this.destroyChildren();		
+		this.destroyChildren();
+		MapGenerator.Random = new System.Random();
 		this.Map = new Dictionary<Vector3i, Slot>();
 		this.failureQueue = new Queue<Slot>();
+		this.buildQueue = new Queue<Slot>();
 
 		this.createModules();
 		this.defaultColumn = new DefaultColumn(this);
 
 		this.Collapse();
+		this.BuildAllSlots();
 	}
 
 	public void Collapse(Vector3i start, Vector3i size) {
@@ -95,7 +103,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 			int minEntropy = this.workArea.Min(slot => slot.Entropy);
 			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
 			
-			var selected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+			var selected = candidates[MapGenerator.Random.Next(0, candidates.Count - 1)];
 			selected.CollapseRandom();
 		}
 
@@ -146,8 +154,30 @@ public class MapGenerator : MonoBehaviour, IMap {
 		this.workArea.Remove(slot);
 	}
 
+	public void MarkSlotForBuilding(Slot slot) {
+		this.buildQueue.Enqueue(slot);
+	}
+
 	public void OnFail(Slot slot) {
 		this.failureQueue.Enqueue(slot);
+	}
+
+	public void Update() {
+		if (this.buildQueue == null) {
+			return;
+		}
+
+		int maxSpawnsPerFrame = 50;
+
+		while (this.buildQueue.Count != 0 && maxSpawnsPerFrame-- > 0) {
+			this.buildQueue.Dequeue().Build();
+		}
+	}
+
+	public void BuildAllSlots() {
+		while (this.buildQueue.Count != 0) {
+			this.buildQueue.Dequeue().Build();
+		}
 	}
 
 	public bool VisualizeSlots = false;

@@ -11,6 +11,7 @@ public class AreaSelectorEditor : Editor {
 		AreaSelector selector = (AreaSelector)target;
 		if (GUILayout.Button("Generate")) {
 			selector.MapGenerator.Collapse(selector.StartPosition, selector.Size);
+			selector.MapGenerator.BuildAllSlots();
 		}
 	}
 }

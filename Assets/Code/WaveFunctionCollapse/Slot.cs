@@ -21,6 +21,7 @@ public class Slot {
 	private IMap map;
 
 	private bool inFailureQueue = false;
+	private bool unrecoveredFailure = false;
 
 	public Module Module {
 		get {
@@ -72,7 +73,9 @@ public class Slot {
 		this.RemoveModules(toRemove);
 
 		this.mapGenerator.MarkSlotComplete(this);
-		this.Build();
+		if (this.Module.Prototype.Spawn) {
+			this.mapGenerator.MarkSlotForBuilding(this);
+		}
 	}
 
 	private void checkConsistency(int index) {
@@ -101,7 +104,7 @@ public class Slot {
 		}
 		var candidates = this.Modules.ToList();
 		float max = candidates.Select(i => this.mapGenerator.Modules[i].Probability).Sum();
-		float roll = UnityEngine.Random.Range(0f, max);
+		float roll = (float)(MapGenerator.Random.NextDouble() * max);
 		float p = 0;
 		foreach (var candidate in candidates) {
 			p += this.mapGenerator.Modules[candidate].Probability;
@@ -154,29 +157,38 @@ public class Slot {
 		this.inFailureQueue = false;
 		if (Enumerable.Range(0, 6).All(i => this.neighbor(i) == null || this.neighbor(i).inFailureQueue || this.neighbor(i).Collapsed)) {
 			foreach (int index in Enumerable.Range(0, this.mapGenerator.Modules.Length)) {
-				if (Enumerable.Range(0, 6).All(direction => this.neighbor(direction) == null || this.neighbor(direction).inFailureQueue || this.mapGenerator.Modules[index].Fits(direction, this.neighbor(direction).Module))) {
+				if (Enumerable.Range(0, 6).All(direction => this.neighbor(direction) == null
+					|| this.neighbor(direction).inFailureQueue
+					|| this.neighbor(direction).unrecoveredFailure
+					|| this.mapGenerator.Modules[index].Fits(direction, this.neighbor(direction).Module))) {
 					this.ModuleIndex = index;
-					this.Build();
+					if (this.Module.Prototype.Spawn) {
+						this.mapGenerator.MarkSlotForBuilding(this);
+					}
 					return true;
 				}
 			}
 
-			this.mark(2f, Color.red);
+			this.unrecoveredFailure = true;
+			this.mapGenerator.MarkSlotForBuilding(this);
 			return true;
 		}
 		return false;
 	}
 
-	private GameObject mark(float size, Color color) {
+	private void mark(float size, Color color) {
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.parent = this.mapGenerator.transform;
 		cube.transform.localScale = Vector3.one * size;
 		cube.GetComponent<MeshRenderer>().material.color = color;
 		cube.transform.position = this.GetPosition();
-		return cube;
 	}
 
 	public void Build() {
+		if (this.unrecoveredFailure) {
+			this.mark(2f, Color.white);
+		}
+
 		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {
 			return;
 		}
