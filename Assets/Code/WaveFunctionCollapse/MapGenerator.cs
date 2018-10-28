@@ -21,6 +21,8 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public bool RespectNeighorExclusions = true;
 
+	public Vector3i RangeLimitCenter;
+
 	public int RangeLimit = 20;
 
 	private DefaultColumn defaultColumn;
@@ -44,15 +46,17 @@ public class MapGenerator : MonoBehaviour, IMap {
 			return null;
 		}
 
-		if (position.Magnitude > this.RangeLimit) {
-			Debug.LogWarning("Touched Range Limit!");
-			return null;
-		}
-
 		if (this.Map.ContainsKey(position)) {
 			return this.Map[position];
 		}
 		if (!create) {
+			return null;
+		}
+
+		if ((position - this.RangeLimitCenter).Magnitude > this.RangeLimit) {
+#if UNITY_EDITOR
+			Debug.LogWarning("Touched Range Limit!");
+#endif
 			return null;
 		}
 

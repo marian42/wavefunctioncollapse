@@ -60,6 +60,8 @@ public class FollowPlayer : MonoBehaviour {
 
 		if (any) {
 			this.completedChunks.Add(closestMissingChunk);
+			this.mapGenerator.RangeLimitCenter = closestMissingChunk * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
+			this.mapGenerator.RangeLimit = this.ChunkSize + 12;
 			this.mapGenerator.Collapse(closestMissingChunk * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
 		} else {
 			Thread.Sleep(80);
