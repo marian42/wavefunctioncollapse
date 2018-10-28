@@ -21,7 +21,10 @@ public class Slot {
 	private IMap map;
 
 	private bool inFailureQueue = false;
-	private bool unrecoveredFailure = false;
+	public bool UnrecoveredFailure {
+		get;
+		private set;
+	}
 
 	public Module Module {
 		get {
@@ -41,14 +44,13 @@ public class Slot {
 		}
 	}
 
-	public BlockBehaviour BlockBehaviour;
-
 	public Slot(Vector3i position, MapGenerator mapGenerator, IMap map) {
 		this.Position = position;
 		this.mapGenerator = mapGenerator;
 		this.map = map;
 		this.Modules = new HashSet<int>(Enumerable.Range(0, mapGenerator.Modules.Length));
 		this.ModuleIndex = -1;
+		this.UnrecoveredFailure = false;
 	}
 
 	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
@@ -57,7 +59,7 @@ public class Slot {
 	}
 
 	// TODO only look up once and then cache???
-	private Slot neighbor(int direction) {
+	public Slot GetNeighbor(int direction) {
 		return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
 	}
 
@@ -80,7 +82,7 @@ public class Slot {
 
 	private void checkConsistency(int index) {
 		for (int d = 0; d < 6; d++) {
-			if (this.neighbor(d) != null && this.neighbor(d).Collapsed && !this.neighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
+			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
 				this.mark(2f, Color.red);
 				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list. (Incompatible connectors)");
@@ -140,8 +142,8 @@ public class Slot {
 		}
 
 		for (int d = 0; d < 6; d++) {
-			if (affectedNeighbouredModules[d].Any() && this.neighbor(d) != null && !this.neighbor(d).Collapsed) {
-				this.neighbor(d).RemoveModules(affectedNeighbouredModules[d]);
+			if (affectedNeighbouredModules[d].Any() && this.GetNeighbor(d) != null && !this.GetNeighbor(d).Collapsed) {
+				this.GetNeighbor(d).RemoveModules(affectedNeighbouredModules[d]);
 			}
 		}
 	}
@@ -155,12 +157,12 @@ public class Slot {
 
 	public bool TryToRecoverFailure() {
 		this.inFailureQueue = false;
-		if (Enumerable.Range(0, 6).All(i => this.neighbor(i) == null || this.neighbor(i).inFailureQueue || this.neighbor(i).Collapsed)) {
+		if (Enumerable.Range(0, 6).All(i => this.GetNeighbor(i) == null || this.GetNeighbor(i).inFailureQueue || this.GetNeighbor(i).Collapsed)) {
 			foreach (int index in Enumerable.Range(0, this.mapGenerator.Modules.Length)) {
-				if (Enumerable.Range(0, 6).All(direction => this.neighbor(direction) == null
-					|| this.neighbor(direction).inFailureQueue
-					|| this.neighbor(direction).unrecoveredFailure
-					|| this.mapGenerator.Modules[index].Fits(direction, this.neighbor(direction).Module))) {
+				if (Enumerable.Range(0, 6).All(direction => this.GetNeighbor(direction) == null
+					|| this.GetNeighbor(direction).inFailureQueue
+					|| this.GetNeighbor(direction).UnrecoveredFailure
+					|| this.mapGenerator.Modules[index].Fits(direction, this.GetNeighbor(direction).Module))) {
 					this.ModuleIndex = index;
 					if (this.Module.Prototype.Spawn) {
 						this.mapGenerator.MarkSlotForBuilding(this);
@@ -169,7 +171,7 @@ public class Slot {
 				}
 			}
 
-			this.unrecoveredFailure = true;
+			this.UnrecoveredFailure = true;
 			this.mapGenerator.MarkSlotForBuilding(this);
 			return true;
 		}
@@ -185,7 +187,7 @@ public class Slot {
 	}
 
 	public void Build() {
-		if (this.unrecoveredFailure) {
+		if (this.UnrecoveredFailure) {
 			this.mark(2f, Color.white);
 		}
 
@@ -214,16 +216,7 @@ public class Slot {
 		gameObject.transform.position = this.GetPosition();
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
-		blockBehaviour.Prototype = this.Module.Prototype;
-		blockBehaviour.Neighbours = new BlockBehaviour[6];
-		this.BlockBehaviour = blockBehaviour;
-		for (int i = 0; i < 6; i++) {
-			if (this.neighbor(i) != null && this.neighbor(i).BlockBehaviour != null) {
-				var otherBlock = this.neighbor(i).BlockBehaviour;
-				blockBehaviour.Neighbours[i] = otherBlock;
-				otherBlock.Neighbours[(i + 3) % 6] = blockBehaviour;
-			}
-		}
+		blockBehaviour.Slot = this;
 	}
 
 	public Vector3 GetPosition() {

@@ -7,23 +7,76 @@ public class BlockBehaviourEditor : Editor {
 
 	public override void OnInspectorGUI() {
 		DrawDefaultInspector();
+		var style = new GUIStyle();
 
 		BlockBehaviour block = (BlockBehaviour)target;
+		if (block.Slot == null || Application.isPlaying) {
+			return;
+		}
+
 		for (int i = 0; i < 6; i++) {
-			if (block.Neighbours != null && block.Neighbours[i] != null && GUILayout.Button("Exclude neighbor " + block.Neighbours[i].Prototype.gameObject.name + " (" + Orientations.Names[i] + ")")) {
-				var p1 = block.Prototype;
-				var p2 = block.Neighbours[i].Prototype;
-				var list1 = p1.Faces[i].ExcludedNeighbours;
-				var list2 = p2.Faces[(i + 3) % 6].ExcludedNeighbours;
-				if (!list1.Contains(p2)) {
-					p1.Faces[i].ExcludedNeighbours = list1.Concat(new ModulePrototype[] {p2}).ToArray();
-					Debug.Log("Added exclusion rule.");
-				}
-				if (!list2.Contains(p1)) {
-					p2.Faces[(i + 3) % 6].ExcludedNeighbours = list2.Concat(new ModulePrototype[] { p1 }).ToArray();
-					Debug.Log("Added exclusion rule.");
-				}
+			style.normal.textColor = getColor(i);
+			var neighbor = block.Slot.GetNeighbor(i);
+
+			GUILayout.Label(Orientations.Names[i], style);
+			if (neighbor == null || !neighbor.Collapsed) {
+				GUILayout.Label("(No neighbor)");
+				continue;
 			}
+			if (neighbor.UnrecoveredFailure) {
+				GUILayout.Label("(Failed)");
+				continue;
+			}
+
+			GUILayout.Label(neighbor.Module.ToString());
+
+			if (neighbor.ModuleIndex == 0) {
+				continue;
+			}
+
+			var ownFace = block.Slot.Module.GetFace(i);
+			var neighborFace = neighbor.Module.GetFace((i + 3) % 6);
+
+			if (ownFace.ExcludedNeighbours.Contains(neighbor.Module.Prototype) && neighborFace.ExcludedNeighbours.Contains(block.Slot.Module.Prototype)) {
+				GUILayout.Label("(Already exlcuded)");
+				continue;
+			}
+
+			if (GUILayout.Button("Exclude neighbor")) {
+				if (!ownFace.ExcludedNeighbours.Contains(neighbor.Module.Prototype)) {
+					ownFace.ExcludedNeighbours = ownFace.ExcludedNeighbours.Concat(new ModulePrototype[] { neighbor.Module.Prototype }).ToArray();
+				}
+				if (!neighborFace.ExcludedNeighbours.Contains(block.Slot.Module.Prototype)) {
+					neighborFace.ExcludedNeighbours = neighborFace.ExcludedNeighbours.Concat(new ModulePrototype[] { block.Slot.Module.Prototype }).ToArray();
+				}
+				Debug.Log("Added exclusion rule.");
+			}
+
+			if (neighborFace.Walkable) {
+				GUILayout.Label("(Neighbor is walkable)");
+				continue;
+			}
+
+			if (ownFace.EnforceWalkableNeighbor && !neighborFace.Walkable) {
+				GUILayout.Label("(Already exlcuded by walkability constraint)");
+				continue;
+			}
+
+			if (!ownFace.EnforceWalkableNeighbor && !neighborFace.Walkable && GUILayout.Button("Enforce Walkable neighbor")) {
+				ownFace.EnforceWalkableNeighbor = true;
+			}
+		}
+	}
+
+	private static Color getColor(int i) {
+		switch (i) {
+			case 0: return Color.red;
+			case 1: return Color.green;
+			case 2: return Color.blue;
+			case 3: return Color.red;
+			case 4: return Color.green;
+			case 5: return Color.blue;
+			default: throw new System.NotImplementedException();
 		}
 	}
 }

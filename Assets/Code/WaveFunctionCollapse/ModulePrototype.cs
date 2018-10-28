@@ -20,6 +20,8 @@ public class ModulePrototype : AbstractModulePrototype {
 		}
 
 		public ModulePrototype[] ExcludedNeighbours;
+
+		public bool EnforceWalkableNeighbor = false;
 	}
 
 	[System.Serializable]
@@ -245,11 +247,14 @@ public class ModulePrototype : AbstractModulePrototype {
 		foreach (var module in modules) {
 			module.PossibleNeighbours = new int[6][];
 			for (int direction = 0; direction < 6; direction++) {
+				var face = module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)];
 				module.PossibleNeighbours[direction] = Enumerable.Range(0, modules.Count).
 					Where(i => module.Fits(direction, modules[i])
 						&& (!mapGenerator.RespectNeighorExclusions || (
-							!module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)].ExcludedNeighbours.Contains(modules[i].Prototype)
-							&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype)))
+							!face.ExcludedNeighbours.Contains(modules[i].Prototype)
+							&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype))
+							&& (!face.EnforceWalkableNeighbor || modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].Walkable)
+							&& (face.Walkable || !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].EnforceWalkableNeighbor))
 					)
 					.ToArray();
 			}

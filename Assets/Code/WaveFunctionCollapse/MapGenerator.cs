@@ -15,7 +15,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public Dictionary<Vector3i, Slot> Map;
 
-	public int InitializationAreaSize = 4;
+	public int DefaultSize = 4;
 
 	public int Height = 8;
 
@@ -32,6 +32,12 @@ public class MapGenerator : MonoBehaviour, IMap {
 	private Queue<Slot> failureQueue;
 
 	private Queue<Slot> buildQueue;
+
+	public bool Initialized {
+		get {
+			return this.Map != null;
+		}
+	}
 
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
@@ -67,7 +73,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 	}	
 
 	public void Initialize() {
-		this.destroyChildren();
+		this.Clear();
 		MapGenerator.Random = new System.Random();
 		this.Map = new Dictionary<Vector3i, Slot>();
 		this.failureQueue = new Queue<Slot>();
@@ -75,9 +81,6 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 		this.createModules();
 		this.defaultColumn = new DefaultColumn(this);
-
-		this.Collapse();
-		this.BuildAllSlots();
 	}
 
 	public void Collapse(Vector3i start, Vector3i size) {
@@ -92,8 +95,8 @@ public class MapGenerator : MonoBehaviour, IMap {
 		this.Collapse(targets);
 	}
 
-	public void Collapse() {
-		this.Collapse(new Vector3i(- this.InitializationAreaSize / 2, 0, - this.InitializationAreaSize / 2), new Vector3i(this.InitializationAreaSize, this.Height, this.InitializationAreaSize));
+	public void CollapseDefaultArea() {
+		this.Collapse(new Vector3i(- this.DefaultSize / 2, 0, - this.DefaultSize / 2), new Vector3i(this.DefaultSize, this.Height, this.DefaultSize));
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets) {
@@ -128,7 +131,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 				(float)(position.Z) * MapGenerator.BlockSize);
 	}
 
-	private void destroyChildren() {
+	public void Clear() {
 		var children = new List<Transform>();
 		foreach (Transform child in this.transform) {
 			children.Add(child);
@@ -136,6 +139,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 		foreach (var child in children) {
 			GameObject.DestroyImmediate(child.gameObject);
 		}
+		this.Map = null;
 	}
 
 	public void EnforceWalkway(Vector3i start, int direction) {

@@ -10,8 +10,13 @@ public class MapGeneratorEditor : Editor {
 		DrawDefaultInspector();
 
 		MapGenerator generator = (MapGenerator)target;
+		if (GUILayout.Button("Clear")) {
+			generator.Clear();
+		}
 		if (GUILayout.Button("Initialize")) {
 			generator.Initialize();
+			generator.CollapseDefaultArea();
+			generator.BuildAllSlots();
 			Debug.Log("Map initialized.");
 		}
 	}
