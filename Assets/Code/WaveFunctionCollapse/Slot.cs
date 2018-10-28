@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -180,7 +180,7 @@ public class Slot {
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.parent = this.mapGenerator.transform;
 		cube.transform.localScale = Vector3.one * size;
-		cube.GetComponent<MeshRenderer>().material.color = color;
+		cube.GetComponent<MeshRenderer>().sharedMaterial.color = color;
 		cube.transform.position = this.GetPosition();
 	}
 

@@ -24,11 +24,14 @@ public class Module {
 
 	public float Probability;
 
+	private readonly string name;
+
 	public Module(ModulePrototype prototype, int rotation, MapGenerator mapGenerator) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
 		this.Models = new List<AbstractModulePrototype>();
 		this.Models.Add(prototype);
+		this.name = this.Prototype.gameObject.name + (this.Rotation != 0 ? " R" + this.Rotation : "");
 	}
 
 	public bool Fits(int direction, Module module) {
@@ -57,5 +60,9 @@ public class Module {
 
 	public ModulePrototype.FaceDetails GetFace(int direction) {
 		return this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)];
+	}
+
+	public override string ToString() {
+		return this.name;
 	}
 }

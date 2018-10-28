@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +32,8 @@ public class DefaultColumn : IMap {
 		for (int d = 0; d < 6; d++) {
 			for (int i = 0; i < modules.Length; i++) {
 				if (initialNeighborCandidateHealth[d][i] == 0) {
-					throw new Exception("Module " + modules[i].Prototype.name + " cannot be reached from direction " + d + " (" + modules[i].Prototype.Faces[d].ToString() + ")!");
+					Debug.LogError("Module " + modules[i].Prototype.name + " cannot be reached from direction " + d + " (" + modules[i].Prototype.Faces[d].ToString() + ")!", modules[i].Prototype.gameObject);
+					throw new Exception("Unreachable module.");
 				}
 			}
 		}
