@@ -129,6 +129,18 @@ ModelImporter:
     100246: Roof_2_Top_5
     100248: Roof_2_Upper_Roof_Wall
     100250: Roof_2_Upper_Roof_Wall_M
+    100252: Roof_2_Tile
+    100254: Roof_2_Tiles_Prototype_001
+    100256: Roof_2_Tiles_Prototype_002
+    100258: Roof_2_Tiles_Prototype_004
+    100260: Roof_2_Tiles_Prototype_005
+    100262: Roof_2_Tiles_Prototype_006
+    100264: Roof_2_Tiles_Prototype_007
+    100266: Roof_2_Tiles_Prototype_009
+    100268: Roof_2_Tiles_Prototype_012
+    100270: Roof_2_Top_Wall
+    100272: High_Wall_Corner
+    100274: Roof_2_Corner_Collider
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -255,6 +267,18 @@ ModelImporter:
     400246: Roof_2_Top_5
     400248: Roof_2_Upper_Roof_Wall
     400250: Roof_2_Upper_Roof_Wall_M
+    400252: Roof_2_Tile
+    400254: Roof_2_Tiles_Prototype_001
+    400256: Roof_2_Tiles_Prototype_002
+    400258: Roof_2_Tiles_Prototype_004
+    400260: Roof_2_Tiles_Prototype_005
+    400262: Roof_2_Tiles_Prototype_006
+    400264: Roof_2_Tiles_Prototype_007
+    400266: Roof_2_Tiles_Prototype_009
+    400268: Roof_2_Tiles_Prototype_012
+    400270: Roof_2_Top_Wall
+    400272: High_Wall_Corner
+    400274: Roof_2_Corner_Collider
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -380,6 +404,18 @@ ModelImporter:
     2300242: Roof_2_Top_5
     2300244: Roof_2_Upper_Roof_Wall
     2300246: Roof_2_Upper_Roof_Wall_M
+    2300248: Roof_2_Tile
+    2300250: Roof_2_Tiles_Prototype_001
+    2300252: Roof_2_Tiles_Prototype_002
+    2300254: Roof_2_Tiles_Prototype_004
+    2300256: Roof_2_Tiles_Prototype_005
+    2300258: Roof_2_Tiles_Prototype_006
+    2300260: Roof_2_Tiles_Prototype_007
+    2300262: Roof_2_Tiles_Prototype_009
+    2300264: Roof_2_Tiles_Prototype_012
+    2300266: Roof_2_Top_Wall
+    2300268: High_Wall_Corner
+    2300270: Roof_2_Corner_Collider
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -504,6 +540,18 @@ ModelImporter:
     3300242: Roof_2_Top_5
     3300244: Roof_2_Upper_Roof_Wall
     3300246: Roof_2_Upper_Roof_Wall_M
+    3300248: Roof_2_Tile
+    3300250: Roof_2_Tiles_Prototype_001
+    3300252: Roof_2_Tiles_Prototype_002
+    3300254: Roof_2_Tiles_Prototype_004
+    3300256: Roof_2_Tiles_Prototype_005
+    3300258: Roof_2_Tiles_Prototype_006
+    3300260: Roof_2_Tiles_Prototype_007
+    3300262: Roof_2_Tiles_Prototype_009
+    3300264: Roof_2_Tiles_Prototype_012
+    3300266: Roof_2_Top_Wall
+    3300268: High_Wall_Corner
+    3300270: Roof_2_Corner_Collider
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -628,6 +676,18 @@ ModelImporter:
     4300242: Roof_2_Top_5
     4300244: Roof_2_Upper_Roof_Wall_M
     4300246: Roof_2_Upper_Roof_Wall
+    4300248: Roof_2_Tile
+    4300250: Roof_2_Tiles_Prototype_002
+    4300252: Roof_2_Tiles_Prototype_001
+    4300254: Roof_2_Tiles_Prototype_012
+    4300256: Roof_2_Tiles_Prototype_009
+    4300258: Roof_2_Tiles_Prototype_004
+    4300260: Roof_2_Tiles_Prototype_007
+    4300262: Roof_2_Tiles_Prototype_005
+    4300264: Roof_2_Tiles_Prototype_006
+    4300266: Roof_2_Top_Wall
+    4300268: High_Wall_Corner
+    4300270: Roof_2_Corner_Collider
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
