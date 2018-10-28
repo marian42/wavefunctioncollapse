@@ -105,6 +105,30 @@ ModelImporter:
     100198: HH_Wall_Corner
     100200: HH_Stairs_Wall
     100202: HH_Stairs_Wall_M
+    100204: eave
+    100206: Roof_2
+    100208: Roof_2_Corner
+    100210: Roof_2_Corner_2
+    100212: Roof_2_Floor
+    100214: Roof_2_Wall
+    100216: Roof_2_Wall_M
+    100218: Roof_2_Floor_Corner
+    100220: Roof_2_Floor_Wall
+    100222: Roof_2_Floor_Wall_M
+    100224: Roof_2_Upper_Corner
+    100226: Roof_2_Upper_Corner_2
+    100228: Roof_2_Floor_Corner_2
+    100230: Roof_2_Top
+    100232: Roof_2_Upper_Roof
+    100234: Roof_2_Upper_Roof_001
+    100236: Roof_2_Wall_Corner
+    100238: Roof_2_Top_2
+    100240: Roof_2_Top_3
+    100242: Roof_2_Top_4
+    100244: Roof_2_Wall_Corner_2
+    100246: Roof_2_Top_5
+    100248: Roof_2_Upper_Roof_Wall
+    100250: Roof_2_Upper_Roof_Wall_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -207,6 +231,30 @@ ModelImporter:
     400198: HH_Wall_Corner
     400200: HH_Stairs_Wall
     400202: HH_Stairs_Wall_M
+    400204: eave
+    400206: Roof_2
+    400208: Roof_2_Corner
+    400210: Roof_2_Corner_2
+    400212: Roof_2_Floor
+    400214: Roof_2_Wall
+    400216: Roof_2_Wall_M
+    400218: Roof_2_Floor_Corner
+    400220: Roof_2_Floor_Wall
+    400222: Roof_2_Floor_Wall_M
+    400224: Roof_2_Upper_Corner
+    400226: Roof_2_Upper_Corner_2
+    400228: Roof_2_Floor_Corner_2
+    400230: Roof_2_Top
+    400232: Roof_2_Upper_Roof
+    400234: Roof_2_Upper_Roof_001
+    400236: Roof_2_Wall_Corner
+    400238: Roof_2_Top_2
+    400240: Roof_2_Top_3
+    400242: Roof_2_Top_4
+    400244: Roof_2_Wall_Corner_2
+    400246: Roof_2_Top_5
+    400248: Roof_2_Upper_Roof_Wall
+    400250: Roof_2_Upper_Roof_Wall_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -308,6 +356,30 @@ ModelImporter:
     2300194: HH_Wall_Corner
     2300196: HH_Stairs_Wall
     2300198: HH_Stairs_Wall_M
+    2300200: eave
+    2300202: Roof_2
+    2300204: Roof_2_Corner
+    2300206: Roof_2_Corner_2
+    2300208: Roof_2_Floor
+    2300210: Roof_2_Wall
+    2300212: Roof_2_Wall_M
+    2300214: Roof_2_Floor_Corner
+    2300216: Roof_2_Floor_Wall
+    2300218: Roof_2_Floor_Wall_M
+    2300220: Roof_2_Upper_Corner
+    2300222: Roof_2_Upper_Corner_2
+    2300224: Roof_2_Floor_Corner_2
+    2300226: Roof_2_Top
+    2300228: Roof_2_Upper_Roof
+    2300230: Roof_2_Upper_Roof_001
+    2300232: Roof_2_Wall_Corner
+    2300234: Roof_2_Top_2
+    2300236: Roof_2_Top_3
+    2300238: Roof_2_Top_4
+    2300240: Roof_2_Wall_Corner_2
+    2300242: Roof_2_Top_5
+    2300244: Roof_2_Upper_Roof_Wall
+    2300246: Roof_2_Upper_Roof_Wall_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -408,6 +480,30 @@ ModelImporter:
     3300194: HH_Wall_Corner
     3300196: HH_Stairs_Wall
     3300198: HH_Stairs_Wall_M
+    3300200: eave
+    3300202: Roof_2
+    3300204: Roof_2_Corner
+    3300206: Roof_2_Corner_2
+    3300208: Roof_2_Floor
+    3300210: Roof_2_Wall
+    3300212: Roof_2_Wall_M
+    3300214: Roof_2_Floor_Corner
+    3300216: Roof_2_Floor_Wall
+    3300218: Roof_2_Floor_Wall_M
+    3300220: Roof_2_Upper_Corner
+    3300222: Roof_2_Upper_Corner_2
+    3300224: Roof_2_Floor_Corner_2
+    3300226: Roof_2_Top
+    3300228: Roof_2_Upper_Roof
+    3300230: Roof_2_Upper_Roof_001
+    3300232: Roof_2_Wall_Corner
+    3300234: Roof_2_Top_2
+    3300236: Roof_2_Top_3
+    3300238: Roof_2_Top_4
+    3300240: Roof_2_Wall_Corner_2
+    3300242: Roof_2_Top_5
+    3300244: Roof_2_Upper_Roof_Wall
+    3300246: Roof_2_Upper_Roof_Wall_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -508,6 +604,30 @@ ModelImporter:
     4300194: HH_Floor
     4300196: HH_Stairs_Wall_M
     4300198: HH_Stairs_Wall
+    4300200: Roof_2_Corner_2
+    4300202: Roof_2_Corner
+    4300204: eave
+    4300206: Roof_2
+    4300208: Roof_2_Floor
+    4300210: Roof_2_Wall_M
+    4300212: Roof_2_Wall
+    4300214: Roof_2_Upper_Corner_2
+    4300216: Roof_2_Upper_Corner
+    4300218: Roof_2_Floor_Wall_M
+    4300220: Roof_2_Floor_Corner
+    4300222: Roof_2_Floor_Wall
+    4300224: Roof_2_Top
+    4300226: Roof_2_Floor_Corner_2
+    4300228: Roof_2_Upper_Roof_001
+    4300230: Roof_2_Upper_Roof
+    4300232: Roof_2_Wall_Corner
+    4300234: Roof_2_Top_4
+    4300236: Roof_2_Top_3
+    4300238: Roof_2_Top_2
+    4300240: Roof_2_Wall_Corner_2
+    4300242: Roof_2_Top_5
+    4300244: Roof_2_Upper_Roof_Wall_M
+    4300246: Roof_2_Upper_Roof_Wall
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
