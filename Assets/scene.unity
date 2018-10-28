@@ -6460,7 +6460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovementSpeed: 2
-  LookSensitivity: 30
+  LookSensitivity: 50
   JumpStrength: 4
 --- !u!143 &784786033
 CharacterController:

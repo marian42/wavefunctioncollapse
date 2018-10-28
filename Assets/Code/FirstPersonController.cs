@@ -19,6 +19,7 @@ public class FirstPersonController : MonoBehaviour {
 
 	private float cameraTilt = 0f;
 	private float verticalSpeed = 0f;
+	private float timeInAir = 0f;
 
 	void Start () {
 		this.characterController = this.GetComponent<CharacterController>();
@@ -27,19 +28,27 @@ public class FirstPersonController : MonoBehaviour {
 	}
 	
 	void Update () {
+		bool touchesGround = this.onGround();
 		float runMultiplier = Input.GetKey(KeyCode.LeftShift) ? 2f : 1f;
 		this.characterController.Move(this.transform.forward * Input.GetAxis("Vertical") * Time.deltaTime * this.MovementSpeed * runMultiplier + this.transform.right * Input.GetAxis("Horizontal") * Time.deltaTime * this.MovementSpeed * runMultiplier);
 		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
 		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Mouse Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
 
-		if (this.characterController.isGrounded) {
+		if (touchesGround) {
+			this.timeInAir = 0;
+		} else {
+			this.timeInAir += Time.deltaTime;
+		}
+
+		if (touchesGround && this.verticalSpeed < 0) {
 			this.verticalSpeed = 0;
 		} else {
 			this.verticalSpeed -= 9.18f * Time.deltaTime;
 		}
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			this.jump();
+		if (this.timeInAir < 0.5f && Input.GetKeyDown(KeyCode.Space)) {
+			this.timeInAir = 0.5f;
+			this.verticalSpeed = this.JumpStrength;
 		}
 		if (Input.GetKey(KeyCode.LeftControl)) {
 			this.verticalSpeed = 2f;
@@ -50,12 +59,5 @@ public class FirstPersonController : MonoBehaviour {
 	private bool onGround() {
 		var ray = new Ray(this.transform.position, Vector3.down);
 		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 + 0.1f);
-	}
-
-	private void jump() {
-		if (!this.onGround()) {
-			return;
-		}
-		this.verticalSpeed = this.JumpStrength;
 	}
 }
