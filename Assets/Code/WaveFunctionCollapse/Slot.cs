@@ -8,14 +8,11 @@ public class Slot {
 	public Vector3i Position;
 
 	// List of modules that can still be placed here
-	public HashSet<int> Modules;
+	public HashSet<Module> Modules;
 
 	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
 	public int[][] NeighborCandidateHealth;
-
-	// Which modules occupies this slot, -1 for uncollapsed
-	public int ModuleIndex;
-
+	
 	private MapGenerator mapGenerator;
 
 	private IMap map;
@@ -26,15 +23,11 @@ public class Slot {
 		private set;
 	}
 
-	public Module Module {
-		get {
-			return this.mapGenerator.Modules[this.ModuleIndex];
-		}
-	}
+	public Module Module;
 
 	public bool Collapsed {
 		get {
-			return this.ModuleIndex != -1;
+			return this.Module != null;
 		}
 	}
 
@@ -48,14 +41,13 @@ public class Slot {
 		this.Position = position;
 		this.mapGenerator = mapGenerator;
 		this.map = map;
-		this.Modules = new HashSet<int>(Enumerable.Range(0, mapGenerator.Modules.Length));
-		this.ModuleIndex = -1;
+		this.Modules = new HashSet<Module>(this.mapGenerator.Modules);
 		this.UnrecoveredFailure = false;
 	}
 
 	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
 		this.NeighborCandidateHealth = prototype.NeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
-		this.Modules = new HashSet<int>(prototype.Modules);
+		this.Modules = new HashSet<Module>(prototype.Modules);
 	}
 
 	// TODO only look up once and then cache???
@@ -63,15 +55,15 @@ public class Slot {
 		return this.map.GetSlot(this.Position + Orientations.Direction[direction]);
 	}
 
-	public void Collapse(int index) {
+	public void Collapse(Module module) {
 		if (this.Collapsed) {
 			Debug.LogWarning("Trying to collapse already collapsed slot.");
 			return;
 		}
 
-		this.ModuleIndex = index;
+		this.Module = module;
 		var toRemove = this.Modules.ToList();
-		toRemove.Remove(index);
+		toRemove.Remove(module);
 		this.RemoveModules(toRemove);
 
 		this.mapGenerator.MarkSlotComplete(this);
@@ -80,16 +72,16 @@ public class Slot {
 		}
 	}
 
-	private void checkConsistency(int index) {
+	private void checkConsistency(Module module) {
 		for (int d = 0; d < 6; d++) {
-			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbours[(d + 3) % 6].Contains(index)) {
+			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbors[(d + 3) % 6].Contains(module)) {
 				this.mark(2f, Color.red);
 				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list. (Incompatible connectors)");
 			}
 		}
 
-		if (!this.Modules.Contains(index)) {
+		if (!this.Modules.Contains(module)) {
 			this.mark(2f, Color.red);
 			// This would be a result of inconsistent code, should not be possible.
 			throw new Exception("Illegal collapse!");
@@ -105,11 +97,11 @@ public class Slot {
 			throw new Exception("Slot is already collapsed.");
 		}
 		var candidates = this.Modules.ToList();
-		float max = candidates.Select(i => this.mapGenerator.Modules[i].Probability).Sum();
+		float max = candidates.Select(module => module.Probability).Sum();
 		float roll = (float)(MapGenerator.Random.NextDouble() * max);
 		float p = 0;
 		foreach (var candidate in candidates) {
-			p += this.mapGenerator.Modules[candidate].Probability;
+			p +=  candidate.Probability;
 			if (p >= roll) {
 				this.Collapse(candidate);
 				return;
@@ -118,19 +110,19 @@ public class Slot {
 		this.Collapse(candidates.First());
 	}
 
-	public void RemoveModules(List<int> modulesToRemove) {
-		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<int>()).ToArray();
+	public void RemoveModules(List<Module> modulesToRemove) {
+		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<Module>()).ToArray();
 
-		foreach (int module in modulesToRemove) {
-			if (!this.Modules.Contains(module) || module == this.ModuleIndex) {
+		foreach (var module in modulesToRemove) {
+			if (!this.Modules.Contains(module) || module == this.Module) {
 				continue;
 			}
 			for (int d = 0; d < 6; d++) {
-				foreach (int possibleNeighbour in this.mapGenerator.Modules[module].PossibleNeighbours[d]) {
-					if (this.NeighborCandidateHealth[d][possibleNeighbour] == 1) {
-						affectedNeighbouredModules[d].Add(possibleNeighbour);
+				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
+					if (this.NeighborCandidateHealth[d][possibleNeighbor.Index] == 1) {
+						affectedNeighbouredModules[d].Add(this.mapGenerator.Modules[possibleNeighbor.Index]);
 					}
-					this.NeighborCandidateHealth[d][possibleNeighbour]--;
+					this.NeighborCandidateHealth[d][possibleNeighbor.Index]--;
 				}
 			}
 			this.Modules.Remove(module);
@@ -149,7 +141,7 @@ public class Slot {
 	}
 
 	public void Fail() {
-		this.ModuleIndex = 0;
+		this.Module = null;
 		this.mapGenerator.MarkSlotComplete(this);
 		this.inFailureQueue = true;
 		this.mapGenerator.OnFail(this);
@@ -158,12 +150,12 @@ public class Slot {
 	public bool TryToRecoverFailure() {
 		this.inFailureQueue = false;
 		if (Enumerable.Range(0, 6).All(i => this.GetNeighbor(i) == null || this.GetNeighbor(i).inFailureQueue || this.GetNeighbor(i).Collapsed)) {
-			foreach (int index in Enumerable.Range(0, this.mapGenerator.Modules.Length)) {
+			foreach (var module in this.mapGenerator.Modules) {
 				if (Enumerable.Range(0, 6).All(direction => this.GetNeighbor(direction) == null
 					|| this.GetNeighbor(direction).inFailureQueue
 					|| this.GetNeighbor(direction).UnrecoveredFailure
-					|| this.mapGenerator.Modules[index].Fits(direction, this.GetNeighbor(direction).Module))) {
-					this.ModuleIndex = index;
+					|| module.Fits(direction, this.GetNeighbor(direction).Module))) {
+					this.Module = module;
 					if (this.Module.Prototype.Spawn) {
 						this.mapGenerator.MarkSlotForBuilding(this);
 					}
@@ -224,12 +216,12 @@ public class Slot {
 	}
 
 	public void EnforceConnector(int direction, int connector) {
-		var toRemove = this.Modules.Where(i => !this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
+		var toRemove = this.Modules.Where(module => !module.Fits(direction, connector)).ToList();
 		this.RemoveModules(toRemove);
 	}
 
 	public void ExcludeConnector(int direction, int connector) {
-		var toRemove = this.Modules.Where(i => this.mapGenerator.Modules[i].Fits(direction, connector)).ToList();
+		var toRemove = this.Modules.Where(module => module.Fits(direction, connector)).ToList();
 		this.RemoveModules(toRemove);
 	}
 

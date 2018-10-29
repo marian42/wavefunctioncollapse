@@ -30,7 +30,7 @@ public class BlockBehaviourEditor : Editor {
 
 			GUILayout.Label(neighbor.Module.ToString());
 
-			if (neighbor.ModuleIndex == 0) {
+			if (neighbor.Module == null) {
 				continue;
 			}
 

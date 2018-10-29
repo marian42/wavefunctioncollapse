@@ -148,7 +148,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 
 	public void EnforceWalkway(Vector3i start, int direction) {
 		var slot = this.GetSlot(start);
-		var toRemove = slot.Modules.Where(i => !this.Modules[i].GetFace(direction).Walkable).ToList();
+		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable).ToList();
 		slot.RemoveModules(toRemove);
 	}
 

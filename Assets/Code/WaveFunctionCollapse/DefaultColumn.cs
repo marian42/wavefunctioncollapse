@@ -23,8 +23,8 @@ public class DefaultColumn : IMap {
 		for (int i = 0; i < 6; i++) {
 			initialNeighborCandidateHealth[i] = new int[modules.Length];
 			foreach (var module in modules) {
-				foreach (int possibleNeighbour in module.PossibleNeighbours[i]) {
-					initialNeighborCandidateHealth[i][possibleNeighbour]++;
+				foreach (var possibleNeighbor in module.PossibleNeighbors[i]) {
+					initialNeighborCandidateHealth[i][possibleNeighbor.Index]++;
 				}
 			}
 		}

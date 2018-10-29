@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -63,7 +63,7 @@ public class ModulePrototype : AbstractModulePrototype {
 	public VerticalFaceDetails Up;
 	public HorizontalFaceDetails Forward;
 
-	public bool CreateRotatedVariants;
+	public bool CreateRotatedVariants = true;
 	public bool Spawn = true;
 
 	public FaceDetails[] Faces {
@@ -224,6 +224,7 @@ public class ModulePrototype : AbstractModulePrototype {
 	}
 
 	public static List<Module> CreateModules(MapGenerator mapGenerator) {
+		int count = 0;
 		var modules = new List<Module>();
 		
 		foreach (var prototype in ModulePrototype.GetAll()) {
@@ -234,7 +235,8 @@ public class ModulePrototype : AbstractModulePrototype {
 			}
 
 			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
-				modules.Add(new Module(prototype, rotation, mapGenerator));
+				modules.Add(new Module(prototype, rotation, count, mapGenerator));
+				count++;
 			}
 		}
 
@@ -245,16 +247,16 @@ public class ModulePrototype : AbstractModulePrototype {
 		}
 
 		foreach (var module in modules) {
-			module.PossibleNeighbours = new int[6][];
+			module.PossibleNeighbors = new Module[6][];
 			for (int direction = 0; direction < 6; direction++) {
 				var face = module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)];
-				module.PossibleNeighbours[direction] = Enumerable.Range(0, modules.Count).
-					Where(i => module.Fits(direction, modules[i])
+				module.PossibleNeighbors[direction] = modules
+					.Where(neighbor => module.Fits(direction, neighbor)
 						&& (!mapGenerator.RespectNeighorExclusions || (
-							!face.ExcludedNeighbours.Contains(modules[i].Prototype)
-							&& !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].ExcludedNeighbours.Contains(module.Prototype))
-							&& (!face.EnforceWalkableNeighbor || modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].Walkable)
-							&& (face.Walkable || !modules[i].Prototype.Faces[Orientations.Rotate((direction + 3) % 6, modules[i].Rotation)].EnforceWalkableNeighbor))
+							!face.ExcludedNeighbours.Contains(neighbor.Prototype)
+							&& !neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(module.Prototype))
+							&& (!face.EnforceWalkableNeighbor || neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
+							&& (face.Walkable || !neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
 					)
 					.ToArray();
 			}

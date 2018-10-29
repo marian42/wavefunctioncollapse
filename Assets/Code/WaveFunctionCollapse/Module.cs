@@ -5,20 +5,13 @@ using System;
 using System.Linq;
 
 [System.Serializable]
-public class Module {
-	public Quaternion Orientation {
-		get {
-			return Quaternion.Euler(Vector3.up * this.Rotation * 90f);
-		}
-	}
+public class Module {	
+	public ModulePrototype Prototype;
 
 	public int Rotation;
-
-
+	
 	// Direction -> Array of module IDs that may be placed adjacent in this direction
-	public int[][] PossibleNeighbours;
-
-	public ModulePrototype Prototype;
+	public Module[][] PossibleNeighbors;
 
 	public List<AbstractModulePrototype> Models;
 
@@ -26,12 +19,15 @@ public class Module {
 
 	private readonly string name;
 
-	public Module(ModulePrototype prototype, int rotation, MapGenerator mapGenerator) {
+	public readonly int Index;
+
+	public Module(ModulePrototype prototype, int rotation, int index, MapGenerator mapGenerator) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
 		this.Models = new List<AbstractModulePrototype>();
 		this.Models.Add(prototype);
 		this.name = this.Prototype.gameObject.name + (this.Rotation != 0 ? " R" + this.Rotation : "");
+		this.Index = index;
 	}
 
 	public bool Fits(int direction, Module module) {
