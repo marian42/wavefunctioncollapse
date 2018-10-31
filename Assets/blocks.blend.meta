@@ -148,6 +148,10 @@ ModelImporter:
     100284: Roof_Top_Tiles_005
     100286: Roof_Top_Tiles_006
     100288: Roof_Top_Tiles_008
+    100290: Roof_2_Top_Collider
+    100292: Roof_2_Top_2_Collider
+    100294: Roof_2_Top_3_Collider
+    100296: Roof_2_Top_4_Collider
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -293,6 +297,10 @@ ModelImporter:
     400284: Roof_Top_Tiles_005
     400286: Roof_Top_Tiles_006
     400288: Roof_Top_Tiles_008
+    400290: Roof_2_Top_Collider
+    400292: Roof_2_Top_2_Collider
+    400294: Roof_2_Top_3_Collider
+    400296: Roof_2_Top_4_Collider
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -437,6 +445,10 @@ ModelImporter:
     2300280: Roof_Top_Tiles_005
     2300282: Roof_Top_Tiles_006
     2300284: Roof_Top_Tiles_008
+    2300286: Roof_2_Top_Collider
+    2300288: Roof_2_Top_2_Collider
+    2300290: Roof_2_Top_3_Collider
+    2300292: Roof_2_Top_4_Collider
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -580,6 +592,10 @@ ModelImporter:
     3300280: Roof_Top_Tiles_005
     3300282: Roof_Top_Tiles_006
     3300284: Roof_Top_Tiles_008
+    3300286: Roof_2_Top_Collider
+    3300288: Roof_2_Top_2_Collider
+    3300290: Roof_2_Top_3_Collider
+    3300292: Roof_2_Top_4_Collider
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -723,6 +739,10 @@ ModelImporter:
     4300280: Roof_Top_Tiles_006
     4300282: Roof_Top_Tiles_005
     4300284: Roof_Top_Tiles_003
+    4300286: Roof_2_Top_Collider
+    4300288: Roof_2_Top_2_Collider
+    4300290: Roof_2_Top_4_Collider
+    4300292: Roof_2_Top_3_Collider
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
