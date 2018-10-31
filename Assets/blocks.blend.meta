@@ -141,6 +141,13 @@ ModelImporter:
     100270: Roof_2_Top_Wall
     100272: High_Wall_Corner
     100274: Roof_2_Corner_Collider
+    100276: Roof_Top_Tiles
+    100278: Roof_Top_Tiles_002
+    100280: Roof_Top_Tiles_003
+    100282: Roof_Top_Tiles_004
+    100284: Roof_Top_Tiles_005
+    100286: Roof_Top_Tiles_006
+    100288: Roof_Top_Tiles_008
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -279,6 +286,13 @@ ModelImporter:
     400270: Roof_2_Top_Wall
     400272: High_Wall_Corner
     400274: Roof_2_Corner_Collider
+    400276: Roof_Top_Tiles
+    400278: Roof_Top_Tiles_002
+    400280: Roof_Top_Tiles_003
+    400282: Roof_Top_Tiles_004
+    400284: Roof_Top_Tiles_005
+    400286: Roof_Top_Tiles_006
+    400288: Roof_Top_Tiles_008
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -416,6 +430,13 @@ ModelImporter:
     2300266: Roof_2_Top_Wall
     2300268: High_Wall_Corner
     2300270: Roof_2_Corner_Collider
+    2300272: Roof_Top_Tiles
+    2300274: Roof_Top_Tiles_002
+    2300276: Roof_Top_Tiles_003
+    2300278: Roof_Top_Tiles_004
+    2300280: Roof_Top_Tiles_005
+    2300282: Roof_Top_Tiles_006
+    2300284: Roof_Top_Tiles_008
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -552,6 +573,13 @@ ModelImporter:
     3300266: Roof_2_Top_Wall
     3300268: High_Wall_Corner
     3300270: Roof_2_Corner_Collider
+    3300272: Roof_Top_Tiles
+    3300274: Roof_Top_Tiles_002
+    3300276: Roof_Top_Tiles_003
+    3300278: Roof_Top_Tiles_004
+    3300280: Roof_Top_Tiles_005
+    3300282: Roof_Top_Tiles_006
+    3300284: Roof_Top_Tiles_008
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -688,6 +716,13 @@ ModelImporter:
     4300266: Roof_2_Top_Wall
     4300268: High_Wall_Corner
     4300270: Roof_2_Corner_Collider
+    4300272: Roof_Top_Tiles_002
+    4300274: Roof_Top_Tiles
+    4300276: Roof_Top_Tiles_008
+    4300278: Roof_Top_Tiles_004
+    4300280: Roof_Top_Tiles_006
+    4300282: Roof_Top_Tiles_005
+    4300284: Roof_Top_Tiles_003
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
