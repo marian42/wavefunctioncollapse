@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,6 +58,6 @@ public class FirstPersonController : MonoBehaviour {
 
 	private bool onGround() {
 		var ray = new Ray(this.transform.position, Vector3.down);
-		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 + 0.1f);
+		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 - this.characterController.radius + 0.1f);
 	}
 }

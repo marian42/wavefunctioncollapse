@@ -20,10 +20,12 @@ public class FollowPlayer : MonoBehaviour {
 	private Vector3 targetPosition;
 	private Vector3 mapPosition;
 
-	void Start () {
+	void Start() {
+		this.completedChunks = new HashSet<Vector3i>();
 		this.mapGenerator = this.GetComponent<MapGenerator>();
 		this.mapGenerator.Initialize();
-		this.completedChunks = new HashSet<Vector3i>();
+		this.generate();
+		this.mapGenerator.BuildAllSlots();
 
 		new Thread(this.generatorThread).Start();
 	}
