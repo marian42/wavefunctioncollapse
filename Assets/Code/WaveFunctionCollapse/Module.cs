@@ -13,20 +13,11 @@ public class Module {
 	// Direction -> Array of module IDs that may be placed adjacent in this direction
 	public Module[][] PossibleNeighbors;
 
-	public List<AbstractModulePrototype> Models;
-
-	public float Probability;
-
-	private readonly string name;
-
 	public readonly int Index;
 
 	public Module(ModulePrototype prototype, int rotation, int index, MapGenerator mapGenerator) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
-		this.Models = new List<AbstractModulePrototype>();
-		this.Models.Add(prototype);
-		this.name = this.Prototype.gameObject.name + (this.Rotation != 0 ? " R" + this.Rotation : "");
 		this.Index = index;
 	}
 
@@ -56,9 +47,5 @@ public class Module {
 
 	public ModulePrototype.FaceDetails GetFace(int direction) {
 		return this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)];
-	}
-
-	public override string ToString() {
-		return this.name;
 	}
 }

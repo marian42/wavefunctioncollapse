@@ -97,11 +97,11 @@ public class Slot {
 			throw new Exception("Slot is already collapsed.");
 		}
 		var candidates = this.Modules.ToList();
-		float max = candidates.Select(module => module.Probability).Sum();
+		float max = candidates.Select(module => module.Prototype.Probability).Sum();
 		float roll = (float)(MapGenerator.Random.NextDouble() * max);
 		float p = 0;
 		foreach (var candidate in candidates) {
-			p +=  candidate.Probability;
+			p += candidate.Prototype.Probability;
 			if (p >= roll) {
 				this.Collapse(candidate);
 				return;
@@ -187,23 +187,9 @@ public class Slot {
 			return;
 		}
 
-		AbstractModulePrototype model = this.Module.Prototype;
-		if (this.Module.Models.Count > 1) {
-			float max = this.Module.Models.Select(m => m.Probability).Sum();
-			float roll = UnityEngine.Random.Range(0f, max);
-			float p = 0;
-			foreach (var candidate in this.Module.Models) {
-				p += candidate.Probability;
-				if (p >= roll) {
-					model = candidate;
-					break;
-				}
-			}
-		}
-
-		var gameObject = GameObject.Instantiate(model.gameObject);
+		var gameObject = GameObject.Instantiate(this.Module.Prototype.gameObject);
 		gameObject.name = this.Module.Prototype.gameObject.name + " " + this.Position;
-		GameObject.DestroyImmediate(gameObject.GetComponent<AbstractModulePrototype>());
+		GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
 		gameObject.transform.parent = this.mapGenerator.transform;
 		gameObject.transform.position = this.GetPosition();
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);

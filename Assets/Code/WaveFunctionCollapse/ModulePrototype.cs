@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class ModulePrototype : AbstractModulePrototype {
+public class ModulePrototype : MonoBehaviour {
 	[System.Serializable]
 	public abstract class FaceDetails {
 		public bool Walkable;
@@ -55,6 +55,8 @@ public class ModulePrototype : AbstractModulePrototype {
 			this.Rotation = 0;
 		}
 	}
+	
+	public float Probability = 1.0f;
 
 	public HorizontalFaceDetails Left;
 	public VerticalFaceDetails Down;
@@ -240,12 +242,6 @@ public class ModulePrototype : AbstractModulePrototype {
 			}
 		}
 
-		foreach (var variation in Variation.GetAll()) {
-			foreach (var module in modules.Where(module => module.Prototype == variation.Prototype)) {
-				module.Models.Add(variation);
-			}
-		}
-
 		foreach (var module in modules) {
 			module.PossibleNeighbors = new Module[6][];
 			for (int direction = 0; direction < 6; direction++) {
@@ -260,7 +256,6 @@ public class ModulePrototype : AbstractModulePrototype {
 					)
 					.ToArray();
 			}
-			module.Probability = module.Models.Sum(model => model.Probability);
 		}
 
 		return modules;
