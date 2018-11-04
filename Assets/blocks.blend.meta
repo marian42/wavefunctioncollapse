@@ -152,6 +152,14 @@ ModelImporter:
     100292: Roof_2_Top_2_Collider
     100294: Roof_2_Top_3_Collider
     100296: Roof_2_Top_4_Collider
+    100298: Wall_Corner_001
+    100300: Blocks
+    100302: Colliders
+    100304: Prototypes
+    100306: Wall_Corner_002
+    100308: Wall_Corner_2_Tunnel
+    100310: Wall_Corner_2_Tunnel_M
+    100312: Roof_Single_Collider
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -301,6 +309,14 @@ ModelImporter:
     400292: Roof_2_Top_2_Collider
     400294: Roof_2_Top_3_Collider
     400296: Roof_2_Top_4_Collider
+    400298: Wall_Corner_001
+    400300: Blocks
+    400302: Colliders
+    400304: Prototypes
+    400306: Wall_Corner_002
+    400308: Wall_Corner_2_Tunnel
+    400310: Wall_Corner_2_Tunnel_M
+    400312: Roof_Single_Collider
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -449,6 +465,11 @@ ModelImporter:
     2300288: Roof_2_Top_2_Collider
     2300290: Roof_2_Top_3_Collider
     2300292: Roof_2_Top_4_Collider
+    2300294: Wall_Corner_001
+    2300296: Wall_Corner_002
+    2300298: Wall_Corner_2_Tunnel
+    2300300: Wall_Corner_2_Tunnel_M
+    2300302: Roof_Single_Collider
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -596,6 +617,11 @@ ModelImporter:
     3300288: Roof_2_Top_2_Collider
     3300290: Roof_2_Top_3_Collider
     3300292: Roof_2_Top_4_Collider
+    3300294: Wall_Corner_001
+    3300296: Wall_Corner_002
+    3300298: Wall_Corner_2_Tunnel
+    3300300: Wall_Corner_2_Tunnel_M
+    3300302: Roof_Single_Collider
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -743,6 +769,11 @@ ModelImporter:
     4300288: Roof_2_Top_2_Collider
     4300290: Roof_2_Top_4_Collider
     4300292: Roof_2_Top_3_Collider
+    4300294: Wall_Corner_001
+    4300296: Wall_Corner_002
+    4300298: Wall_Corner_2_Tunnel_M
+    4300300: Wall_Corner_2_Tunnel
+    4300302: Roof_Single_Collider
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
