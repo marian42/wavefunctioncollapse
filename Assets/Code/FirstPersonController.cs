@@ -29,10 +29,10 @@ public class FirstPersonController : MonoBehaviour {
 	
 	void Update () {
 		bool touchesGround = this.onGround();
-		float runMultiplier = Input.GetKey(KeyCode.LeftShift) ? 2f : 1f;
-		this.characterController.Move(this.transform.forward * Input.GetAxis("Vertical") * Time.deltaTime * this.MovementSpeed * runMultiplier + this.transform.right * Input.GetAxis("Horizontal") * Time.deltaTime * this.MovementSpeed * runMultiplier);
-		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
-		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Mouse Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
+		float runMultiplier = 1f + 2f * Input.GetAxis("Run");
+		this.characterController.Move(this.transform.forward * Input.GetAxis("Move Y") * Time.deltaTime * this.MovementSpeed * runMultiplier + this.transform.right * Input.GetAxis("Move X") * Time.deltaTime * this.MovementSpeed * runMultiplier);
+		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Look X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
+		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
 
 		if (touchesGround) {
@@ -46,11 +46,11 @@ public class FirstPersonController : MonoBehaviour {
 		} else {
 			this.verticalSpeed -= 9.18f * Time.deltaTime;
 		}
-		if (this.timeInAir < 0.5f && Input.GetKeyDown(KeyCode.Space)) {
+		if (this.timeInAir < 0.5f && Input.GetAxisRaw("Jump") > 0.1f) {
 			this.timeInAir = 0.5f;
 			this.verticalSpeed = this.JumpStrength;
 		}
-		if (Input.GetKey(KeyCode.LeftControl)) {
+		if (Input.GetAxisRaw("Jetpack") > 0.1f) {
 			this.verticalSpeed = 2f;
 		}
 		this.characterController.Move(Vector3.up * Time.deltaTime * this.verticalSpeed);
