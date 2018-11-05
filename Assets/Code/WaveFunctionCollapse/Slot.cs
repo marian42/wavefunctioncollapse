@@ -25,6 +25,8 @@ public class Slot {
 
 	public Module Module;
 
+	public GameObject GameObject;
+
 	public bool Collapsed {
 		get {
 			return this.Module != null;
@@ -195,6 +197,7 @@ public class Slot {
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = this;
+		this.GameObject = gameObject;
 	}
 
 	public Vector3 GetPosition() {

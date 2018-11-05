@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(MapGenerator))]
 public class FollowPlayer : MonoBehaviour {
@@ -13,19 +14,27 @@ public class FollowPlayer : MonoBehaviour {
 
 	public int ChunkSize = 4;
 
-	public float Range;
+	public float Range = 30;
 
-	private HashSet<Vector3i> completedChunks;
+	public float UnloadRange = 60;
+
+	private Dictionary<Vector3i, bool> chunkVisibility;
 
 	private Vector3 targetPosition;
 	private Vector3 mapPosition;
 
+	private Queue<Vector3i> showQueue;
+	private Queue<Vector3i> hideQueue;
+
 	void Start() {
-		this.completedChunks = new HashSet<Vector3i>();
+		this.chunkVisibility = new Dictionary<Vector3i, bool>();
 		this.mapGenerator = this.GetComponent<MapGenerator>();
 		this.mapGenerator.Initialize();
 		this.generate();
 		this.mapGenerator.BuildAllSlots();
+
+		this.showQueue = new Queue<Vector3i>();
+		this.hideQueue = new Queue<Vector3i>();
 
 		new Thread(this.generatorThread).Start();
 	}
@@ -46,7 +55,10 @@ public class FollowPlayer : MonoBehaviour {
 		for (int x = Mathf.FloorToInt(chunkX - this.Range / chunkSize); x < chunkX + this.Range / chunkSize; x++) {
 			for (int z = Mathf.FloorToInt(chunkZ - this.Range / chunkSize); z < chunkZ + this.Range / chunkSize; z++) {
 				var chunk = new Vector3i(x, 0, z);
-				if (this.completedChunks.Contains(chunk)) {
+				if (this.chunkVisibility.ContainsKey(chunk)) {
+					if (!this.chunkVisibility[chunk]) {
+						this.setChunkVisible(chunk, true);
+					}
 					continue;
 				}
 				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
@@ -61,13 +73,34 @@ public class FollowPlayer : MonoBehaviour {
 		}
 
 		if (any) {
-			this.completedChunks.Add(closestMissingChunk);
-			this.mapGenerator.RangeLimitCenter = closestMissingChunk * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
-			this.mapGenerator.RangeLimit = this.ChunkSize + 12;
-			this.mapGenerator.Collapse(closestMissingChunk * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
+			this.createChunk(closestMissingChunk);
 		} else {
+			foreach (var kvp in this.chunkVisibility.ToList()) {
+				var chunk = kvp.Key;
+				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
+				bool inRange = Vector3.Distance(center, this.targetPosition - Vector3.up * this.targetPosition.y) < this.UnloadRange;
+				if (inRange != kvp.Value) {
+					this.setChunkVisible(chunk, inRange);
+				}
+			}
 			Thread.Sleep(80);
 		}
+	}
+
+	private void setChunkVisible(Vector3i chunkAddress, bool visible) {
+		if (visible) {
+			this.showQueue.Enqueue(chunkAddress);
+		} else {
+			this.hideQueue.Enqueue(chunkAddress);
+		}
+		this.chunkVisibility[chunkAddress] = visible;
+	}
+
+	private void createChunk(Vector3i chunkAddress) {
+		this.mapGenerator.RangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
+		this.mapGenerator.RangeLimit = this.ChunkSize + 12;
+		this.mapGenerator.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
+		this.chunkVisibility[chunkAddress] = true;
 	}
 
 	private void generatorThread() {
@@ -81,9 +114,34 @@ public class FollowPlayer : MonoBehaviour {
 		}
 		
 	}
+
+	private IEnumerable<Slot> getSlotsInChunk(Vector3i chunkAddress) {
+		for (int x = 0; x < this.ChunkSize; x++) {
+			for (int y = 0; y < this.mapGenerator.Height; y++) {
+				for (int z = 0; z < this.ChunkSize; z++) {
+					yield return this.mapGenerator.GetSlot(chunkAddress * this.ChunkSize + new Vector3i(x, y, z));
+				}
+			}
+		}
+	}
 	
 	void Update () {
 		this.targetPosition = this.Target.position;
 		this.mapPosition = this.mapGenerator.transform.position;
+
+		while (this.showQueue.Count != 0) {
+			foreach (var slot in this.getSlotsInChunk(this.showQueue.Dequeue())) {
+				if (slot.GameObject != null) {
+					slot.GameObject.SetActive(true);
+				}
+			}
+		}
+		while (this.hideQueue.Count != 0) {
+			foreach (var slot in this.getSlotsInChunk(this.hideQueue.Dequeue())) {
+				if (slot.GameObject != null) {
+					slot.GameObject.SetActive(false);
+				}
+			}
+		}
 	}
 }

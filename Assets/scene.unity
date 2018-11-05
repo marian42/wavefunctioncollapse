@@ -11658,7 +11658,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1288097635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.66, y: -10.82, z: 70.19}
+  m_LocalPosition: {x: 1.66, y: -4.12, z: 70.19}
   m_LocalScale: {x: 15.067718, y: 83.948616, z: 14.553735}
   m_Children: []
   m_Father: {fileID: 0}
@@ -17488,7 +17488,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 784786034}
   ChunkSize: 5
-  Range: 30
+  Range: 35
+  UnloadRange: 80
 --- !u!1 &1919581514
 GameObject:
   m_ObjectHideFlags: 0
