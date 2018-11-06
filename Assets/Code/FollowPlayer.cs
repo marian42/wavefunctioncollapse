@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,6 +26,8 @@ public class FollowPlayer : MonoBehaviour {
 	private Queue<Vector3i> showQueue;
 	private Queue<Vector3i> hideQueue;
 
+	private Thread thread;
+
 	void Start() {
 		this.chunkVisibility = new Dictionary<Vector3i, bool>();
 		this.mapGenerator = this.GetComponent<MapGenerator>();
@@ -36,7 +38,12 @@ public class FollowPlayer : MonoBehaviour {
 		this.showQueue = new Queue<Vector3i>();
 		this.hideQueue = new Queue<Vector3i>();
 
-		new Thread(this.generatorThread).Start();
+		this.thread = new Thread(this.generatorThread);
+		this.thread.Start();
+	}
+
+	public void OnDisable() {
+		this.thread.Abort();
 	}
 
 	private void generate() {
@@ -109,8 +116,11 @@ public class FollowPlayer : MonoBehaviour {
 				this.generate();
 			}
 		}
-		catch (Exception e) {
-			Debug.LogError(e);
+		catch (Exception exception) {
+			if (exception is System.Threading.ThreadAbortException) {
+				return;
+			}
+			Debug.LogError(exception);
 		}
 		
 	}
