@@ -18,36 +18,36 @@ public class DefaultColumn : IMap {
 		return this.GetSlot(position.Y);
 	}
 
-	private int[][] createInitialNeighborCandidateHealth(Module[] modules) {
-		var initialNeighborCandidateHealth = new int[6][];
+	private int[][] createInitialModuleHealth(Module[] modules) {
+		var initialModuleHealth = new int[6][];
 		for (int i = 0; i < 6; i++) {
-			initialNeighborCandidateHealth[i] = new int[modules.Length];
+			initialModuleHealth[i] = new int[modules.Length];
 			foreach (var module in modules) {
-				foreach (var possibleNeighbor in module.PossibleNeighbors[i]) {
-					initialNeighborCandidateHealth[i][possibleNeighbor.Index]++;
+				foreach (var possibleNeighbor in module.PossibleNeighbors[(i + 3) % 6]) {
+					initialModuleHealth[i][possibleNeighbor.Index]++;
 				}
 			}
 		}
 
 		for (int d = 0; d < 6; d++) {
 			for (int i = 0; i < modules.Length; i++) {
-				if (initialNeighborCandidateHealth[d][i] == 0) {
+				if (initialModuleHealth[d][i] == 0) {
 					Debug.LogError("Module " + modules[i].Prototype.name + " cannot be reached from direction " + d + " (" + modules[i].Prototype.Faces[d].ToString() + ")!", modules[i].Prototype.gameObject);
 					throw new Exception("Unreachable module.");
 				}
 			}
 		}
-		return initialNeighborCandidateHealth;
+		return initialModuleHealth;
 	}
 
 	public DefaultColumn(MapGenerator mapGenerator) {
-		var initialNeighborCandidateHealth = this.createInitialNeighborCandidateHealth(mapGenerator.Modules);
+		var initialNeighborCandidateHealth = this.createInitialModuleHealth(mapGenerator.Modules);
 
 		this.slots = new Slot[mapGenerator.Height];
 		for (int y = 0; y < mapGenerator.Height; y++) {
 			var slot = new Slot(new Vector3i(0, y, 0), mapGenerator, this);
 			this.slots[y] = slot;
-			slot.NeighborCandidateHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+			slot.ModuleHealth = initialNeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
 		}
 
 		foreach (var constraint in mapGenerator.BoundaryConstraints) {

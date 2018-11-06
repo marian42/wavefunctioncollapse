@@ -10,8 +10,8 @@ public class Slot {
 	// List of modules that can still be placed here
 	public HashSet<Module> Modules;
 
-	// Direction -> Module -> Number of entries in this.Modules that allow that module as a neighbor in that direction
-	public int[][] NeighborCandidateHealth;
+	// Direction -> Module -> Number of items in this.getneighbor(direction).Modules that allow this module as a neighbor
+	public int[][] ModuleHealth;
 	
 	private MapGenerator mapGenerator;
 
@@ -48,7 +48,7 @@ public class Slot {
 	}
 
 	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
-		this.NeighborCandidateHealth = prototype.NeighborCandidateHealth.Select(a => a.ToArray()).ToArray();
+		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
 		this.Modules = new HashSet<Module>(prototype.Modules);
 	}
 
@@ -120,11 +120,22 @@ public class Slot {
 				continue;
 			}
 			for (int d = 0; d < 6; d++) {
+				int inverseDirection = (d + 3) % 6;
+				var neighbor = this.GetNeighbor(d);
+				if (neighbor == null) {
+					continue;
+				}
+
 				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
-					if (this.NeighborCandidateHealth[d][possibleNeighbor.Index] == 1) {
-						affectedNeighbouredModules[d].Add(this.mapGenerator.Modules[possibleNeighbor.Index]);
+					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1) {
+						affectedNeighbouredModules[d].Add(possibleNeighbor);
 					}
-					this.NeighborCandidateHealth[d][possibleNeighbor.Index]--;
+#if UNITY_EDITOR
+					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] < 1) {
+						throw new System.InvalidOperationException("ModuleHealth must not be negative.");
+					}
+#endif
+					neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index]--;
 				}
 			}
 			this.Modules.Remove(module);
@@ -182,7 +193,7 @@ public class Slot {
 
 	public void Build() {
 		if (this.UnrecoveredFailure) {
-			this.mark(2f, Color.white);
+			this.mark(2f, Application.isEditor ? Color.red : Color.white);
 		}
 
 		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {

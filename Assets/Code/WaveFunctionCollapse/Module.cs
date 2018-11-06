@@ -10,7 +10,7 @@ public class Module {
 
 	public int Rotation;
 	
-	// Direction -> Array of module IDs that may be placed adjacent in this direction
+	// Direction -> Array of modules that may be placed adjacent in this direction
 	public Module[][] PossibleNeighbors;
 
 	public readonly int Index;
