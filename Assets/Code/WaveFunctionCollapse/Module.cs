@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -15,10 +15,13 @@ public class Module {
 
 	public readonly int Index;
 
+	public readonly string Name;
+
 	public Module(ModulePrototype prototype, int rotation, int index, MapGenerator mapGenerator) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
 		this.Index = index;
+		this.Name = prototype.gameObject.name + " R" + rotation;
 	}
 
 	public bool Fits(int direction, Module module) {
@@ -47,5 +50,9 @@ public class Module {
 
 	public ModulePrototype.FaceDetails GetFace(int direction) {
 		return this.Prototype.Faces[Orientations.Rotate(direction, this.Rotation)];
+	}
+
+	public override string ToString() {
+		return this.Name;
 	}
 }
