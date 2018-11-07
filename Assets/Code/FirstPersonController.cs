@@ -54,6 +54,13 @@ public class FirstPersonController : MonoBehaviour {
 			this.verticalSpeed = 2f;
 		}
 		this.characterController.Move(Vector3.up * Time.deltaTime * this.verticalSpeed);
+
+		if (Input.GetKeyDown(FlightController.OnOffKey)) {
+			var flyBehaviour = this.GetComponent<FlightController>();
+			if (flyBehaviour != null) {
+				this.GetComponent<FlightController>().enabled = true;
+			}
+		}
 	}
 
 	private bool onGround() {
