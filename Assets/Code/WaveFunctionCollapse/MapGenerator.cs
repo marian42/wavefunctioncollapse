@@ -87,7 +87,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 		this.defaultColumn = new DefaultColumn(this);
 	}
 
-	public void Collapse(Vector3i start, Vector3i size) {
+	public void Collapse(Vector3i start, Vector3i size, bool showProgress = false) {
 		var targets = new List<Vector3i>();
 		for (int x = 0; x < size.X; x++) {
 			for (int y = 0; y < size.Y; y++) {
@@ -96,33 +96,44 @@ public class MapGenerator : MonoBehaviour, IMap {
 				}
 			}
 		}
-		this.Collapse(targets);
+		this.Collapse(targets, showProgress);
 	}
 
-	public void CollapseDefaultArea() {
-		this.Collapse(new Vector3i(- this.DefaultSize / 2, 0, - this.DefaultSize / 2), new Vector3i(this.DefaultSize, this.Height, this.DefaultSize));
+	public void CollapseDefaultArea(bool showProgress = false) {
+		this.Collapse(new Vector3i(- this.DefaultSize / 2, 0, - this.DefaultSize / 2), new Vector3i(this.DefaultSize, this.Height, this.DefaultSize), showProgress);
 	}
 
-	public void Collapse(IEnumerable<Vector3i> targets) {
+	public void Collapse(IEnumerable<Vector3i> targets, bool showProgress = false) {
 		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
-
+		
 		while (this.workArea.Any()) {
 			int minEntropy = this.workArea.Min(slot => slot.Entropy);
 			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
 			
 			var selected = candidates[MapGenerator.Random.Next(0, candidates.Count - 1)];
 			selected.CollapseRandom();
+
+			if (showProgress) {
+				EditorUtility.DisplayProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count());
+			}
 		}
 
 		var retry = new List<Slot>();
+		int failureCount = this.failureQueue.Count();
 		while (this.failureQueue.Any()) {
 			var failedSlot = this.failureQueue.Dequeue();
 			if (!failedSlot.TryToRecoverFailure()) {
 				retry.Add(failedSlot);
 			}
+			if (showProgress) {
+				EditorUtility.DisplayProgressBar("Handling failed blocks...", this.failureQueue.Count + " left...", 1f - (float)this.failureQueue.Count() / failureCount);
+			}
 		}
 		foreach (var item in retry) {
 			this.failureQueue.Enqueue(item);
+		}
+		if (showProgress) {
+			EditorUtility.ClearProgressBar();
 		}
 	}
 

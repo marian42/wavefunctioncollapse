@@ -13,7 +13,7 @@ public class AreaSelectorEditor : Editor {
 			if (!selector.MapGenerator.Initialized) {
 				selector.MapGenerator.Initialize();
 			}
-			selector.MapGenerator.Collapse(selector.StartPosition, selector.Size);
+			selector.MapGenerator.Collapse(selector.StartPosition, selector.Size, true);
 			selector.MapGenerator.BuildAllSlots();
 		}
 	}

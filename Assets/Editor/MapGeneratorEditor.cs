@@ -15,7 +15,7 @@ public class MapGeneratorEditor : Editor {
 		}
 		if (GUILayout.Button("Initialize")) {
 			generator.Initialize();
-			generator.CollapseDefaultArea();
+			generator.CollapseDefaultArea(true);
 			generator.BuildAllSlots();
 			Debug.Log("Map initialized.");
 		}
