@@ -213,10 +213,10 @@ public class MapGenerator : MonoBehaviour, IMap {
 			return;
 		}
 		foreach (var slot in mapGenerator.Map.Values) {
-			if (slot.Collapsed) {
+			if (slot.Collapsed || slot.Modules.Count() == mapGenerator.Modules.Count()) {
 				continue;
 			}
-			Gizmos.DrawWireSphere(mapGenerator.GetWorldspacePosition(slot.Position), 0.2f);
+			Handles.Label(mapGenerator.GetWorldspacePosition(slot.Position), slot.Modules.Count().ToString());
 		}
 	}
 #endif
