@@ -1618,7 +1618,8 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours:
     - {fileID: 1945017238}
-    EnforceWalkableNeighbor: 0
+    - {fileID: 217746167}
+    EnforceWalkableNeighbor: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -6639,7 +6640,7 @@ Transform:
   m_Children:
   - {fileID: 282840814}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &784786035
 MonoBehaviour:
@@ -11474,6 +11475,47 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 1.075001, z: 2}
   m_Center: {x: -0.8, y: -0.4624995, z: 0}
+--- !u!1 &1277591053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1277591055}
+  - component: {fileID: 1277591054}
+  m_Layer: 0
+  m_Name: Slot Inspector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1277591054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1277591053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048a30e60c6973048b3f66b98b31cd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapGenerator: {fileID: 1916848026}
+--- !u!4 &1277591055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1277591053}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.43, y: 10.36, z: 3.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1277759429
 GameObject:
   m_ObjectHideFlags: 0
@@ -11684,8 +11726,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1288097635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 23.55453, y: 136.75864, z: 23.709135}
+  m_LocalPosition: {x: -27.01, y: 0, z: 9.27}
+  m_LocalScale: {x: 8.594577, y: 49.90049, z: 8.65099}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -13963,6 +14005,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 1106638989}
+    - {fileID: 1607197251}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -17481,7 +17524,7 @@ MonoBehaviour:
     Direction: 2
     Mode: 1
     Connector: 31
-  VisualizeSlots: 0
+  VisualizeSlots: 1
 --- !u!4 &1916848027
 Transform:
   m_ObjectHideFlags: 0
