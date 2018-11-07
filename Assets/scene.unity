@@ -325,7 +325,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 54
+  m_RootOrder: 56
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &38858557
 MonoBehaviour:
@@ -645,12 +645,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 98244520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 180}
+  m_LocalPosition: {x: 0, y: 0, z: 185.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1237290599}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 45
+  m_RootOrder: 47
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &98244522
 MonoBehaviour:
@@ -663,12 +663,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 100
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 2024038481}
+    - {fileID: 98244522}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -843,7 +844,7 @@ Transform:
   m_Children:
   - {fileID: 269407091}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 43
+  m_RootOrder: 45
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &109800211
 MonoBehaviour:
@@ -990,7 +991,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 65
+  m_RootOrder: 67
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &126369410
 MonoBehaviour:
@@ -1009,6 +1010,7 @@ MonoBehaviour:
     Connector: 26
     ExcludedNeighbours:
     - {fileID: 435266499}
+    - {fileID: 1945017238}
     EnforceWalkableNeighbor: 0
     Symmetric: 0
     Flipped: 0
@@ -1597,7 +1599,7 @@ Transform:
   - {fileID: 246898631}
   - {fileID: 1409750809}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 56
+  m_RootOrder: 58
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &217746167
 MonoBehaviour:
@@ -1614,7 +1616,8 @@ MonoBehaviour:
   Left:
     Walkable: 0
     Connector: 2
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 1945017238}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -1887,7 +1890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 0.2
   Left:
     Walkable: 0
     Connector: 1
@@ -2387,11 +2390,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 279289012}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 192}
+  m_LocalPosition: {x: 0.019, y: 2.167, z: 188.025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 48
+  m_RootOrder: 50
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &279289014
 MonoBehaviour:
@@ -3737,7 +3740,7 @@ Transform:
   - {fileID: 839093709}
   - {fileID: 1559757354}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 64
+  m_RootOrder: 66
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &427848814
 MonoBehaviour:
@@ -3756,6 +3759,7 @@ MonoBehaviour:
     Connector: 23
     ExcludedNeighbours:
     - {fileID: 447617901}
+    - {fileID: 1106638989}
     EnforceWalkableNeighbor: 0
     Symmetric: 0
     Flipped: 0
@@ -3884,7 +3888,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 59
+  m_RootOrder: 61
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &435266499
 MonoBehaviour:
@@ -4076,7 +4080,7 @@ Transform:
   - {fileID: 1493525356}
   - {fileID: 29025192}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 57
+  m_RootOrder: 59
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &447617901
 MonoBehaviour:
@@ -4511,6 +4515,8 @@ Transform:
   - {fileID: 1069624577}
   - {fileID: 1262390208}
   - {fileID: 574915374}
+  - {fileID: 1205432411}
+  - {fileID: 807719505}
   - {fileID: 1087490823}
   - {fileID: 1923923220}
   - {fileID: 1822108481}
@@ -4543,8 +4549,6 @@ Transform:
   - {fileID: 427848813}
   - {fileID: 126369409}
   - {fileID: 498141450}
-  - {fileID: 1205432411}
-  - {fileID: 807719505}
   - {fileID: 278714519}
   - {fileID: 1826743737}
   - {fileID: 1181201281}
@@ -4601,7 +4605,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 66
+  m_RootOrder: 68
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &498141451
 MonoBehaviour:
@@ -4928,7 +4932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 0.001
+  Probability: 0.0001
   Left:
     Walkable: 0
     Connector: 1
@@ -5720,11 +5724,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 671815731}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 196}
+  m_LocalPosition: {x: 0, y: 2.138, z: 185.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 49
+  m_RootOrder: 51
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &671815733
 MonoBehaviour:
@@ -5887,7 +5891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 0.1
   Left:
     Walkable: 0
     Connector: 1
@@ -6283,7 +6287,7 @@ Transform:
   - {fileID: 448671777}
   - {fileID: 1506235621}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 63
+  m_RootOrder: 65
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &756417957
 MonoBehaviour:
@@ -6302,6 +6306,7 @@ MonoBehaviour:
     Connector: 23
     ExcludedNeighbours:
     - {fileID: 447617901}
+    - {fileID: 1106638989}
     EnforceWalkableNeighbor: 0
     Symmetric: 0
     Flipped: 0
@@ -6466,12 +6471,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 773646387}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 188}
+  m_LocalPosition: {x: 0, y: 0, z: 188.852}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1415473010}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 47
+  m_RootOrder: 49
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &773646389
 MonoBehaviour:
@@ -6498,7 +6503,7 @@ MonoBehaviour:
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
     Invariant: 0
-    Rotation: 2
+    Rotation: 3
   Back:
     Walkable: 0
     Connector: 19
@@ -6583,6 +6588,7 @@ GameObject:
   - component: {fileID: 784786034}
   - component: {fileID: 784786033}
   - component: {fileID: 784786032}
+  - component: {fileID: 784786035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6635,6 +6641,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &784786035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 784786031}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f5717b4643fb448934051a99b14502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Velocity: 3
 --- !u!1 &793329393
 GameObject:
   m_ObjectHideFlags: 0
@@ -6695,7 +6713,7 @@ MonoBehaviour:
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
     Invariant: 0
-    Rotation: 0
+    Rotation: 3
   Back:
     Walkable: 0
     Connector: 4
@@ -6721,7 +6739,7 @@ MonoBehaviour:
     Walkable: 0
     Connector: 3
     ExcludedNeighbours: []
-    EnforceWalkableNeighbor: 0
+    EnforceWalkableNeighbor: 1
     Symmetric: 0
     Flipped: 1
   CreateRotatedVariants: 1
@@ -6928,7 +6946,7 @@ Transform:
   - {fileID: 1225875879}
   - {fileID: 999359553}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 68
+  m_RootOrder: 36
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &809240672
 GameObject:
@@ -6961,7 +6979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 53
+  m_RootOrder: 55
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &809240674
 MonoBehaviour:
@@ -7139,7 +7157,7 @@ Transform:
   - {fileID: 543098653}
   - {fileID: 1267405182}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 61
+  m_RootOrder: 63
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &824005543
 MonoBehaviour:
@@ -7152,7 +7170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 100
   Left:
     Walkable: 0
     Connector: 1
@@ -7333,7 +7351,7 @@ Transform:
   - {fileID: 562169478}
   - {fileID: 1207031883}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 41
+  m_RootOrder: 43
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &824504555
 MonoBehaviour:
@@ -7551,7 +7569,7 @@ Transform:
   - {fileID: 379394591}
   - {fileID: 1600629297}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 39
+  m_RootOrder: 41
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &850399225
 MonoBehaviour:
@@ -7559,7 +7577,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 850399223}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
@@ -8959,7 +8977,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 35
+  m_RootOrder: 37
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1087490824
 MonoBehaviour:
@@ -9152,7 +9170,7 @@ Transform:
   - {fileID: 304679015}
   - {fileID: 2060384308}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 58
+  m_RootOrder: 60
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1106638989
 MonoBehaviour:
@@ -9169,7 +9187,9 @@ MonoBehaviour:
   Left:
     Walkable: 1
     Connector: 23
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 756417957}
+    - {fileID: 427848814}
     EnforceWalkableNeighbor: 0
     Symmetric: 0
     Flipped: 1
@@ -9183,7 +9203,9 @@ MonoBehaviour:
   Back:
     Walkable: 0
     Connector: 1
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 1607197251}
+    - {fileID: 2024038481}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -9193,7 +9215,7 @@ MonoBehaviour:
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
     Symmetric: 0
-    Flipped: 1
+    Flipped: 0
   Up:
     Walkable: 0
     Connector: 30
@@ -9537,7 +9559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 100
   Left:
     Walkable: 0
     Connector: 1
@@ -9545,6 +9567,10 @@ MonoBehaviour:
     - {fileID: 1221812422}
     - {fileID: 1078488568}
     - {fileID: 2024038481}
+    - {fileID: 98244522}
+    - {fileID: 1607197251}
+    - {fileID: 824005543}
+    - {fileID: 1133078801}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -9968,7 +9994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 0.05
   Left:
     Walkable: 0
     Connector: 2
@@ -10104,7 +10130,7 @@ Transform:
   - {fileID: 1140207749}
   - {fileID: 1949368490}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 67
+  m_RootOrder: 35
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1205432412
 MeshRenderer:
@@ -11265,7 +11291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 0.001
+  Probability: 0.0005
   Left:
     Walkable: 1
     Connector: 12
@@ -11521,7 +11547,7 @@ Transform:
   m_Children:
   - {fileID: 626946179}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 52
+  m_RootOrder: 54
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1282313987
 MonoBehaviour:
@@ -11658,8 +11684,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1288097635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.66, y: -4.12, z: 70.19}
-  m_LocalScale: {x: 15.067718, y: 83.948616, z: 14.553735}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 23.55453, y: 136.75864, z: 23.709135}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -13085,7 +13111,7 @@ Transform:
   - {fileID: 1105503965}
   - {fileID: 1948113544}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 42
+  m_RootOrder: 44
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1511147655
 MonoBehaviour:
@@ -13918,7 +13944,7 @@ Transform:
   - {fileID: 707402789}
   - {fileID: 1489379949}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 55
+  m_RootOrder: 57
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1607197251
 MonoBehaviour:
@@ -13931,11 +13957,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 100
   Left:
     Walkable: 0
     Connector: 1
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 1106638989}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -13975,6 +14002,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 824005543}
     - {fileID: 98244522}
+    - {fileID: 1607197251}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -15489,7 +15517,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 37
+  m_RootOrder: 39
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1822108482
 MonoBehaviour:
@@ -15980,7 +16008,7 @@ Transform:
   m_Children:
   - {fileID: 1003567569}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 40
+  m_RootOrder: 42
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1866347236
 MonoBehaviour:
@@ -16592,7 +16620,7 @@ Transform:
   m_Children:
   - {fileID: 1862082000}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 44
+  m_RootOrder: 46
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1904601153
 MonoBehaviour:
@@ -17010,14 +17038,6 @@ MonoBehaviour:
     Rotation: 2
   - Prototype: {fileID: 2058239814}
     Rotation: 3
-  - Prototype: {fileID: 850399225}
-    Rotation: 0
-  - Prototype: {fileID: 850399225}
-    Rotation: 1
-  - Prototype: {fileID: 850399225}
-    Rotation: 2
-  - Prototype: {fileID: 850399225}
-    Rotation: 3
   - Prototype: {fileID: 1866347236}
     Rotation: 0
   - Prototype: {fileID: 1866347236}
@@ -17397,13 +17417,13 @@ MonoBehaviour:
   - Prototype: {fileID: 1475903623}
     Rotation: 3
   DefaultSize: 20
-  Height: 8
+  Height: 6
   RespectNeighorExclusions: 1
   RangeLimitCenter:
     X: 0
     Y: 0
     Z: 0
-  RangeLimit: 100
+  RangeLimit: 50
   BoundaryConstraints:
   - RelativeY: 0
     Direction: 1
@@ -17488,7 +17508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 784786034}
   ChunkSize: 5
-  Range: 35
+  Range: 30
   UnloadRange: 80
 --- !u!1 &1919581514
 GameObject:
@@ -17557,7 +17577,7 @@ MonoBehaviour:
     Walkable: 0
     Connector: 3
     ExcludedNeighbours: []
-    EnforceWalkableNeighbor: 0
+    EnforceWalkableNeighbor: 1
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17672,7 +17692,7 @@ Transform:
   - {fileID: 2059021749}
   - {fileID: 156271961}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 36
+  m_RootOrder: 38
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1923923221
 MonoBehaviour:
@@ -17851,7 +17871,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 482599584}
-  m_RootOrder: 60
+  m_RootOrder: 62
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1945017238
 MonoBehaviour:
@@ -17868,7 +17888,8 @@ MonoBehaviour:
   Left:
     Walkable: 0
     Connector: 26
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 126369410}
     EnforceWalkableNeighbor: 0
     Symmetric: 0
     Flipped: 1
@@ -17882,7 +17903,8 @@ MonoBehaviour:
   Back:
     Walkable: 0
     Connector: 2
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 217746167}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -18081,7 +18103,7 @@ Transform:
   - {fileID: 1570188313}
   - {fileID: 461159997}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 46
+  m_RootOrder: 48
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1977697193
 MonoBehaviour:
@@ -18229,7 +18251,7 @@ Transform:
   - {fileID: 680005885}
   - {fileID: 105615381}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 62
+  m_RootOrder: 64
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1993516260
 MonoBehaviour:
@@ -18490,7 +18512,7 @@ Transform:
   m_Children:
   - {fileID: 38985178}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 50
+  m_RootOrder: 52
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2024038481
 MonoBehaviour:
@@ -18503,7 +18525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 1
+  Probability: 100
   Left:
     Walkable: 0
     Connector: 1
@@ -18547,7 +18569,8 @@ MonoBehaviour:
   Forward:
     Walkable: 0
     Connector: 1
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 1106638989}
     EnforceWalkableNeighbor: 0
     Symmetric: 1
     Flipped: 0
@@ -18726,7 +18749,7 @@ Transform:
   - {fileID: 2002992193}
   - {fileID: 355939069}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 38
+  m_RootOrder: 40
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2058239814
 MonoBehaviour:
@@ -19146,6 +19169,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours:
     - {fileID: 298608963}
+    - {fileID: 2085459354}
     EnforceWalkableNeighbor: 1
     Symmetric: 1
     Flipped: 0
@@ -19220,7 +19244,7 @@ Transform:
   - {fileID: 311071976}
   - {fileID: 941551209}
   m_Father: {fileID: 482599584}
-  m_RootOrder: 51
+  m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2097701348
 MonoBehaviour:
