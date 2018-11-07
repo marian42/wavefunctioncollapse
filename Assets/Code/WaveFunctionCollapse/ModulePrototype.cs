@@ -225,7 +225,7 @@ public class ModulePrototype : MonoBehaviour {
 		return result;
 	}
 
-	public static List<Module> CreateModules(MapGenerator mapGenerator) {
+	public static List<Module> CreateModules(bool respectNeigborExclusions) {
 		int count = 0;
 		var modules = new List<Module>();
 		
@@ -237,7 +237,7 @@ public class ModulePrototype : MonoBehaviour {
 			}
 
 			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
-				modules.Add(new Module(prototype, rotation, count, mapGenerator));
+				modules.Add(new Module(prototype, rotation, count));
 				count++;
 			}
 		}
@@ -248,7 +248,7 @@ public class ModulePrototype : MonoBehaviour {
 				var face = module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)];
 				module.PossibleNeighbors[direction] = modules
 					.Where(neighbor => module.Fits(direction, neighbor)
-						&& (!mapGenerator.RespectNeighorExclusions || (
+						&& (!respectNeigborExclusions || (
 							!face.ExcludedNeighbours.Contains(neighbor.Prototype)
 							&& !neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(module.Prototype))
 							&& (!face.EnforceWalkableNeighbor || neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)

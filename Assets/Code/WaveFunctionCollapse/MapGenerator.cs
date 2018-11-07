@@ -71,10 +71,10 @@ public class MapGenerator : MonoBehaviour, IMap {
 	public Slot GetSlot(int x, int y, int z, bool create = true) {
 		return this.GetSlot(new Vector3i(x, y, z), create);
 	}
-		
+	
 	private void createModules() {
-		this.Modules = ModulePrototype.CreateModules(this).ToArray();
-	}	
+		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
+	}
 
 	public void Initialize() {
 		this.Clear();

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -17,7 +17,7 @@ public class Module {
 
 	public readonly string Name;
 
-	public Module(ModulePrototype prototype, int rotation, int index, MapGenerator mapGenerator) {
+	public Module(ModulePrototype prototype, int rotation, int index) {
 		this.Prototype = prototype;
 		this.Rotation = rotation;
 		this.Index = index;
