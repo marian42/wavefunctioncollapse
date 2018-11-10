@@ -41,6 +41,8 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 	}
 
+	public int[][] InitialModuleHealth;
+
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
 			return null;
@@ -60,7 +62,12 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			return null;
 		}
 
-		this.Map[position] = new Slot(position, this, this.defaultColumn.GetSlot(position)); ;
+		if (this.defaultColumn != null) {
+			this.Map[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
+		} else {
+			this.Map[position] = new Slot(position, this, this);
+			this.Map[position].ModuleHealth = this.InitialModuleHealth.Select(a => a.ToArray()).ToArray();
+		}
 		return this.Map[position];
 	}
 
@@ -74,6 +81,48 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 	
 	public void CreateModules() {
 		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
+	}
+
+	public void SimplifyNeighborData() {
+		this.Initialize();
+		int count = 0;
+		var center = new Vector3i(0, this.Height / 2, 0);
+		this.defaultColumn = null;
+		int p = 0;
+		foreach (var module in this.Modules) {
+			this.InitialModuleHealth = this.createInitialModuleHealth(this.Modules);
+			foreach (var s in this.Map.Values) {
+				s.Module = null;
+				for (int d = 0; d < 6; d++) {
+					for (int i = 0; i < this.Modules.Length; i++) {
+						s.ModuleHealth[d][i] = this.InitialModuleHealth[d][i];
+					}
+				}
+
+				if (s.Modules.Count() != this.Modules.Count()) {
+					foreach (var m in this.Modules) {
+						s.Modules.Add(m);
+					}
+				}
+			}
+			this.buildQueue.Clear();
+			var slot = this.GetSlot(center);
+			slot.Collapse(module);
+			if (this.failureQueue.Any()) {
+				this.BuildAllSlots();
+				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + this.failureQueue.First().Position + ".");
+			}
+			for (int direction = 0; direction < 6; direction++) {
+				var neighbor = slot.GetNeighbor(direction);
+				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
+				module.PossibleNeighbors[direction] = module.PossibleNeighbors[direction].Where(m => neighbor.Modules.Contains(m)).ToArray();
+				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Length;
+			}
+			p++;
+			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / this.Modules.Length);
+		}
+		Debug.Log("Removed " + count + " impossible neighbors.");
+		EditorUtility.ClearProgressBar();
 	}
 
 	public void Initialize() {
@@ -205,6 +254,27 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 	}
 
+	private int[][] createInitialModuleHealth(Module[] modules) {
+		var initialModuleHealth = new int[6][];
+		for (int i = 0; i < 6; i++) {
+			initialModuleHealth[i] = new int[modules.Length];
+			foreach (var module in modules) {
+				foreach (var possibleNeighbor in module.PossibleNeighbors[(i + 3) % 6]) {
+					initialModuleHealth[i][possibleNeighbor.Index]++;
+				}
+			}
+		}
+
+		for (int i = 0; i < modules.Length; i++) {
+			for (int d = 0; d < 6; d++) {
+				if (initialModuleHealth[d][i] == 0) {
+					Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prototype.gameObject);
+					throw new Exception("Unreachable module.");
+				}
+			}
+		}
+		return initialModuleHealth;
+	}
 
 	public void OnBeforeSerialize() { }
 
