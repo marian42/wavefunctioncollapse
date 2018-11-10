@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 using UnityEditor;
 
-public class MapGenerator : MonoBehaviour, IMap {
+public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver {
 	public const float BlockSize = 2f;
 
 	public static System.Random Random;
@@ -72,7 +72,7 @@ public class MapGenerator : MonoBehaviour, IMap {
 		return this.GetSlot(new Vector3i(x, y, z), create);
 	}
 	
-	private void createModules() {
+	public void CreateModules() {
 		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
 	}
 
@@ -83,7 +83,11 @@ public class MapGenerator : MonoBehaviour, IMap {
 		this.failureQueue = new Queue<Slot>();
 		this.buildQueue = new Queue<Slot>();
 
-		this.createModules();
+		if (this.Modules == null || this.Modules.Length == 0) {
+			Debug.LogWarning("Module data was not available, creating new data.");
+			this.CreateModules();
+		}
+		this.InitialModuleHealth = this.createInitialModuleHealth(this.Modules);
 		this.defaultColumn = new DefaultColumn(this);
 	}
 
@@ -201,6 +205,17 @@ public class MapGenerator : MonoBehaviour, IMap {
 		}
 	}
 
+
+	public void OnBeforeSerialize() { }
+
+	public void OnAfterDeserialize() {
+		if (this.Modules != null && this.Modules.Length != 0) {
+			foreach (var module in this.Modules) {
+				module.DeserializeNeigbors(this.Modules);
+			}
+		}
+	}
+	
 	public bool VisualizeSlots = false;
 
 #if UNITY_EDITOR

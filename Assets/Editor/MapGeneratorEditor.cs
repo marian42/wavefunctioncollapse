@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,6 +10,13 @@ public class MapGeneratorEditor : Editor {
 		DrawDefaultInspector();
 
 		MapGenerator generator = (MapGenerator)target;
+
+		if (GUILayout.Button("Create module data")) {
+			generator.CreateModules();
+		}
+
+		GUILayout.Space(20f);
+
 		if (GUILayout.Button("Clear")) {
 			generator.Clear();
 		}
