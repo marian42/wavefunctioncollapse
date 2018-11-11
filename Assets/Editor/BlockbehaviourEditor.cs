@@ -23,10 +23,6 @@ public class BlockBehaviourEditor : Editor {
 				GUILayout.Label("(No neighbor)");
 				continue;
 			}
-			if (neighbor.UnrecoveredFailure) {
-				GUILayout.Label("(Failed)");
-				continue;
-			}
 
 			GUILayout.Label(neighbor.Module.ToString());
 

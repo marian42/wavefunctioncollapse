@@ -31,8 +31,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	private HashSet<Slot> workArea;
 
-	private Queue<Slot> failureQueue;
-
 	private Queue<Slot> buildQueue;
 
 	public RingBuffer<HistoryItem> History;
@@ -113,11 +111,14 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			}
 			this.buildQueue.Clear();
 			var slot = this.GetSlot(center);
-			slot.Collapse(module);
-			if (this.failureQueue.Any()) {
-				this.BuildAllSlots();
-				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + this.failureQueue.First().Position + ".");
+			try {
+
 			}
+			catch (CollapseFailedException exception) {
+				this.BuildAllSlots();
+				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + exception.Slot.Position + ".");
+			}
+			slot.Collapse(module);
 			for (int direction = 0; direction < 6; direction++) {
 				var neighbor = slot.GetNeighbor(direction);
 				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
@@ -136,7 +137,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.Clear();
 		MapGenerator.Random = new System.Random();
 		this.Map = new Dictionary<Vector3i, Slot>();
-		this.failureQueue = new Queue<Slot>();
 		this.buildQueue = new Queue<Slot>();
 		this.History = new RingBuffer<HistoryItem>(3000);
 		this.backtrackBarrier = 0;
@@ -196,22 +196,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 #endif
 		}
 
-		var retry = new List<Slot>();
-		int failureCount = this.failureQueue.Count();
-		while (this.failureQueue.Any()) {
-			var failedSlot = this.failureQueue.Dequeue();
-			if (!failedSlot.TryToRecoverFailure()) {
-				retry.Add(failedSlot);
-			}
-#if UNITY_EDITOR
-			if (showProgress) {
-				EditorUtility.DisplayProgressBar("Handling failed blocks...", this.failureQueue.Count + " left...", 1f - (float)this.failureQueue.Count() / failureCount);
-			}
-#endif
-		}
-		foreach (var item in retry) {
-			this.failureQueue.Enqueue(item);
-		}
 #if UNITY_EDITOR
 		if (showProgress) {
 			EditorUtility.ClearProgressBar();
@@ -276,10 +260,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	public void MarkSlotForBuilding(Slot slot) {
 		this.buildQueue.Enqueue(slot);
-	}
-
-	public void OnFail(Slot slot) {
-		this.failureQueue.Enqueue(slot);
 	}
 
 	public void Update() {

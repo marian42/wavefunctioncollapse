@@ -17,12 +17,6 @@ public class Slot {
 
 	private IMap map;
 
-	private bool inFailureQueue = false;
-	public bool UnrecoveredFailure {
-		get;
-		private set;
-	}
-
 	public Module Module;
 
 	public GameObject GameObject;
@@ -44,7 +38,6 @@ public class Slot {
 		this.mapGenerator = mapGenerator;
 		this.map = map;
 		this.Modules = new HashSet<Module>(this.mapGenerator.Modules);
-		this.UnrecoveredFailure = false;
 	}
 
 	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
@@ -94,7 +87,7 @@ public class Slot {
 
 	public void CollapseRandom() {
 		if (!this.Modules.Any()) {
-			throw new CollapseFailedException();
+			throw new CollapseFailedException(this);
 		}
 		if (this.Collapsed) {
 			throw new Exception("Slot is already collapsed.");
@@ -146,7 +139,7 @@ public class Slot {
 		}
 
 		if (this.Modules.Count == 0) {
-			throw new CollapseFailedException();
+			throw new CollapseFailedException(this);
 		}
 
 		for (int d = 0; d < 6; d++) {
@@ -188,34 +181,6 @@ public class Slot {
 		return false;
 	}
 
-	public void Fail() {
-		this.Module = null;
-		this.mapGenerator.MarkSlotComplete(this);
-		this.inFailureQueue = true;
-		this.mapGenerator.OnFail(this);
-	}
-
-	public bool TryToRecoverFailure() {
-		this.inFailureQueue = false;
-		if (Enumerable.Range(0, 6).All(i => this.GetNeighbor(i) == null || this.GetNeighbor(i).inFailureQueue || this.GetNeighbor(i).Collapsed)) {
-			foreach (var module in this.mapGenerator.Modules) {
-				if (Enumerable.Range(0, 6).All(direction => this.GetNeighbor(direction) == null
-					|| this.GetNeighbor(direction).inFailureQueue
-					|| this.GetNeighbor(direction).UnrecoveredFailure
-					|| module.Fits(direction, this.GetNeighbor(direction).Module))) {
-					this.Module = module;
-					this.mapGenerator.MarkSlotForBuilding(this);
-					return true;
-				}
-			}
-
-			this.UnrecoveredFailure = true;
-			this.mapGenerator.MarkSlotForBuilding(this);
-			return true;
-		}
-		return false;
-	}
-
 	private void mark(float size, Color color) {
 		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		cube.transform.parent = this.mapGenerator.transform;
@@ -225,10 +190,6 @@ public class Slot {
 	}
 
 	public void Build() {
-		if (this.UnrecoveredFailure) {
-			this.mark(2f, Application.isEditor ? Color.red : Color.white);
-		}
-
 		if (this.GameObject != null) {
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(this.GameObject);
