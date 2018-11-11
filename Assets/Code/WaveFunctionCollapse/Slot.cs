@@ -64,9 +64,6 @@ public class Slot {
 		this.RemoveModules(toRemove);
 
 		this.mapGenerator.MarkSlotComplete(this);
-		if (this.Module.Prototype.Spawn) {
-			this.mapGenerator.MarkSlotForBuilding(this);
-		}
 	}
 
 	private void checkConsistency(Module module) {
@@ -189,7 +186,7 @@ public class Slot {
 		cube.transform.position = this.GetPosition();
 	}
 
-	public void Build() {
+	public bool Build() {
 		if (this.GameObject != null) {
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(this.GameObject);
@@ -199,7 +196,7 @@ public class Slot {
 		}
 
 		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {
-			return;
+			return false;
 		}		
 
 		var gameObject = GameObject.Instantiate(this.Module.Prototype.gameObject);
@@ -211,6 +208,7 @@ public class Slot {
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = this;
 		this.GameObject = gameObject;
+		return true;
 	}
 
 	public Vector3 GetPosition() {

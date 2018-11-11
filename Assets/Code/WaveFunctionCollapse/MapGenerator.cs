@@ -250,6 +250,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		if (this.workArea != null) {
 			this.workArea.Remove(slot);
 		}
+		this.buildQueue.Enqueue(slot);
 	}
 
 	public void MarkSlotIncomplete(Slot slot) {
@@ -257,20 +258,18 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			this.workArea.Add(slot);
 		}
 	}
-
-	public void MarkSlotForBuilding(Slot slot) {
-		this.buildQueue.Enqueue(slot);
-	}
-
+	
 	public void Update() {
 		if (this.buildQueue == null) {
 			return;
 		}
 
-		int maxSpawnsPerFrame = 50;
+		int itemsLeft = 50;
 
-		while (this.buildQueue.Count != 0 && maxSpawnsPerFrame-- > 0) {
-			this.buildQueue.Dequeue().Build();
+		while (this.buildQueue.Count != 0 && itemsLeft > 0) {
+			if (this.buildQueue.Dequeue().Build()) {
+				itemsLeft--;
+			}
 		}
 	}
 
