@@ -88,6 +88,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
 	}
 
+#if UNITY_EDITOR
 	public void SimplifyNeighborData() {
 		this.Initialize();
 		int count = 0;
@@ -129,6 +130,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		Debug.Log("Removed " + count + " impossible neighbors.");
 		EditorUtility.ClearProgressBar();
 	}
+#endif
 
 	public void Initialize() {
 		this.Clear();
@@ -187,9 +189,11 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 				this.Undo(this.backtrackAmount);
 			}
 
+#if UNITY_EDITOR
 			if (showProgress) {
 				EditorUtility.DisplayProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count());
 			}
+#endif
 		}
 
 		var retry = new List<Slot>();
@@ -199,16 +203,21 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			if (!failedSlot.TryToRecoverFailure()) {
 				retry.Add(failedSlot);
 			}
+#if UNITY_EDITOR
 			if (showProgress) {
 				EditorUtility.DisplayProgressBar("Handling failed blocks...", this.failureQueue.Count + " left...", 1f - (float)this.failureQueue.Count() / failureCount);
 			}
+#endif
 		}
 		foreach (var item in retry) {
 			this.failureQueue.Enqueue(item);
 		}
+#if UNITY_EDITOR
 		if (showProgress) {
 			EditorUtility.ClearProgressBar();
 		}
+#endif
+	}
 
 	public void Undo(int steps) {
 		while (steps > 0 && this.History.Any()) {
