@@ -35,7 +35,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	private Queue<Slot> buildQueue;
 
-	public Stack<HistoryItem> History;
+	public RingBuffer<HistoryItem> History;
 
 	private int backtrackBarrier;
 	private int backtrackAmount = 0;
@@ -136,7 +136,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.Map = new Dictionary<Vector3i, Slot>();
 		this.failureQueue = new Queue<Slot>();
 		this.buildQueue = new Queue<Slot>();
-		this.History = new Stack<HistoryItem>();
+		this.History = new RingBuffer<HistoryItem>(3000);
 		this.backtrackBarrier = 0;
 
 		if (this.Modules == null || this.Modules.Length == 0) {
@@ -175,8 +175,8 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 				selected.CollapseRandom();
 			}
 			catch (CollapseFailedException) {
-				if (this.History.Count() > this.backtrackBarrier) {
-					this.backtrackBarrier = this.History.Count();
+				if (this.History.TotalCount > this.backtrackBarrier) {
+					this.backtrackBarrier = this.History.TotalCount;
 					this.backtrackAmount = 2;
 				} else {
 					this.backtrackAmount *= 2;
