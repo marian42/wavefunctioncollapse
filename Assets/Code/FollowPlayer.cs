@@ -28,6 +28,8 @@ public class FollowPlayer : MonoBehaviour {
 
 	private Thread thread;
 
+	private int stepsWithoutVisibilityUpdate = 0;
+
 	void Start() {
 		this.chunkVisibility = new Dictionary<Vector3i, bool>();
 		this.mapGenerator = this.GetComponent<MapGenerator>();
@@ -81,7 +83,10 @@ public class FollowPlayer : MonoBehaviour {
 
 		if (any) {
 			this.createChunk(closestMissingChunk);
-		} else {
+			this.stepsWithoutVisibilityUpdate++;
+		}
+
+		if (!any || this.stepsWithoutVisibilityUpdate > 15) {
 			foreach (var kvp in this.chunkVisibility.ToList()) {
 				var chunk = kvp.Key;
 				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
@@ -90,6 +95,7 @@ public class FollowPlayer : MonoBehaviour {
 					this.setChunkVisible(chunk, inRange);
 				}
 			}
+			this.stepsWithoutVisibilityUpdate = 0;
 			Thread.Sleep(80);
 		}
 	}
