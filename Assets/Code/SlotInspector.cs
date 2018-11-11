@@ -8,7 +8,8 @@ public class SlotInspector : MonoBehaviour {
 	public MapGenerator MapGenerator;
 
 	public Vector3i GetPosition() {
-		return new Vector3i(this.transform.position / MapGenerator.BlockSize + new Vector3(-1, 0, 1) * 0.5f);
+		var pos = this.transform.position / MapGenerator.BlockSize;
+		return new Vector3i(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
 	}
 
 #if UNITY_EDITOR
