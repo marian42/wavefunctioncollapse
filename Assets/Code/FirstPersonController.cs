@@ -8,7 +8,7 @@ public class FirstPersonController : MonoBehaviour {
 	[Range(1f, 5f)]
 	public float MovementSpeed = 1f;
 
-	[Range(1, 100f)]
+	[Range(1, 200f)]
 	public float LookSensitivity = 10f;
 
 	[Range(1, 100f)]
@@ -20,6 +20,7 @@ public class FirstPersonController : MonoBehaviour {
 	private float cameraTilt = 0f;
 	private float verticalSpeed = 0f;
 	private float timeInAir = 0f;
+	private bool jumpLocked = false;
 
 	void Start () {
 		this.characterController = this.GetComponent<CharacterController>();
@@ -30,7 +31,12 @@ public class FirstPersonController : MonoBehaviour {
 	void Update () {
 		bool touchesGround = this.onGround();
 		float runMultiplier = 1f + 2f * Input.GetAxis("Run");
+		float y = this.transform.position.y;
 		this.characterController.Move(this.transform.forward * Input.GetAxis("Move Y") * Time.deltaTime * this.MovementSpeed * runMultiplier + this.transform.right * Input.GetAxis("Move X") * Time.deltaTime * this.MovementSpeed * runMultiplier);
+		float verticalMovement = this.transform.position.y - y;
+		if (verticalMovement < 0) {
+			this.transform.position += Vector3.down * verticalMovement;
+		}
 		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Look X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
 		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
@@ -46,9 +52,13 @@ public class FirstPersonController : MonoBehaviour {
 		} else {
 			this.verticalSpeed -= 9.18f * Time.deltaTime;
 		}
-		if (this.timeInAir < 0.5f && Input.GetAxisRaw("Jump") > 0.1f) {
+		if (Input.GetAxisRaw("Jump") < 0.1f) {
+			this.jumpLocked = false;
+		}
+		if (!this.jumpLocked && this.timeInAir < 0.5f && Input.GetAxisRaw("Jump") > 0.1f) {
 			this.timeInAir = 0.5f;
 			this.verticalSpeed = this.JumpStrength;
+			this.jumpLocked = true;
 		}
 		if (Input.GetAxisRaw("Jetpack") > 0.1f) {
 			this.verticalSpeed = 2f;

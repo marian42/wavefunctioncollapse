@@ -105,7 +105,7 @@ public class FollowPlayer : MonoBehaviour {
 
 	private void createChunk(Vector3i chunkAddress) {
 		this.mapGenerator.RangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
-		this.mapGenerator.RangeLimit = this.ChunkSize + 12;
+		this.mapGenerator.RangeLimit = this.ChunkSize + 20;
 		this.mapGenerator.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
 		this.chunkVisibility[chunkAddress] = true;
 	}

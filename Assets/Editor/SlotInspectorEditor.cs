@@ -13,7 +13,7 @@ public class SlotInspectorEditor : Editor {
 		SlotInspector slotInspector = (SlotInspector)target;
 		var mapGenerator = slotInspector.MapGenerator;
 
-		if (mapGenerator == null || Application.isPlaying) {
+		if (mapGenerator == null) {
 			return;
 		}
 
