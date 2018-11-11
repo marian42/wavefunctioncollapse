@@ -18529,7 +18529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 784786034}
   ChunkSize: 5
-  Range: 30
+  Range: 36
   UnloadRange: 80
 --- !u!1 &1919581514
 GameObject:
