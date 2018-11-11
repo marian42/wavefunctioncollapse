@@ -63,6 +63,8 @@ public class Slot {
 			return;
 		}
 
+		this.mapGenerator.History.Push(new HistoryItem());
+
 		this.Module = module;
 		var toRemove = this.Modules.ToList();
 		toRemove.Remove(module);
@@ -92,8 +94,7 @@ public class Slot {
 
 	public void CollapseRandom() {
 		if (!this.Modules.Any()) {
-			this.Fail();
-			return;
+			throw new CollapseFailedException();
 		}
 		if (this.Collapsed) {
 			throw new Exception("Slot is already collapsed.");
@@ -119,6 +120,9 @@ public class Slot {
 			if (!this.Modules.Contains(module) || module == this.Module) {
 				continue;
 			}
+			if (this.mapGenerator.History != null && this.mapGenerator.History.Any()) {
+				this.mapGenerator.History.Peek().RemoveModule(this, module);
+			}
 			for (int d = 0; d < 6; d++) {
 				int inverseDirection = (d + 3) % 6;
 				var neighbor = this.GetNeighbor(d);
@@ -142,8 +146,7 @@ public class Slot {
 		}
 
 		if (this.Modules.Count == 0) {
-			this.Fail();
-			return;
+			throw new CollapseFailedException();
 		}
 
 		for (int d = 0; d < 6; d++) {
@@ -151,6 +154,38 @@ public class Slot {
 				this.GetNeighbor(d).RemoveModules(affectedNeighbouredModules[d]);
 			}
 		}
+	}
+
+
+	/// <summary>
+	/// Add modules non-recursively.
+	/// Returns true if this lead to this slot changing from collapsed to not collapsed.
+	/// </summary>
+	public bool AddModules(List<Module> modulesToAdd) {
+		foreach (var module in modulesToAdd) {
+			if (this.Modules.Contains(module) || module == this.Module) {
+				continue;
+			}
+			for (int d = 0; d < 6; d++) {
+				int inverseDirection = (d + 3) % 6;
+				var neighbor = this.GetNeighbor(d);
+				if (neighbor == null) {
+					continue;
+				}
+
+				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
+					neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index]++;
+				}
+			}
+			this.Modules.Add(module);
+		}
+
+		if (this.Collapsed && this.Modules.Count > 1) {
+			this.Module = null;
+			this.mapGenerator.MarkSlotIncomplete(this);
+			return true;
+		}
+		return false;
 	}
 
 	public void Fail() {
@@ -169,9 +204,7 @@ public class Slot {
 					|| this.GetNeighbor(direction).UnrecoveredFailure
 					|| module.Fits(direction, this.GetNeighbor(direction).Module))) {
 					this.Module = module;
-					if (this.Module.Prototype.Spawn) {
-						this.mapGenerator.MarkSlotForBuilding(this);
-					}
+					this.mapGenerator.MarkSlotForBuilding(this);
 					return true;
 				}
 			}
@@ -196,9 +229,17 @@ public class Slot {
 			this.mark(2f, Application.isEditor ? Color.red : Color.white);
 		}
 
+		if (this.GameObject != null) {
+#if UNITY_EDITOR
+			GameObject.DestroyImmediate(this.GameObject);
+#else
+			GameObject.Destroy(this.GameObject);
+#endif
+		}
+
 		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {
 			return;
-		}
+		}		
 
 		var gameObject = GameObject.Instantiate(this.Module.Prototype.gameObject);
 		gameObject.name = this.Module.Prototype.gameObject.name + " " + this.Position;

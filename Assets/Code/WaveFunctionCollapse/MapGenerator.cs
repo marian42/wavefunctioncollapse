@@ -35,6 +35,11 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	private Queue<Slot> buildQueue;
 
+	public Stack<HistoryItem> History;
+
+	private int backtrackBarrier;
+	private int backtrackAmount = 0;
+
 	public bool Initialized {
 		get {
 			return this.Map != null;
@@ -131,6 +136,8 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.Map = new Dictionary<Vector3i, Slot>();
 		this.failureQueue = new Queue<Slot>();
 		this.buildQueue = new Queue<Slot>();
+		this.History = new Stack<HistoryItem>();
+		this.backtrackBarrier = 0;
 
 		if (this.Modules == null || this.Modules.Length == 0) {
 			Debug.LogWarning("Module data was not available, creating new data.");
@@ -164,7 +171,21 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
 			
 			var selected = candidates[MapGenerator.Random.Next(0, candidates.Count - 1)];
-			selected.CollapseRandom();
+			try {
+				selected.CollapseRandom();
+			}
+			catch (CollapseFailedException) {
+				if (this.History.Count() > this.backtrackBarrier) {
+					this.backtrackBarrier = this.History.Count();
+					this.backtrackAmount = 2;
+				} else {
+					this.backtrackAmount *= 2;
+				}
+				if (this.backtrackAmount > 10) {
+					Debug.Log("Backtracking " + this.backtrackAmount + " steps...");
+				}
+				this.Undo(this.backtrackAmount);
+			}
 
 			if (showProgress) {
 				EditorUtility.DisplayProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count());
@@ -187,6 +208,16 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 		if (showProgress) {
 			EditorUtility.ClearProgressBar();
+		}
+
+	public void Undo(int steps) {
+		while (steps > 0 && this.History.Any()) {
+			var item = this.History.Pop();
+
+			foreach (var slotAddress in item.RemovedModules.Keys) {
+				this.GetSlot(slotAddress).AddModules(item.RemovedModules[slotAddress].Select(i => this.Modules[i]).ToList());
+			}
+			steps--;
 		}
 	}
 
@@ -225,6 +256,12 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 	public void MarkSlotComplete(Slot slot) {
 		if (this.workArea != null) {
 			this.workArea.Remove(slot);
+		}
+	}
+
+	public void MarkSlotIncomplete(Slot slot) {
+		if (this.workArea != null) {
+			this.workArea.Add(slot);
 		}
 	}
 
