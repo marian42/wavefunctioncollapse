@@ -145,14 +145,14 @@ public class FollowPlayer : MonoBehaviour {
 		this.targetPosition = this.Target.position;
 		this.mapPosition = this.mapGenerator.transform.position;
 
-		while (this.showQueue.Count != 0) {
+		if (this.showQueue.Count != 0) {
 			foreach (var slot in this.getSlotsInChunk(this.showQueue.Dequeue())) {
 				if (slot.GameObject != null) {
 					slot.GameObject.SetActive(true);
 				}
 			}
 		}
-		while (this.hideQueue.Count != 0) {
+		if (this.hideQueue.Count != 0) {
 			foreach (var slot in this.getSlotsInChunk(this.hideQueue.Dequeue())) {
 				if (slot.GameObject != null) {
 					slot.GameObject.SetActive(false);
