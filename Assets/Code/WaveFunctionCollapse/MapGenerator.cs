@@ -267,13 +267,14 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		int itemsLeft = 50;
 
 		while (this.buildQueue.Count != 0 && itemsLeft > 0) {
-			var slot = this.buildQueue.Dequeue();
+			var slot = this.buildQueue.Peek();
 			if (slot == null) {
 				return;
 			}
 			if (slot.Build()) {
 				itemsLeft--;
 			}
+			buildQueue.Dequeue();
 		}
 	}
 
