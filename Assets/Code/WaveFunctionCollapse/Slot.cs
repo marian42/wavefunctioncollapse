@@ -8,7 +8,7 @@ public class Slot {
 	public Vector3i Position;
 
 	// List of modules that can still be placed here
-	public HashSet<Module> Modules;
+	public ModuleSet Modules;
 
 	// Direction -> Module -> Number of items in this.getneighbor(direction).Modules that allow this module as a neighbor
 	public int[][] ModuleHealth;
@@ -37,12 +37,12 @@ public class Slot {
 		this.Position = position;
 		this.mapGenerator = mapGenerator;
 		this.map = map;
-		this.Modules = new HashSet<Module>(this.mapGenerator.Modules);
+		this.Modules = new ModuleSet(initializeFull: true);
 	}
 
 	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
 		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
-		this.Modules = new HashSet<Module>(prototype.Modules);
+		this.Modules = new ModuleSet(prototype.Modules);
 	}
 
 	// TODO only look up once and then cache???
@@ -59,7 +59,7 @@ public class Slot {
 		this.mapGenerator.History.Push(new HistoryItem());
 
 		this.Module = module;
-		var toRemove = this.Modules.ToList();
+		var toRemove = new ModuleSet(this.Modules);
 		toRemove.Remove(module);
 		this.RemoveModules(toRemove);
 
@@ -89,22 +89,24 @@ public class Slot {
 		if (this.Collapsed) {
 			throw new Exception("Slot is already collapsed.");
 		}
-		var candidates = this.Modules.ToList();
-		float max = candidates.Select(module => module.Prototype.Probability).Sum();
+		
+		float max = this.Modules.Select(module => module.Prototype.Probability).Sum();
 		float roll = (float)(MapGenerator.Random.NextDouble() * max);
 		float p = 0;
-		foreach (var candidate in candidates) {
+		foreach (var candidate in this.Modules) {
 			p += candidate.Prototype.Probability;
 			if (p >= roll) {
 				this.Collapse(candidate);
 				return;
 			}
 		}
-		this.Collapse(candidates.First());
+		this.Collapse(this.Modules.First());
 	}
 
-	public void RemoveModules(List<Module> modulesToRemove) {
-		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new List<Module>()).ToArray();
+	public static int RemoveCalls = 0;
+
+	public void RemoveModules(ModuleSet modulesToRemove) {
+		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new ModuleSet()).ToArray();
 
 		foreach (var module in modulesToRemove) {
 			if (!this.Modules.Contains(module) || module == this.Module) {
@@ -151,7 +153,7 @@ public class Slot {
 	/// Add modules non-recursively.
 	/// Returns true if this lead to this slot changing from collapsed to not collapsed.
 	/// </summary>
-	public bool AddModules(List<Module> modulesToAdd) {
+	public bool AddModules(ModuleSet modulesToAdd) {
 		foreach (var module in modulesToAdd) {
 			if (this.Modules.Contains(module) || module == this.Module) {
 				continue;
@@ -216,13 +218,13 @@ public class Slot {
 	}
 
 	public void EnforceConnector(int direction, int connector) {
-		var toRemove = this.Modules.Where(module => !module.Fits(direction, connector)).ToList();
-		this.RemoveModules(toRemove);
+		var toRemove = this.Modules.Where(module => !module.Fits(direction, connector));
+		this.RemoveModules(ModuleSet.FromEnumerable(toRemove));
 	}
 
 	public void ExcludeConnector(int direction, int connector) {
-		var toRemove = this.Modules.Where(module => module.Fits(direction, connector)).ToList();
-		this.RemoveModules(toRemove);
+		var toRemove = this.Modules.Where(module => module.Fits(direction, connector));
+		this.RemoveModules(ModuleSet.FromEnumerable(toRemove));
 	}
 
 	public override int GetHashCode() {

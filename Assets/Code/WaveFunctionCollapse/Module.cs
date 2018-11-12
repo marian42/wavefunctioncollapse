@@ -5,7 +5,9 @@ using System;
 using System.Linq;
 
 [System.Serializable]
-public class Module : ISerializationCallbackReceiver {	
+public class Module : ISerializationCallbackReceiver {
+	public static Module[] All;
+
 	public ModulePrototype Prototype;
 
 	public int Rotation;

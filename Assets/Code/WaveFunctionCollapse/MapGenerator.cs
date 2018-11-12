@@ -84,6 +84,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 	
 	public void CreateModules() {
 		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
+		Module.All = this.Modules;
 	}
 
 #if UNITY_EDITOR
@@ -208,7 +209,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			var item = this.History.Pop();
 
 			foreach (var slotAddress in item.RemovedModules.Keys) {
-				this.GetSlot(slotAddress).AddModules(item.RemovedModules[slotAddress].Select(i => this.Modules[i]).ToList());
+				this.GetSlot(slotAddress).AddModules(item.RemovedModules[slotAddress]);
 			}
 			steps--;
 		}
@@ -236,8 +237,8 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	public void EnforceWalkway(Vector3i start, int direction) {
 		var slot = this.GetSlot(start);
-		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable).ToList();
-		slot.RemoveModules(toRemove);
+		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable);
+		slot.RemoveModules(ModuleSet.FromEnumerable(toRemove));
 	}
 
 	public void EnforceWalkway(Vector3i start, Vector3i destination) {
@@ -314,6 +315,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 				module.DeserializeNeigbors(this.Modules);
 			}
 		}
+		Module.All = this.Modules;
 	}
 	
 	public bool VisualizeSlots = false;
