@@ -70,6 +70,7 @@ public class FirstPersonController : MonoBehaviour {
 			if (flyBehaviour != null) {
 				this.GetComponent<FlightController>().enabled = true;
 			}
+			this.cameraTilt = 24;
 		}
 	}
 

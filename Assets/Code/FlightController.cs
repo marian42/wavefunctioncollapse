@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FlightController : MonoBehaviour {
 
-	[Range(0f, 10f)]
+	[Range(0f, 20f)]
 	public float Velocity;
 
 	public const KeyCode OnOffKey = KeyCode.M;
@@ -25,6 +25,6 @@ public class FlightController : MonoBehaviour {
 			this.GetComponent<FirstPersonController>().enabled = true;
 		}
 
-		this.Velocity = Mathf.Clamp(this.Velocity + Input.GetAxis("Move Y") * Time.deltaTime * 2f, 0f, 10f);
+		this.Velocity = Mathf.Clamp(this.Velocity + Input.GetAxis("Move Y") * Time.deltaTime * 2f, 0f, 20f);
 	}
 }
