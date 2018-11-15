@@ -5975,7 +5975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 0.00001
+  Probability: 0.0001
   Left:
     Walkable: 0
     Connector: 1
@@ -13499,7 +13499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Probability: 0.0001
+  Probability: 0.0005
   Left:
     Walkable: 1
     Connector: 12
