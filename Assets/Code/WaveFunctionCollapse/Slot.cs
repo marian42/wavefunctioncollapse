@@ -105,9 +105,7 @@ public class Slot {
 
 	public static int RemoveCalls = 0;
 
-	public void RemoveModules(ModuleSet modulesToRemove) {
-		var affectedNeighbouredModules = Enumerable.Range(0, 6).Select(_ => new ModuleSet()).ToArray();
-
+	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true) {
 		foreach (var module in modulesToRemove) {
 			if (!this.Modules.Contains(module) || module == this.Module) {
 				continue;
@@ -123,12 +121,12 @@ public class Slot {
 				}
 
 				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
-					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1) {
-						affectedNeighbouredModules[d].Add(possibleNeighbor);
+					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
+						this.mapGenerator.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
 					}
 #if UNITY_EDITOR
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] < 1) {
-						throw new System.InvalidOperationException("ModuleHealth must not be negative.");
+						throw new System.InvalidOperationException("ModuleHealth must not be negative. " + this.Position + " d: " + d);
 					}
 #endif
 					neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index]--;
@@ -141,10 +139,8 @@ public class Slot {
 			throw new CollapseFailedException(this);
 		}
 
-		for (int d = 0; d < 6; d++) {
-			if (affectedNeighbouredModules[d].Any() && this.GetNeighbor(d) != null && !this.GetNeighbor(d).Collapsed) {
-				this.GetNeighbor(d).RemoveModules(affectedNeighbouredModules[d]);
-			}
+		if (recursive) {
+			this.mapGenerator.ClearRemovalQueue();
 		}
 	}
 

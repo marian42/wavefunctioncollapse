@@ -38,6 +38,8 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 	private int backtrackBarrier;
 	private int backtrackAmount = 0;
 
+	public QueueDictionary<Vector3i, ModuleSet> RemovalQueue;
+
 	public bool Initialized {
 		get {
 			return this.Map != null;
@@ -141,6 +143,7 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.buildQueue = new Queue<Slot>();
 		this.History = new RingBuffer<HistoryItem>(3000);
 		this.backtrackBarrier = 0;
+		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
 
 		if (this.Modules == null || this.Modules.Length == 0) {
 			Debug.LogWarning("Module data was not available, creating new data.");
@@ -166,18 +169,30 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		this.Collapse(new Vector3i(- this.DefaultSize / 2, 0, - this.DefaultSize / 2), new Vector3i(this.DefaultSize, this.Height, this.DefaultSize), showProgress);
 	}
 
+	public void ClearRemovalQueue() {
+		while (this.RemovalQueue.Any()) {
+			var kvp = this.RemovalQueue.Dequeue();
+			var slot = this.GetSlot(kvp.Key);
+			if (!slot.Collapsed) {
+				slot.RemoveModules(kvp.Value, false);
+			}
+		}
+	}
+
 	public void Collapse(IEnumerable<Vector3i> targets, bool showProgress = false) {
+		this.RemovalQueue.Clear();
 		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 		
 		while (this.workArea.Any()) {
 			int minEntropy = this.workArea.Min(slot => slot.Entropy);
-			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToList();
+			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToArray();
 			
-			var selected = candidates[MapGenerator.Random.Next(0, candidates.Count - 1)];
+			var selected = candidates[MapGenerator.Random.Next(0, candidates.Length - 1)];
 			try {
 				selected.CollapseRandom();
 			}
 			catch (CollapseFailedException) {
+				this.RemovalQueue.Clear();
 				if (this.History.TotalCount > this.backtrackBarrier) {
 					this.backtrackBarrier = this.History.TotalCount;
 					this.backtrackAmount = 2;
