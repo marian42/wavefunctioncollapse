@@ -26,6 +26,7 @@ public class DefaultColumn : IMap {
 			slot.ModuleHealth = mapGenerator.InitialModuleHealth.Select(a => a.ToArray()).ToArray();
 		}
 
+		/*
 		foreach (var constraint in mapGenerator.BoundaryConstraints) {
 			int y = constraint.RelativeY;
 			if (y < 0) {
@@ -40,5 +41,6 @@ public class DefaultColumn : IMap {
 					break;
 			}
 		}
+		 */
 	}
 }

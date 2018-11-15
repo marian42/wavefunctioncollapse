@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class SlotInspector : MonoBehaviour {
 
-	public MapGenerator MapGenerator;
+	public MapBehaviour MapBehaviour;
 
 	public Vector3i GetPosition() {
 		var pos = this.transform.position / MapGenerator.BlockSize;
@@ -16,7 +16,7 @@ public class SlotInspector : MonoBehaviour {
 	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmoForMyScript(SlotInspector target, GizmoType gizmoType) {
 		Gizmos.color = Color.blue;
-		Gizmos.DrawWireCube(target.MapGenerator.GetWorldspacePosition(target.GetPosition()), Vector3.one * MapGenerator.BlockSize);
+		Gizmos.DrawWireCube(target.MapBehaviour.GetWorldspacePosition(target.GetPosition()), Vector3.one * MapGenerator.BlockSize);
 	}
 #endif
 }

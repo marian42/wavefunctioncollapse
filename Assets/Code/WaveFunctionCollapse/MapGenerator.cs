@@ -5,33 +5,23 @@ using System.Linq;
 using System;
 using UnityEditor;
 
-public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver {
+public class MapGenerator : IMap {
 	public const float BlockSize = 2f;
 
 	public static System.Random Random;
 
-	[HideInInspector]
-	public Module[] Modules;
+	public Dictionary<Vector3i, Slot> Slots;
 
-	public Dictionary<Vector3i, Slot> Map;
+	public readonly int Height;
 
-	public int DefaultSize = 4;
-
-	public int Height = 8;
-
-	public bool RespectNeighorExclusions = true;
-
-	public Vector3i RangeLimitCenter;
-
-	public int RangeLimit = 20;
+	public Vector3i rangeLimitCenter;
+	public int rangeLimit = 80;
 
 	private DefaultColumn defaultColumn;
 
-	public BoundaryConstraint[] BoundaryConstraints;
-
 	private HashSet<Slot> workArea;
 
-	private Queue<Slot> buildQueue;
+	public readonly Queue<Slot> BuildQueue;
 
 	public RingBuffer<HistoryItem> History;
 
@@ -40,27 +30,37 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 
 	public QueueDictionary<Vector3i, ModuleSet> RemovalQueue;
 
-	public bool Initialized {
-		get {
-			return this.Map != null;
-		}
-	}
-
 	public int[][] InitialModuleHealth;
+
+	public MapGenerator(int height) {
+		this.Height = height;
+		MapGenerator.Random = new System.Random();
+		this.Slots = new Dictionary<Vector3i, Slot>();
+		this.BuildQueue = new Queue<Slot>();
+		this.History = new RingBuffer<HistoryItem>(3000);
+		this.backtrackBarrier = 0;
+		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
+
+		if (Module.All == null || Module.All.Length == 0) {
+			throw new InvalidOperationException("Module data was not available, please create module data first.");
+		}
+		this.InitialModuleHealth = this.createInitialModuleHealth(Module.All);
+		this.defaultColumn = new DefaultColumn(this);
+	}
 
 	public Slot GetSlot(Vector3i position, bool create) {
 		if (position.Y >= this.Height || position.Y < 0) {
 			return null;
 		}
 
-		if (this.Map.ContainsKey(position)) {
-			return this.Map[position];
+		if (this.Slots.ContainsKey(position)) {
+			return this.Slots[position];
 		}
 		if (!create) {
 			return null;
 		}
 
-		if ((position - this.RangeLimitCenter).Magnitude > this.RangeLimit) {
+		if ((position - this.rangeLimitCenter).Magnitude > this.rangeLimit) {
 #if UNITY_EDITOR
 			Debug.LogWarning("Touched Range Limit!");
 #endif
@@ -68,89 +68,16 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 
 		if (this.defaultColumn != null) {
-			this.Map[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
+			this.Slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
 		} else {
-			this.Map[position] = new Slot(position, this, this);
-			this.Map[position].ModuleHealth = this.InitialModuleHealth.Select(a => a.ToArray()).ToArray();
+			this.Slots[position] = new Slot(position, this, this);
+			this.Slots[position].ModuleHealth = this.InitialModuleHealth.Select(a => a.ToArray()).ToArray();
 		}
-		return this.Map[position];
+		return this.Slots[position];
 	}
 
 	public Slot GetSlot(Vector3i position) {
 		return this.GetSlot(position, true);
-	}
-
-	public Slot GetSlot(int x, int y, int z, bool create = true) {
-		return this.GetSlot(new Vector3i(x, y, z), create);
-	}
-	
-	public void CreateModules() {
-		this.Modules = ModulePrototype.CreateModules(this.RespectNeighorExclusions).ToArray();
-		Module.All = this.Modules;
-	}
-
-#if UNITY_EDITOR
-	public void SimplifyNeighborData() {
-		this.Initialize();
-		int count = 0;
-		var center = new Vector3i(0, this.Height / 2, 0);
-		this.defaultColumn = null;
-		int p = 0;
-		foreach (var module in this.Modules) {
-			this.InitialModuleHealth = this.createInitialModuleHealth(this.Modules);
-			foreach (var s in this.Map.Values) {
-				s.Module = null;
-				for (int d = 0; d < 6; d++) {
-					for (int i = 0; i < this.Modules.Length; i++) {
-						s.ModuleHealth[d][i] = this.InitialModuleHealth[d][i];
-					}
-				}
-
-				if (s.Modules.Count() != this.Modules.Count()) {
-					foreach (var m in this.Modules) {
-						s.Modules.Add(m);
-					}
-				}
-			}
-			this.buildQueue.Clear();
-			var slot = this.GetSlot(center);
-			try {
-
-			}
-			catch (CollapseFailedException exception) {
-				this.BuildAllSlots();
-				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + exception.Slot.Position + ".");
-			}
-			slot.Collapse(module);
-			for (int direction = 0; direction < 6; direction++) {
-				var neighbor = slot.GetNeighbor(direction);
-				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
-				module.PossibleNeighbors[direction] = module.PossibleNeighbors[direction].Where(m => neighbor.Modules.Contains(m)).ToArray();
-				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Length;
-			}
-			p++;
-			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / this.Modules.Length);
-		}
-		Debug.Log("Removed " + count + " impossible neighbors.");
-		EditorUtility.ClearProgressBar();
-	}
-#endif
-
-	public void Initialize() {
-		this.Clear();
-		MapGenerator.Random = new System.Random();
-		this.Map = new Dictionary<Vector3i, Slot>();
-		this.buildQueue = new Queue<Slot>();
-		this.History = new RingBuffer<HistoryItem>(3000);
-		this.backtrackBarrier = 0;
-		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
-
-		if (this.Modules == null || this.Modules.Length == 0) {
-			Debug.LogWarning("Module data was not available, creating new data.");
-			this.CreateModules();
-		}
-		this.InitialModuleHealth = this.createInitialModuleHealth(this.Modules);
-		this.defaultColumn = new DefaultColumn(this);
 	}
 
 	public void Collapse(Vector3i start, Vector3i size, bool showProgress = false) {
@@ -163,10 +90,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 			}
 		}
 		this.Collapse(targets, showProgress);
-	}
-
-	public void CollapseDefaultArea(bool showProgress = false) {
-		this.Collapse(new Vector3i(- this.DefaultSize / 2, 0, - this.DefaultSize / 2), new Vector3i(this.DefaultSize, this.Height, this.DefaultSize), showProgress);
 	}
 
 	public void ClearRemovalQueue() {
@@ -230,26 +153,6 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 	}
 
-	public Vector3 GetWorldspacePosition(Vector3i position) {
-		return this.transform.position
-			+ Vector3.up * MapGenerator.BlockSize / 2f
-			+ new Vector3(
-				(float)(position.X) * MapGenerator.BlockSize,
-				(float)(position.Y) * MapGenerator.BlockSize,
-				(float)(position.Z) * MapGenerator.BlockSize);
-	}
-
-	public void Clear() {
-		var children = new List<Transform>();
-		foreach (Transform child in this.transform) {
-			children.Add(child);
-		}
-		foreach (var child in children) {
-			GameObject.DestroyImmediate(child.gameObject);
-		}
-		this.Map = null;
-	}
-
 	public void EnforceWalkway(Vector3i start, int direction) {
 		var slot = this.GetSlot(start);
 		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable);
@@ -266,37 +169,12 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		if (this.workArea != null) {
 			this.workArea.Remove(slot);
 		}
-		this.buildQueue.Enqueue(slot);
+		this.BuildQueue.Enqueue(slot);
 	}
 
 	public void MarkSlotIncomplete(Slot slot) {
 		if (this.workArea != null) {
 			this.workArea.Add(slot);
-		}
-	}
-	
-	public void Update() {
-		if (this.buildQueue == null) {
-			return;
-		}
-
-		int itemsLeft = 50;
-
-		while (this.buildQueue.Count != 0 && itemsLeft > 0) {
-			var slot = this.buildQueue.Peek();
-			if (slot == null) {
-				return;
-			}
-			if (slot.Build()) {
-				itemsLeft--;
-			}
-			buildQueue.Dequeue();
-		}
-	}
-
-	public void BuildAllSlots() {
-		while (this.buildQueue.Count != 0) {
-			this.buildQueue.Dequeue().Build();
 		}
 	}
 
@@ -321,35 +199,4 @@ public class MapGenerator : MonoBehaviour, IMap, ISerializationCallbackReceiver 
 		}
 		return initialModuleHealth;
 	}
-
-	public void OnBeforeSerialize() { }
-
-	public void OnAfterDeserialize() {
-		if (this.Modules != null && this.Modules.Length != 0) {
-			foreach (var module in this.Modules) {
-				module.DeserializeNeigbors(this.Modules);
-			}
-		}
-		Module.All = this.Modules;
-	}
-	
-	public bool VisualizeSlots = false;
-
-#if UNITY_EDITOR
-	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmoForMyScript(MapGenerator mapGenerator, GizmoType gizmoType) {
-		if (!mapGenerator.VisualizeSlots) {
-			return;
-		}
-		if (mapGenerator.Map == null) {
-			return;
-		}
-		foreach (var slot in mapGenerator.Map.Values) {
-			if (slot.Collapsed || slot.Modules.Count() == mapGenerator.Modules.Count()) {
-				continue;
-			}
-			Handles.Label(mapGenerator.GetWorldspacePosition(slot.Position), slot.Modules.Count().ToString());
-		}
-	}
-#endif
 }

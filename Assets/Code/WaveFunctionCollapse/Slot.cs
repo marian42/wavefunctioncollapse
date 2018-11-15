@@ -69,15 +69,11 @@ public class Slot {
 	private void checkConsistency(Module module) {
 		for (int d = 0; d < 6; d++) {
 			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbors[(d + 3) % 6].Contains(module)) {
-				this.mark(2f, Color.red);
-				// This would be a result of inconsistent code, should not be possible.
 				throw new Exception("Illegal collapse, not in neighbour list. (Incompatible connectors)");
 			}
 		}
 
 		if (!this.Modules.Contains(module)) {
-			this.mark(2f, Color.red);
-			// This would be a result of inconsistent code, should not be possible.
 			throw new Exception("Illegal collapse!");
 		}
 	}
@@ -174,43 +170,6 @@ public class Slot {
 			return true;
 		}
 		return false;
-	}
-
-	private void mark(float size, Color color) {
-		var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		cube.transform.parent = this.mapGenerator.transform;
-		cube.transform.localScale = Vector3.one * size;
-		cube.GetComponent<MeshRenderer>().sharedMaterial.color = color;
-		cube.transform.position = this.GetPosition();
-	}
-
-	public bool Build() {
-		if (this.GameObject != null) {
-#if UNITY_EDITOR
-			GameObject.DestroyImmediate(this.GameObject);
-#else
-			GameObject.Destroy(this.GameObject);
-#endif
-		}
-
-		if (!this.Collapsed || this.Module.Prototype.Spawn == false) {
-			return false;
-		}		
-
-		var gameObject = GameObject.Instantiate(this.Module.Prototype.gameObject);
-		gameObject.name = this.Module.Prototype.gameObject.name + " " + this.Position;
-		GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
-		gameObject.transform.parent = this.mapGenerator.transform;
-		gameObject.transform.position = this.GetPosition();
-		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * this.Module.Rotation);
-		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
-		blockBehaviour.Slot = this;
-		this.GameObject = gameObject;
-		return true;
-	}
-
-	public Vector3 GetPosition() {
-		return this.mapGenerator.GetWorldspacePosition(this.Position);
 	}
 
 	public void EnforceConnector(int direction, int connector) {
