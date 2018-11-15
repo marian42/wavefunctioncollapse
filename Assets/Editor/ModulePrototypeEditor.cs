@@ -17,6 +17,15 @@ public class ModulePrototypeEditor : Editor {
 			}
 		}
 
+		if (GUILayout.Button("Distribute (Overview)")) {
+			int w = Mathf.FloorToInt(Mathf.Sqrt(modulePrototype.transform.parent.childCount));
+			int i = 0;
+			foreach (Transform transform in modulePrototype.transform.parent) {
+				transform.localPosition = Vector3.forward * (i / w) * MapGenerator.BlockSize * 1.4f + Vector3.right * (i % w) * MapGenerator.BlockSize * 1.4f;
+				i++;
+			}
+		}
+
 		if (GUILayout.Button("Guess connectors")) {
 			foreach (var face in modulePrototype.Faces) {
 				face.Fingerprint = null;
