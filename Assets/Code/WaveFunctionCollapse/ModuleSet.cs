@@ -96,7 +96,6 @@ public class ModuleSet : ICollection<Module> {
 			array[arrayIndex] = item;
 			arrayIndex++;
 		}
-		Debug.Log(arrayIndex + ", " + Module.All.Length);
 	}
 
 	public IEnumerator<Module> GetEnumerator() {
