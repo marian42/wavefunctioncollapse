@@ -59,14 +59,26 @@ public class InfiniteMap : AbstractMap {
 			if (y < 0) {
 				y += this.Height;
 			}
-			switch (constraint.Mode) {
-				case BoundaryConstraint.ConstraintMode.EnforceConnector:
-					this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).EnforceConnector((int)constraint.Direction, constraint.Connector);
-					break;
-				case BoundaryConstraint.ConstraintMode.ExcludeConnector:
-					this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).ExcludeConnector((int)constraint.Direction, constraint.Connector);
-					break;
+			int[] directions = null;
+			switch (constraint.Direction) {
+				case BoundaryConstraint.ConstraintDirection.Up:
+					directions = new int[] { 4 }; break;
+				case BoundaryConstraint.ConstraintDirection.Down:
+					directions = new int[] { 1 }; break;
+				case BoundaryConstraint.ConstraintDirection.Horizontal:
+					directions = Orientations.HorizontalDirections; break;
 			}
+
+			foreach (int d in directions) {
+				switch (constraint.Mode) {
+					case BoundaryConstraint.ConstraintMode.EnforceConnector:
+						this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).EnforceConnector(d, constraint.Connector);
+						break;
+					case BoundaryConstraint.ConstraintMode.ExcludeConnector:
+						this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).ExcludeConnector(d, constraint.Connector);
+						break;
+				}
+			}			
 		}
 	}
 }

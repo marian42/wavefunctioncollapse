@@ -9,8 +9,14 @@ public class BoundaryConstraint {
 		ExcludeConnector
 	}
 
+	public enum ConstraintDirection {
+		Up,
+		Down,
+		Horizontal
+	}
+
 	public int RelativeY = 0;
-	public Orientations.Enum Direction;
+	public ConstraintDirection Direction;
 	public ConstraintMode Mode;
 	public int Connector;
 }
