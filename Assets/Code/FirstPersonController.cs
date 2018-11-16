@@ -32,7 +32,11 @@ public class FirstPersonController : MonoBehaviour {
 		bool touchesGround = this.onGround();
 		float runMultiplier = 1f + 2f * Input.GetAxis("Run");
 		float y = this.transform.position.y;
-		this.characterController.Move(this.transform.forward * Input.GetAxis("Move Y") * Time.deltaTime * this.MovementSpeed * runMultiplier + this.transform.right * Input.GetAxis("Move X") * Time.deltaTime * this.MovementSpeed * runMultiplier);
+		Vector3 movementVector = this.transform.forward * Input.GetAxis("Move Y") + this.transform.right * Input.GetAxis("Move X");
+		if (movementVector.sqrMagnitude > 1) { // this check prevents partial joystick input from becoming 100% speed
+			movementVector.Normalize();  // this prevents diagonal movement form being too fast
+		}
+		this.characterController.Move(movementVector * Time.deltaTime * this.MovementSpeed * runMultiplier);
 		float verticalMovement = this.transform.position.y - y;
 		if (verticalMovement < 0) {
 			this.transform.position += Vector3.down * verticalMovement;
