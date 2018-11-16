@@ -78,7 +78,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(slot.GameObject);
 #else
-			GameObject.Destroy(this.GameObject);
+			GameObject.Destroy(slot.GameObject);
 #endif
 		}
 
