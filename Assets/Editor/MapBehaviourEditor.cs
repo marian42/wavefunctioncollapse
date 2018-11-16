@@ -35,7 +35,6 @@ public class MapBehaviourEditor : Editor {
 			mapBehaviour.Initialize();
 			mapBehaviour.Map.Collapse(Vector3i.zero, new Vector3i(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
 			mapBehaviour.BuildAllSlots();
-			Debug.Log("Map initialized.");
 		}
 		GUILayout.EndHorizontal();
 	}

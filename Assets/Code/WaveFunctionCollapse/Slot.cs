@@ -99,9 +99,13 @@ public class Slot {
 		this.Collapse(this.Modules.First());
 	}
 
-	public static int RemoveCalls = 0;
+	private static int iterationCount = 0;
 
 	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true) {
+#if UNITY_EDITOR
+		Slot.iterationCount++;
+#endif
+
 		foreach (var module in modulesToRemove) {
 			if (!this.Modules.Contains(module) || module == this.Module) {
 				continue;
@@ -140,6 +144,13 @@ public class Slot {
 		}
 	}
 
+	public static void ResetIterationCount() {
+		iterationCount = 0;
+	}
+
+	public static int GetIterationCount() {
+		return iterationCount;
+	}
 
 	/// <summary>
 	/// Add modules non-recursively.
