@@ -120,7 +120,8 @@ public class Slot {
 					continue;
 				}
 
-				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
+				for (int i = 0; i < module.PossibleNeighbors[d].Length; i++) {
+					var possibleNeighbor = module.PossibleNeighbors[d][i];
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
 						this.map.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
 					}
