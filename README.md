@@ -1,4 +1,4 @@
-![](https://i.imgur.com/nudwW5W.jpg)
+![](https://i.imgur.com/vL80izv.jpg)
 
 # Wave Function Collapse
 
@@ -13,7 +13,3 @@ Flight mode: Use M to toggle between flight mode and normal mode. In flight mode
 Read more about the WFC algorithm [here](https://github.com/mxgmn/WaveFunctionCollapse).
 
 Play the game on Itch.io: [https://marian42.itch.io/wfc](https://marian42.itch.io/wfc)
-
-## Unity project
-
-To view the project in Unity, import it and download the Postprocessing stack from the Asset Store. Alternatively, you can remove the Post Processing Behaviour from the Main Camera.
