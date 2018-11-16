@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	public InfiniteMap Map;
@@ -134,41 +135,22 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	}
 #endif
 
-
-	// TOO Will be added back in later
-	/*
 #if UNITY_EDITOR
 	public void SimplifyNeighborData() {
 		int count = 0;
-		var center = new Vector3i(0, this.Height / 2, 0);
-		this.defaultColumn = null;
+		var center = new Vector3i(0, 3, 0);
+		
 		int p = 0;
 		foreach (var module in Module.All) {
-			this.InitialModuleHealth = this.createInitialModuleHealth(Module.All);
-			foreach (var s in this.Map.Values) {
-				s.Module = null;
-				for (int d = 0; d < 6; d++) {
-					for (int i = 0; i < Module.All.Length; i++) {
-						s.ModuleHealth[d][i] = this.InitialModuleHealth[d][i];
-					}
-				}
-
-				if (s.Modules.Count() != Module.All.Length) {
-					foreach (var m in Module.All) {
-						s.Modules.Add(m);
-					}
-				}
-			}
-			this.buildQueue.Clear();
-			var slot = this.GetSlot(center);
+			var map = new InfiniteMap(6);
+			var slot = map.GetSlot(center);
 			try {
-
+				slot.Collapse(module);
 			}
 			catch (CollapseFailedException exception) {
 				this.BuildAllSlots();
-				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + exception.Slot.Position + ".");
+				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + (exception.Slot.Position - center) + ".");
 			}
-			slot.Collapse(module);
 			for (int direction = 0; direction < 6; direction++) {
 				var neighbor = slot.GetNeighbor(direction);
 				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
@@ -182,5 +164,4 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 		EditorUtility.ClearProgressBar();
 	}
 #endif
-	 * */
 }

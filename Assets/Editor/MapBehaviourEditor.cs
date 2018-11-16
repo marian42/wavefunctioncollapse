@@ -17,14 +17,10 @@ public class MapBehaviourEditor : Editor {
 			mapBehaviour.CreateModules();
 		}
 
-		// TOO Will be added back in later
-
-		
-		/*if (GUILayout.Button("Simplify module data")) {
+		if (GUILayout.Button("Simplify module data")) {
 			mapBehaviour.CreateModules();
 			mapBehaviour.SimplifyNeighborData();
-		} */
-
+		}
 
 		GUILayout.Space(20f);
 
