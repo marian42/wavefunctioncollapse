@@ -103,7 +103,10 @@ public abstract class AbstractMap {
 
 #if UNITY_EDITOR
 			if (showProgress) {
-				EditorUtility.DisplayProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count());
+				if (EditorUtility.DisplayCancelableProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count())) {
+					EditorUtility.ClearProgressBar();
+					throw new Exception("Map generation cancelled.");
+				}
 			}
 #endif
 		}
