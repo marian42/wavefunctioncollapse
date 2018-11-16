@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -19,7 +19,7 @@ public abstract class AbstractMap {
 	private int backtrackBarrier;
 	private int backtrackAmount = 0;
 
-	public readonly int[][] InitialModuleHealth;
+	public readonly short[][] InitialModuleHealth;
 
 	public AbstractMap() {
 		InfiniteMap.Random = new System.Random();
@@ -139,10 +139,10 @@ public abstract class AbstractMap {
 		}
 	}
 
-	private int[][] createInitialModuleHealth(Module[] modules) {
-		var initialModuleHealth = new int[6][];
+	private short[][] createInitialModuleHealth(Module[] modules) {
+		var initialModuleHealth = new short[6][];
 		for (int i = 0; i < 6; i++) {
-			initialModuleHealth[i] = new int[modules.Length];
+			initialModuleHealth[i] = new short[modules.Length];
 			foreach (var module in modules) {
 				foreach (var possibleNeighbor in module.PossibleNeighbors[(i + 3) % 6]) {
 					initialModuleHealth[i][possibleNeighbor.Index]++;
@@ -161,7 +161,7 @@ public abstract class AbstractMap {
 		return initialModuleHealth;
 	}
 
-	public int[][] CopyInititalModuleHealth() {
+	public short[][] CopyInititalModuleHealth() {
 		return this.InitialModuleHealth.Select(a => a.ToArray()).ToArray();
 	}
 }

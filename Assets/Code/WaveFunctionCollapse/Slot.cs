@@ -11,7 +11,7 @@ public class Slot {
 	public ModuleSet Modules;
 
 	// Direction -> Module -> Number of items in this.getneighbor(direction).Modules that allow this module as a neighbor
-	public int[][] ModuleHealth;
+	public short[][] ModuleHealth;
 
 	private AbstractMap map;
 
