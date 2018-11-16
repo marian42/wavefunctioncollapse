@@ -35,6 +35,7 @@ public class FollowPlayer : MonoBehaviour {
 		this.chunkVisibility = new Dictionary<Vector3i, bool>();
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
 		this.mapBehaviour.Initialize();
+		this.map = this.mapBehaviour.Map;
 		this.generate();
 		this.mapBehaviour.BuildAllSlots();
 
