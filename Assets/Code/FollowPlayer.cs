@@ -5,11 +5,11 @@ using System.Threading;
 using UnityEngine;
 using System.Linq;
 
-[RequireComponent(typeof(MapGenerator))]
+[RequireComponent(typeof(InfiniteMap))]
 public class FollowPlayer : MonoBehaviour {
 
 	private MapBehaviour mapBehaviour;
-	private MapGenerator map;
+	private InfiniteMap map;
 
 	public Transform Target;
 
@@ -50,10 +50,10 @@ public class FollowPlayer : MonoBehaviour {
 	}
 
 	private void generate() {
-		float chunkSize = MapGenerator.BlockSize * this.ChunkSize;
+		float chunkSize = InfiniteMap.BLOCK_SIZE * this.ChunkSize;
 
-		float targetX = this.targetPosition.x - this.mapPosition.x + MapGenerator.BlockSize / 2;
-		float targetZ = this.targetPosition.z - this.mapPosition.z + MapGenerator.BlockSize / 2;
+		float targetX = this.targetPosition.x - this.mapPosition.x + InfiniteMap.BLOCK_SIZE / 2;
+		float targetZ = this.targetPosition.z - this.mapPosition.z + InfiniteMap.BLOCK_SIZE / 2;
 
 		int chunkX = Mathf.FloorToInt(targetX / chunkSize);
 		int chunkZ = Mathf.FloorToInt(targetZ / chunkSize);
@@ -71,7 +71,7 @@ public class FollowPlayer : MonoBehaviour {
 					}
 					continue;
 				}
-				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
+				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
 				float distance = Vector3.Distance(center, this.targetPosition + Vector3.down * this.targetPosition.y);
 
 				if (distance < closestDistance) {
@@ -90,7 +90,7 @@ public class FollowPlayer : MonoBehaviour {
 		if (!any || this.stepsWithoutVisibilityUpdate > 15) {
 			foreach (var kvp in this.chunkVisibility.ToList()) {
 				var chunk = kvp.Key;
-				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
+				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
 				bool inRange = Vector3.Distance(center, this.targetPosition - Vector3.up * this.targetPosition.y) < this.UnloadRange;
 				if (inRange != kvp.Value) {
 					this.setChunkVisible(chunk, inRange);

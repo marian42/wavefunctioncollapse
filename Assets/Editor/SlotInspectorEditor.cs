@@ -12,7 +12,7 @@ public class SlotInspectorEditor : Editor {
 
 		SlotInspector slotInspector = (SlotInspector)target;
 		var mapBehaviour = slotInspector.MapBehaviour;
-		var map = mapBehaviour.MapGenerator;
+		var map = mapBehaviour.Map;
 		if (mapBehaviour == null) {
 			return;
 		}

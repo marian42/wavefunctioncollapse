@@ -106,7 +106,7 @@ public class ModulePrototype : MonoBehaviour {
 		ModulePrototype.style.normal.textColor = Color.black;
 		for (int i = 0; i < 6; i++) {
 			var face = modulePrototype.Faces[i];
-			Handles.Label(position + modulePrototype.transform.rotation * Orientations.Rotations[i] * Vector3.forward * MapGenerator.BlockSize / 2f, face.ToString(), ModulePrototype.style);
+			Handles.Label(position + modulePrototype.transform.rotation * Orientations.Rotations[i] * Vector3.forward * InfiniteMap.BLOCK_SIZE / 2f, face.ToString(), ModulePrototype.style);
 		}
 
 		for (int i = 0; i < 6; i++) {

@@ -12,10 +12,8 @@ public class Slot {
 
 	// Direction -> Module -> Number of items in this.getneighbor(direction).Modules that allow this module as a neighbor
 	public int[][] ModuleHealth;
-	
-	private MapGenerator mapGenerator;
 
-	private IMap map;
+	private AbstractMap map;
 
 	public Module Module;
 
@@ -33,14 +31,16 @@ public class Slot {
 		}
 	}
 
-	public Slot(Vector3i position, MapGenerator mapGenerator, IMap map) {
+	public Slot(Vector3i position, AbstractMap map, bool initializeModuleHealth) {
 		this.Position = position;
-		this.mapGenerator = mapGenerator;
 		this.map = map;
 		this.Modules = new ModuleSet(initializeFull: true);
+		if (initializeModuleHealth) {
+			this.ModuleHealth = map.CopyInititalModuleHealth();
+		}
 	}
 
-	public Slot(Vector3i position, MapGenerator mapGenerator, Slot prototype) : this(position, mapGenerator, mapGenerator) {
+	public Slot(Vector3i position, AbstractMap map, Slot prototype) : this(position, map, false) {
 		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
 		this.Modules = new ModuleSet(prototype.Modules);
 	}
@@ -56,14 +56,14 @@ public class Slot {
 			return;
 		}
 
-		this.mapGenerator.History.Push(new HistoryItem());
+		this.map.History.Push(new HistoryItem());
 
 		this.Module = module;
 		var toRemove = new ModuleSet(this.Modules);
 		toRemove.Remove(module);
 		this.RemoveModules(toRemove);
 
-		this.mapGenerator.MarkSlotComplete(this);
+		this.map.NotifySlotCollapsed(this);
 	}
 
 	private void checkConsistency(Module module) {
@@ -87,7 +87,7 @@ public class Slot {
 		}
 		
 		float max = this.Modules.Select(module => module.Prototype.Probability).Sum();
-		float roll = (float)(MapGenerator.Random.NextDouble() * max);
+		float roll = (float)(InfiniteMap.Random.NextDouble() * max);
 		float p = 0;
 		foreach (var candidate in this.Modules) {
 			p += candidate.Prototype.Probability;
@@ -106,8 +106,8 @@ public class Slot {
 			if (!this.Modules.Contains(module) || module == this.Module) {
 				continue;
 			}
-			if (this.mapGenerator.History != null && this.mapGenerator.History.Any()) {
-				this.mapGenerator.History.Peek().RemoveModule(this, module);
+			if (this.map.History != null && this.map.History.Any()) {
+				this.map.History.Peek().RemoveModule(this, module);
 			}
 			for (int d = 0; d < 6; d++) {
 				int inverseDirection = (d + 3) % 6;
@@ -118,7 +118,7 @@ public class Slot {
 
 				foreach (var possibleNeighbor in module.PossibleNeighbors[d]) {
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
-						this.mapGenerator.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
+						this.map.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
 					}
 #if UNITY_EDITOR
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] < 1) {
@@ -136,7 +136,7 @@ public class Slot {
 		}
 
 		if (recursive) {
-			this.mapGenerator.ClearRemovalQueue();
+			this.map.FinishRemovalQueue();
 		}
 	}
 
@@ -166,7 +166,7 @@ public class Slot {
 
 		if (this.Collapsed && this.Modules.Count > 1) {
 			this.Module = null;
-			this.mapGenerator.MarkSlotIncomplete(this);
+			this.map.NotifySlotCollapseUndone(this);
 			return true;
 		}
 		return false;

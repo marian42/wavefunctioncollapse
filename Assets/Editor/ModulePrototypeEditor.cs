@@ -12,7 +12,7 @@ public class ModulePrototypeEditor : Editor {
 		if (GUILayout.Button("Distribute")) {
 			int i = 0;
 			foreach (Transform transform in modulePrototype.transform.parent) {
-				transform.localPosition = Vector3.forward * i * MapGenerator.BlockSize * 2f;
+				transform.localPosition = Vector3.forward * i * InfiniteMap.BLOCK_SIZE * 2f;
 				i++;
 			}
 		}

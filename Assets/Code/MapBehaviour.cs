@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 
 public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
-	public MapGenerator MapGenerator;
+	public InfiniteMap Map;
 
 	public int MapHeight = 6;
 
@@ -21,11 +21,11 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
 		return this.transform.position
-			+ Vector3.up * MapGenerator.BlockSize / 2f
+			+ Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
 			+ new Vector3(
-				(float)(position.X) * MapGenerator.BlockSize,
-				(float)(position.Y) * MapGenerator.BlockSize,
-				(float)(position.Z) * MapGenerator.BlockSize);
+				(float)(position.X) * InfiniteMap.BLOCK_SIZE,
+				(float)(position.Y) * InfiniteMap.BLOCK_SIZE,
+				(float)(position.Z) * InfiniteMap.BLOCK_SIZE);
 	}
 
 	public void Clear() {
@@ -36,36 +36,39 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 		foreach (var child in children) {
 			GameObject.DestroyImmediate(child.gameObject);
 		}
-		this.MapGenerator = null;
+		this.Map = null;
 	}
 
 	public void Initialize() {
 		this.Clear();
-		this.MapGenerator = new MapGenerator(this.MapHeight);
+		this.Map = new InfiniteMap(this.MapHeight);
+		if (this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
+			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
+		}
 	}
 
 	public bool Initialized {
 		get {
-			return this.MapGenerator != null;
+			return this.Map != null;
 		}
 	}
 	
 	public void Update() {
-		if (this.MapGenerator.BuildQueue == null) {
+		if (this.Map.BuildQueue == null) {
 			return;
 		}
 
 		int itemsLeft = 50;
 
-		while (this.MapGenerator.BuildQueue.Count != 0 && itemsLeft > 0) {
-			var slot = this.MapGenerator.BuildQueue.Peek();
+		while (this.Map.BuildQueue.Count != 0 && itemsLeft > 0) {
+			var slot = this.Map.BuildQueue.Peek();
 			if (slot == null) {
 				return;
 			}
 			if (this.BuildSlot(slot)) {
 				itemsLeft--;
 			}
-			this.MapGenerator.BuildQueue.Dequeue();
+			this.Map.BuildQueue.Dequeue();
 		}
 	}
 
@@ -95,16 +98,16 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	}
 
 	public void BuildAllSlots() {
-		while (this.MapGenerator.BuildQueue.Count != 0) {
-			this.BuildSlot(this.MapGenerator.BuildQueue.Dequeue());
+		while (this.Map.BuildQueue.Count != 0) {
+			this.BuildSlot(this.Map.BuildQueue.Dequeue());
 		}
 	}
 	
 	public void OnBeforeSerialize() { }
 
 	public void OnAfterDeserialize() {
-		if (Module.All != null && Module.All.Length != 0) {
-			foreach (var module in Module.All) {
+		if (this.Modules != null && this.Modules.Length != 0) {
+			foreach (var module in this.Modules) {
 				module.DeserializeNeigbors(this.Modules);
 			}
 		}
@@ -119,10 +122,10 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 		if (!mapBehaviour.VisualizeSlots) {
 			return;
 		}
-		if (mapBehaviour.MapGenerator == null) {
+		if (mapBehaviour.Map == null) {
 			return;
 		}
-		foreach (var slot in mapBehaviour.MapGenerator.Slots.Values) {
+		foreach (var slot in mapBehaviour.Map.Slots.Values) {
 			if (slot.Collapsed || slot.Modules.Count == Module.All.Length) {
 				continue;
 			}

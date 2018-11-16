@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -37,7 +37,7 @@ public class MapBehaviourEditor : Editor {
 
 		if (GUILayout.Button("Initialize " + this.collapseAreaSize + "x" + this.collapseAreaSize + " area")) {
 			mapBehaviour.Initialize();
-			mapBehaviour.MapGenerator.Collapse(Vector3i.zero, new Vector3i(this.collapseAreaSize, mapBehaviour.MapGenerator.Height, this.collapseAreaSize));
+			mapBehaviour.Map.Collapse(Vector3i.zero, new Vector3i(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
 			mapBehaviour.BuildAllSlots();
 			Debug.Log("Map initialized.");
 		}
