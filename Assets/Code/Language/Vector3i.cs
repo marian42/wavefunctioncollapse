@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct Vector3i {
+public struct Vector3i : IEquatable<Vector3i> {
 	public int X;
 	public int Y;
 	public int Z;
@@ -51,15 +52,15 @@ public struct Vector3i {
 		return !(a == b);
 	}
 
-	public override bool Equals(object obj) {
-		if (!(obj is Vector3i)) {
-			return false;
-		}
-		return this == (Vector3i)obj;
+	public override bool Equals(object other) {
+		return !(other is Vector3i) && this == (Vector3i)other;
+	}
+	public bool Equals(Vector3i other) {
+		return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
 	}
 
 	public override int GetHashCode() {
-		return this.X * 1111111111 + this.Y * 2222 + this.Z * 3333333;
+		return (this.X.GetHashCode() * 314159 + this.Y.GetHashCode()) * 23 + this.Z.GetHashCode();
 	}
 
 	public Vector3 ToVector3() {
