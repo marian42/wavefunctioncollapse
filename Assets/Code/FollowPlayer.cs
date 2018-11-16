@@ -5,10 +5,11 @@ using System.Threading;
 using UnityEngine;
 using System.Linq;
 
-[RequireComponent(typeof(MapGenerator))]
+[RequireComponent(typeof(InfiniteMap))]
 public class FollowPlayer : MonoBehaviour {
 
-	private MapGenerator mapGenerator;
+	private MapBehaviour mapBehaviour;
+	private InfiniteMap map;
 
 	public Transform Target;
 
@@ -32,10 +33,11 @@ public class FollowPlayer : MonoBehaviour {
 
 	void Start() {
 		this.chunkVisibility = new Dictionary<Vector3i, bool>();
-		this.mapGenerator = this.GetComponent<MapGenerator>();
-		this.mapGenerator.Initialize();
+		this.mapBehaviour = this.GetComponent<MapBehaviour>();
+		this.mapBehaviour.Initialize();
+		this.map = this.mapBehaviour.Map;
 		this.generate();
-		this.mapGenerator.BuildAllSlots();
+		this.mapBehaviour.BuildAllSlots();
 
 		this.showQueue = new Queue<Vector3i>();
 		this.hideQueue = new Queue<Vector3i>();
@@ -49,10 +51,10 @@ public class FollowPlayer : MonoBehaviour {
 	}
 
 	private void generate() {
-		float chunkSize = MapGenerator.BlockSize * this.ChunkSize;
+		float chunkSize = InfiniteMap.BLOCK_SIZE * this.ChunkSize;
 
-		float targetX = this.targetPosition.x - this.mapPosition.x + MapGenerator.BlockSize / 2;
-		float targetZ = this.targetPosition.z - this.mapPosition.z + MapGenerator.BlockSize / 2;
+		float targetX = this.targetPosition.x - this.mapPosition.x + InfiniteMap.BLOCK_SIZE / 2;
+		float targetZ = this.targetPosition.z - this.mapPosition.z + InfiniteMap.BLOCK_SIZE / 2;
 
 		int chunkX = Mathf.FloorToInt(targetX / chunkSize);
 		int chunkZ = Mathf.FloorToInt(targetZ / chunkSize);
@@ -70,7 +72,7 @@ public class FollowPlayer : MonoBehaviour {
 					}
 					continue;
 				}
-				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
+				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
 				float distance = Vector3.Distance(center, this.targetPosition + Vector3.down * this.targetPosition.y);
 
 				if (distance < closestDistance) {
@@ -89,7 +91,7 @@ public class FollowPlayer : MonoBehaviour {
 		if (!any || this.stepsWithoutVisibilityUpdate > 15) {
 			foreach (var kvp in this.chunkVisibility.ToList()) {
 				var chunk = kvp.Key;
-				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * MapGenerator.BlockSize / 2;
+				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
 				bool inRange = Vector3.Distance(center, this.targetPosition - Vector3.up * this.targetPosition.y) < this.UnloadRange;
 				if (inRange != kvp.Value) {
 					this.setChunkVisible(chunk, inRange);
@@ -110,9 +112,9 @@ public class FollowPlayer : MonoBehaviour {
 	}
 
 	private void createChunk(Vector3i chunkAddress) {
-		this.mapGenerator.RangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
-		this.mapGenerator.RangeLimit = this.ChunkSize + 20;
-		this.mapGenerator.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.mapGenerator.Height, this.ChunkSize));
+		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
+		this.map.rangeLimit = this.ChunkSize + 20;
+		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.chunkVisibility[chunkAddress] = true;
 	}
 
@@ -133,9 +135,9 @@ public class FollowPlayer : MonoBehaviour {
 
 	private IEnumerable<Slot> getSlotsInChunk(Vector3i chunkAddress) {
 		for (int x = 0; x < this.ChunkSize; x++) {
-			for (int y = 0; y < this.mapGenerator.Height; y++) {
+			for (int y = 0; y < this.map.Height; y++) {
 				for (int z = 0; z < this.ChunkSize; z++) {
-					yield return this.mapGenerator.GetSlot(chunkAddress * this.ChunkSize + new Vector3i(x, y, z));
+					yield return this.map.GetSlot(chunkAddress * this.ChunkSize + new Vector3i(x, y, z));
 				}
 			}
 		}
@@ -143,7 +145,7 @@ public class FollowPlayer : MonoBehaviour {
 	
 	void Update () {
 		this.targetPosition = this.Target.position;
-		this.mapPosition = this.mapGenerator.transform.position;
+		this.mapPosition = this.mapBehaviour.transform.position;
 
 		if (this.showQueue.Count != 0) {
 			foreach (var slot in this.getSlotsInChunk(this.showQueue.Dequeue())) {

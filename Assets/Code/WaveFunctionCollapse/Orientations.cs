@@ -57,7 +57,7 @@ public class Orientations {
 		Orientations.directions = Orientations.vectors.Select(vector => new Vector3i(vector)).ToArray();
 	}
 
-	private static readonly int[] horizontalFaces = { 0, 2, 3, 5 };
+	public static readonly int[] HorizontalDirections = { 0, 2, 3, 5 };
 
 	public static readonly string[] Names = { "-Red (Left)", "-Green (Down)", "-Blue (Back)", "+Red (Right)", "+Green (Up)", "+Blue (Forward)" };
 
@@ -65,7 +65,7 @@ public class Orientations {
 		if (direction == 1 || direction == 4) {
 			return direction;
 		}
-		return horizontalFaces[(Array.IndexOf(horizontalFaces, direction) + amount) % 4];
+		return HorizontalDirections[(Array.IndexOf(HorizontalDirections, direction) + amount) % 4];
 	}
 
 	public static bool IsHorizontal(int orientation) {

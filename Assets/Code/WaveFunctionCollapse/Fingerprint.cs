@@ -33,7 +33,7 @@ public class Fingerprint {
 				Vector3 v1 = vertices[triangles[t + i]];
 				Vector3 v2 = vertices[triangles[t + (i + 1) % 3]];
 
-				if (v1.z > MapGenerator.BlockSize / 2f * 0.99f && v2.z > MapGenerator.BlockSize / 2f * 0.99f) {
+				if (v1.z > InfiniteMap.BLOCK_SIZE / 2f * 0.99f && v2.z > InfiniteMap.BLOCK_SIZE / 2f * 0.99f) {
 					if (flipX) {
 						v1.x *= -1f;
 						v2.x *= -1f;

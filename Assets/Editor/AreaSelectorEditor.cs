@@ -10,11 +10,11 @@ public class AreaSelectorEditor : Editor {
 
 		AreaSelector selector = (AreaSelector)target;
 		if (GUILayout.Button("Generate")) {
-			if (!selector.MapGenerator.Initialized) {
-				selector.MapGenerator.Initialize();
+			if (!selector.MapBehaviour.Initialized) {
+				selector.MapBehaviour.Initialize();
 			}
-			selector.MapGenerator.Collapse(selector.StartPosition, selector.Size, true);
-			selector.MapGenerator.BuildAllSlots();
+			selector.MapBehaviour.Map.Collapse(selector.StartPosition, selector.Size, true);
+			selector.MapBehaviour.BuildAllSlots();
 		}
 	}
 }

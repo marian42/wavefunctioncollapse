@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -11,15 +11,15 @@ public class SlotInspectorEditor : Editor {
 		DrawDefaultInspector();
 
 		SlotInspector slotInspector = (SlotInspector)target;
-		var mapGenerator = slotInspector.MapGenerator;
-
-		if (mapGenerator == null) {
+		var mapBehaviour = slotInspector.MapBehaviour;
+		var map = mapBehaviour.Map;
+		if (mapBehaviour == null) {
 			return;
 		}
 
-		if (!mapGenerator.Initialized) {
+		if (!mapBehaviour.Initialized) {
 			if (GUILayout.Button("Initialize Map")) {
-				mapGenerator.Initialize();
+				mapBehaviour.Initialize();
 			}
 			return;
 		}
@@ -27,11 +27,11 @@ public class SlotInspectorEditor : Editor {
 		var position = slotInspector.GetPosition();
 		GUILayout.Label("Position: " + position);
 
-		var slot = slotInspector.MapGenerator.GetSlot(position, false);
+		var slot = map.GetSlot(position, false);
 
 		if (slot == null) {
 			if (GUILayout.Button("CreateSlot")) {
-				mapGenerator.GetSlot(position);
+				map.GetSlot(position);
 			}
 			return;
 		}
@@ -41,11 +41,11 @@ public class SlotInspectorEditor : Editor {
 			return;
 		}
 
-		GUILayout.Label("Possible modules: " + slot.Modules.Count() + " / " + mapGenerator.Modules.Count());
+		GUILayout.Label("Possible modules: " + slot.Modules.Count() + " / " + mapBehaviour.Modules.Count());
 
 		if (GUILayout.Button("Collapse Random")) {
 			slot.CollapseRandom();
-			mapGenerator.BuildAllSlots();
+			mapBehaviour.BuildAllSlots();
 		}
 
 		var prototypes = new Dictionary<ModulePrototype, List<Module>>();
@@ -67,7 +67,7 @@ public class SlotInspectorEditor : Editor {
 			foreach (var module in list) {
 				if (GUILayout.Button("R" + module.Rotation)) {
 					slot.Collapse(module);
-					mapGenerator.BuildAllSlots();
+					mapBehaviour.BuildAllSlots();
 				}
 			}
 

@@ -11,7 +11,7 @@ public class FlightController : MonoBehaviour {
 
 	public void OnEnable() {
 		this.GetComponent<FirstPersonController>().enabled = false;
-		this.transform.position = this.transform.position - Vector3.up * this.transform.position.y + Vector3.up * (GameObject.FindObjectOfType<MapGenerator>().Height * MapGenerator.BlockSize + 2f);
+		this.transform.position = this.transform.position - Vector3.up * this.transform.position.y + Vector3.up * (GameObject.FindObjectOfType<MapBehaviour>().Map.Height * InfiniteMap.BLOCK_SIZE + 2f);
 		var cameraTransform = this.transform.GetChild(0);
 		cameraTransform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles - Vector3.right * cameraTransform.rotation.eulerAngles.x + Vector3.right * 24f);
 	}
