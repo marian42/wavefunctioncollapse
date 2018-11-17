@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -126,7 +126,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 		if (mapBehaviour.Map == null) {
 			return;
 		}
-		foreach (var slot in mapBehaviour.Map.Slots.Values) {
+		foreach (var slot in mapBehaviour.Map.GetAllSlots()) {
 			if (slot.Collapsed || slot.Modules.Count == Module.All.Length) {
 				continue;
 			}

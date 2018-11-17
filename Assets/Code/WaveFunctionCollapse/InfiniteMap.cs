@@ -6,7 +6,7 @@ using System;
 using UnityEditor;
 
 public class InfiniteMap : AbstractMap {
-	public Dictionary<Vector3i, Slot> Slots;
+	private Dictionary<Vector3i, Slot> slots;
 
 	public readonly int Height;
 
@@ -17,7 +17,7 @@ public class InfiniteMap : AbstractMap {
 
 	public InfiniteMap(int height) : base() {
 		this.Height = height;
-		this.Slots = new Dictionary<Vector3i, Slot>();
+		this.slots = new Dictionary<Vector3i, Slot>();
 
 		if (Module.All == null || Module.All.Length == 0) {
 			throw new InvalidOperationException("Module data was not available, please create module data first.");
@@ -29,8 +29,8 @@ public class InfiniteMap : AbstractMap {
 			return null;
 		}
 
-		if (this.Slots.ContainsKey(position)) {
-			return this.Slots[position];
+		if (this.slots.ContainsKey(position)) {
+			return this.slots[position];
 		}
 		if (!create) {
 			return null;
@@ -44,14 +44,14 @@ public class InfiniteMap : AbstractMap {
 		}
 
 		if (this.defaultColumn != null) {
-			this.Slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
+			this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
 		} else {
-			this.Slots[position] = new Slot(position, this, true);
+			this.slots[position] = new Slot(position, this, true);
 		}
-		return this.Slots[position];
+		return this.slots[position];
 	}
 
-	public void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints) {
+	public override void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints) {
 		this.defaultColumn = new TilingMap(new Vector3i(1, this.Height, 1));
 
 		foreach (var constraint in constraints) {
@@ -80,5 +80,9 @@ public class InfiniteMap : AbstractMap {
 				}
 			}			
 		}
+	}
+
+	public override IEnumerable<Slot> GetAllSlots() {
+		return this.slots.Values;
 	}
 }

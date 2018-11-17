@@ -39,6 +39,10 @@ public abstract class AbstractMap {
 		return this.GetSlot(position, true);
 	}
 
+	public abstract IEnumerable<Slot> GetAllSlots();
+
+	public abstract void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints);	
+
 	public void NotifySlotCollapsed(Slot slot) {
 		if (this.workArea != null) {
 			this.workArea.Remove(slot);
