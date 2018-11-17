@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RingBuffer<T> {
 	public readonly int Size;
+
+	public Action<T> OnOverflow;
 
 	public int Count {
 		get;
@@ -28,6 +31,9 @@ public class RingBuffer<T> {
 
 	public void Push(T item) {
 		this.position = (this.position + 1) % this.Size;
+		if (this.buffer[this.position] != null && this.OnOverflow != null) {
+			this.OnOverflow(this.buffer[this.position]);
+		}
 		this.buffer[this.position] = item;
 		this.Count++;
 		if (this.Count > this.Size) {
@@ -48,6 +54,7 @@ public class RingBuffer<T> {
 			throw new System.InvalidOperationException();
 		}
 		T result = this.buffer[this.position];
+		this.buffer[this.position] = default(T);
 
 		this.position = (this.position + this.Size - 1) % this.Size;
 		this.Count--;

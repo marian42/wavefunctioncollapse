@@ -25,6 +25,7 @@ public abstract class AbstractMap {
 		InfiniteMap.Random = new System.Random();
 
 		this.History = new RingBuffer<HistoryItem>(AbstractMap.HISTORY_SIZE);
+		this.History.OnOverflow = item => item.Slot.Forget();
 		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
 		this.BuildQueue = new Queue<Slot>();
 

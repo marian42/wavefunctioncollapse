@@ -6,8 +6,11 @@ public class HistoryItem {
 	// Use indices instead of references (int instead of Module) since references seem to confuse the garbage collector
 	public Dictionary<Vector3i, ModuleSet> RemovedModules;
 
-	public HistoryItem() {
+	public readonly Slot Slot;
+
+	public HistoryItem(Slot slot) {
 		this.RemovedModules = new Dictionary<Vector3i, ModuleSet>();
+		this.Slot = slot;
 	}
 
 	public void RemoveModule(Slot slot, Module module) {

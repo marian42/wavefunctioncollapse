@@ -56,7 +56,7 @@ public class Slot {
 			return;
 		}
 
-		this.map.History.Push(new HistoryItem());
+		this.map.History.Push(new HistoryItem(this));
 
 		this.Module = module;
 		var toRemove = new ModuleSet(this.Modules);
@@ -116,7 +116,7 @@ public class Slot {
 			for (int d = 0; d < 6; d++) {
 				int inverseDirection = (d + 3) % 6;
 				var neighbor = this.GetNeighbor(d);
-				if (neighbor == null) {
+				if (neighbor == null || neighbor.Forgotten) {
 					continue;
 				}
 
@@ -196,5 +196,16 @@ public class Slot {
 
 	public override int GetHashCode() {
 		return this.Position.GetHashCode();
+	}
+
+	public void Forget() {
+		this.ModuleHealth = null;
+		this.Modules = null;
+	}
+
+	public bool Forgotten {
+		get {
+			return this.Modules == null;
+		}
 	}
 }
