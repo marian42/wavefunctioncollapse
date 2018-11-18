@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(MapBehaviour))]
 public class MapBehaviourEditor : Editor {
@@ -15,17 +16,20 @@ public class MapBehaviourEditor : Editor {
 
 		if (GUILayout.Button("Create module data")) {
 			mapBehaviour.CreateModules();
+			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 		}
 
 		if (GUILayout.Button("Simplify module data")) {
 			mapBehaviour.CreateModules();
 			mapBehaviour.SimplifyNeighborData();
+			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 		}
 
 		GUILayout.Space(20f);
 
 		if (GUILayout.Button("Clear")) {
 			mapBehaviour.Clear();
+			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 		}
 
 		GUILayout.BeginHorizontal();
