@@ -90,15 +90,22 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 			return false;
 		}
 
-		var gameObject = GameObject.Instantiate(module.Prototype.gameObject);
-		gameObject.name = module.Prototype.gameObject.name + " " + slot.Position;
-		GameObject.DestroyImmediate(gameObject.GetComponent<ModulePrototype>());
-		gameObject.transform.parent = this.transform;
-		gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
-		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * module.Rotation);
-		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
+		var newModule = GameObject.Instantiate(module.Prototype.gameObject);
+		newModule.name = module.Prototype.gameObject.name + " " + slot.Position;
+		GameObject.DestroyImmediate(newModule.GetComponent<ModulePrototype>());
+
+        var r = newModule.GetComponent<Renderer>();
+	    if (r != null)
+	    {
+	        r.enabled = true;
+	    }
+
+		newModule.transform.parent = this.transform;
+		newModule.transform.position = this.GetWorldspacePosition(slot.Position);
+		newModule.transform.rotation = Quaternion.Euler(Vector3.up * 90f * module.Rotation);
+		var blockBehaviour = newModule.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = slot;
-		slot.GameObject = gameObject;
+		slot.GameObject = newModule;
 		return true;
 	}
 

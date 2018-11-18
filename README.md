@@ -1,4 +1,4 @@
-![](https://i.imgur.com/vL80izv.jpg)
+![](doc/preview.jpg)
 
 # Wave Function Collapse
 

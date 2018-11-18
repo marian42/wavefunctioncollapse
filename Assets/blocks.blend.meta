@@ -318,6 +318,11 @@ ModelImporter:
     400310: Wall_Corner_2_Tunnel_M
     400312: Roof_Single_Collider
     2100000: unnamed
+    2100002: Roof
+    2100004: Marble
+    2100006: Floor
+    2100008: Window
+    2100010: Water
     2300000: Rig
     2300002: Tile
     2300004: Tile_001
@@ -777,7 +782,32 @@ ModelImporter:
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Floor
+    second: {fileID: 2100000, guid: 2522b839f6861034084a7b37d0c9bc7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Marble
+    second: {fileID: 2100000, guid: b242bf5af774885428f25b8de16577fd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof
+    second: {fileID: 2100002, guid: bf7aa0ba24309344696e173dd5bbc873, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Water
+    second: {fileID: 2100000, guid: 9a7a99966ca0fb140b3b044fcbe7187d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window
+    second: {fileID: 2100000, guid: b0038637b43153842babee4806d18c60, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
