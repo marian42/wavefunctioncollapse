@@ -17,15 +17,15 @@ public class SlotInspectorEditor : Editor {
 			return;
 		}
 
+		var position = slotInspector.GetPosition();
+		GUILayout.Label("Position: " + position);
+
 		if (!mapBehaviour.Initialized) {
 			if (GUILayout.Button("Initialize Map")) {
 				mapBehaviour.Initialize();
 			}
 			return;
 		}
-
-		var position = slotInspector.GetPosition();
-		GUILayout.Label("Position: " + position);
 
 		var slot = map.GetSlot(position, false);
 
@@ -36,8 +36,11 @@ public class SlotInspectorEditor : Editor {
 			return;
 		}
 
-		if (slot.Collapsed) {			
+		if (slot.Collapsed) {
 			GUILayout.Label("Collapsed: " + slot.Module);
+			GUILayout.Space(20f);
+			GUILayout.Label("Add exclusion rules:");
+			BlockBehaviourEditor.CreateNeighborExlusionUI(slot);
 			return;
 		}
 

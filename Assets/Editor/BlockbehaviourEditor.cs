@@ -5,18 +5,13 @@ using System.Linq;
 [CustomEditor(typeof(BlockBehaviour))]
 public class BlockBehaviourEditor : Editor {
 
-	public override void OnInspectorGUI() {
-		DrawDefaultInspector();
+	public static void CreateNeighborExlusionUI(Slot slot) {
 		var style = new GUIStyle();
 
-		BlockBehaviour block = (BlockBehaviour)target;
-		if (block.Slot == null || Application.isPlaying) {
-			return;
-		}
-
 		for (int i = 0; i < 6; i++) {
+			GUILayout.Space(10f);
 			style.normal.textColor = getColor(i);
-			var neighbor = block.Slot.GetNeighbor(i);
+			var neighbor = slot.GetNeighbor(i);
 
 			GUILayout.Label(Orientations.Names[i], style);
 			if (neighbor == null || !neighbor.Collapsed) {
@@ -30,10 +25,10 @@ public class BlockBehaviourEditor : Editor {
 				continue;
 			}
 
-			var ownFace = block.Slot.Module.GetFace(i);
+			var ownFace = slot.Module.GetFace(i);
 			var neighborFace = neighbor.Module.GetFace((i + 3) % 6);
 
-			if (ownFace.ExcludedNeighbours.Contains(neighbor.Module.Prototype) && neighborFace.ExcludedNeighbours.Contains(block.Slot.Module.Prototype)) {
+			if (ownFace.ExcludedNeighbours.Contains(neighbor.Module.Prototype) && neighborFace.ExcludedNeighbours.Contains(slot.Module.Prototype)) {
 				GUILayout.Label("(Already exlcuded)");
 				continue;
 			}
@@ -42,8 +37,8 @@ public class BlockBehaviourEditor : Editor {
 				if (!ownFace.ExcludedNeighbours.Contains(neighbor.Module.Prototype)) {
 					ownFace.ExcludedNeighbours = ownFace.ExcludedNeighbours.Concat(new ModulePrototype[] { neighbor.Module.Prototype }).ToArray();
 				}
-				if (!neighborFace.ExcludedNeighbours.Contains(block.Slot.Module.Prototype)) {
-					neighborFace.ExcludedNeighbours = neighborFace.ExcludedNeighbours.Concat(new ModulePrototype[] { block.Slot.Module.Prototype }).ToArray();
+				if (!neighborFace.ExcludedNeighbours.Contains(slot.Module.Prototype)) {
+					neighborFace.ExcludedNeighbours = neighborFace.ExcludedNeighbours.Concat(new ModulePrototype[] { slot.Module.Prototype }).ToArray();
 				}
 				Debug.Log("Added exclusion rule.");
 			}
@@ -62,6 +57,17 @@ public class BlockBehaviourEditor : Editor {
 				ownFace.EnforceWalkableNeighbor = true;
 			}
 		}
+	}
+
+	public override void OnInspectorGUI() {
+		DrawDefaultInspector();
+
+		BlockBehaviour block = (BlockBehaviour)target;
+		if (block.Slot == null || Application.isPlaying) {
+			return;
+		}
+
+		BlockBehaviourEditor.CreateNeighborExlusionUI(block.Slot);
 	}
 
 	private static Color getColor(int i) {
