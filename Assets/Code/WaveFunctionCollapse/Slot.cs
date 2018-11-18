@@ -165,7 +165,7 @@ public class Slot {
 			for (int d = 0; d < 6; d++) {
 				int inverseDirection = (d + 3) % 6;
 				var neighbor = this.GetNeighbor(d);
-				if (neighbor == null) {
+				if (neighbor == null || neighbor.Forgotten) {
 					continue;
 				}
 
