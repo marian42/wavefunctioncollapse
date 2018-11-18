@@ -26,6 +26,7 @@ public class FirstPersonController : MonoBehaviour {
 		this.characterController = this.GetComponent<CharacterController>();
 		this.cameraTransform = this.GetComponentInChildren<Camera>().transform;
 		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Confined;
 	}
 	
 	void Update () {
