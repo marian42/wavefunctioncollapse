@@ -80,6 +80,10 @@ public class InfiniteMap : AbstractMap {
 				}
 			}			
 		}
+
+		foreach (var slot in this.defaultColumn.GetAllSlots()) {
+			float _ = slot.Modules.Entropy; // Inititalize cached value
+		}
 	}
 
 	public override IEnumerable<Slot> GetAllSlots() {

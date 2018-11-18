@@ -9,9 +9,22 @@ public class ModuleSet : ICollection<Module> {
 
 	private long[] data;
 
+	private float entropy;
+	private bool entropyOutdated = true;
+
 	public int Count {
 		get;
 		private set;
+	}
+
+	public float Entropy {
+		get {
+			if (this.entropyOutdated) {
+				this.entropy = this.calculateEntropy();
+				this.entropyOutdated = false;
+			}
+			return this.entropy;
+		}
 	}
 	
 	public ModuleSet(bool initializeFull = false) {
@@ -29,6 +42,8 @@ public class ModuleSet : ICollection<Module> {
 	public ModuleSet(ModuleSet source) {
 		this.data = source.data.ToArray();
 		this.Count = source.Count;
+		this.entropy = source.Entropy;
+		this.entropyOutdated = false;
 	}
 
 	public static ModuleSet FromEnumerable(IEnumerable<Module> source) {
@@ -48,6 +63,7 @@ public class ModuleSet : ICollection<Module> {
 		if ((value & mask) == 0) {
 			this.data[i] = value | mask;
 			this.Count++;
+			this.entropyOutdated = true;
 		}
 	}
 
@@ -60,6 +76,7 @@ public class ModuleSet : ICollection<Module> {
 		if ((value & mask) != 0) {
 			this.data[i] = value & ~mask;
 			this.Count--;
+			this.entropyOutdated = true;
 			return true;
 		} else {
 			return false;
@@ -80,6 +97,7 @@ public class ModuleSet : ICollection<Module> {
 
 	public void Clear() {
 		this.Count = 0;
+		this.entropyOutdated = true;
 		for (int i = 0; i < this.data.Length; i++) {
 			this.data[i] = 0;
 		}
@@ -124,5 +142,15 @@ public class ModuleSet : ICollection<Module> {
 	public void PrintDebug() {
 		var s = this.Count + ": " + string.Join("-", this.data.Select(l => Convert.ToString(l, 2)).ToArray()) + "   --   " + string.Join(", ", this.Select(m => m.Index.ToString()).ToArray());
 		Debug.Log(s);
+	}
+
+	private float calculateEntropy() {
+		float total = 0;
+		float entropySum = 0;
+		foreach (var module in this) {
+			total += module.Prototype.Probability;
+			entropySum += module.Prototype.Probability * Mathf.Log(module.Prototype.Probability);
+		}
+		return -1f / total * entropySum + Mathf.Log(total);
 	}
 }

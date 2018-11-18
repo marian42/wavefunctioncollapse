@@ -42,6 +42,7 @@ public class SlotInspectorEditor : Editor {
 		}
 
 		GUILayout.Label("Possible modules: " + slot.Modules.Count() + " / " + mapBehaviour.Modules.Count());
+		GUILayout.Label("Entropy: " + slot.Modules.Entropy);
 
 		if (GUILayout.Button("Collapse Random")) {
 			slot.CollapseRandom();
@@ -63,7 +64,7 @@ public class SlotInspectorEditor : Editor {
 			
 			GUILayout.BeginHorizontal();
 
-			EditorGUILayout.PrefixLabel(proto.gameObject.name);
+			EditorGUILayout.PrefixLabel(proto.gameObject.name + " (" + (100f * list.Sum(module => module.Prototype.Probability) / slot.Modules.Sum(module => module.Prototype.Probability)).ToString("0.0") + "%)");
 			foreach (var module in list) {
 				if (GUILayout.Button("R" + module.Rotation)) {
 					slot.Collapse(module);

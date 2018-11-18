@@ -25,12 +25,6 @@ public class Slot {
 		}
 	}
 
-	public int Entropy {
-		get {
-			return this.Modules.Count;
-		}
-	}
-
 	public Slot(Vector3i position, AbstractMap map, bool initializeModuleHealth) {
 		this.Position = position;
 		this.map = map;

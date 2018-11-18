@@ -85,10 +85,16 @@ public abstract class AbstractMap {
 		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
 		while (this.workArea.Any()) {
-			int minEntropy = this.workArea.Min(slot => slot.Entropy);
-			var candidates = this.workArea.Where(slot => !slot.Collapsed && slot.Entropy == minEntropy).ToArray();
+			float minEntropy = float.PositiveInfinity;
+			Slot selected = null;
 
-			var selected = candidates[InfiniteMap.Random.Next(0, candidates.Length - 1)];
+			foreach (var slot in workArea) {
+				float entropy = slot.Modules.Entropy;
+				if (entropy < minEntropy) {
+					selected = slot;
+					minEntropy = entropy;
+				}
+			}
 			try {
 				selected.CollapseRandom();
 			}
