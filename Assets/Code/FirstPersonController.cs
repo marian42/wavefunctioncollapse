@@ -79,6 +79,10 @@ public class FirstPersonController : MonoBehaviour {
 		}
 	}
 
+	public void Enable() {
+		this.verticalSpeed = 0;
+	}
+
 	private bool onGround() {
 		var ray = new Ray(this.transform.position, Vector3.down);
 		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 - this.characterController.radius + 0.1f);
