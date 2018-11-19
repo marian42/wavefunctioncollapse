@@ -55,7 +55,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	}
 	
 	public void Update() {
-		if (this.Map.BuildQueue == null) {
+		if (this.Map == null || this.Map.BuildQueue == null) {
 			return;
 		}
 
