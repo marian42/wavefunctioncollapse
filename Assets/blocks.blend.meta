@@ -160,6 +160,17 @@ ModelImporter:
     100308: Wall_Corner_2_Tunnel
     100310: Wall_Corner_2_Tunnel_M
     100312: Roof_Single_Collider
+    100314: Enclosed_Stairs
+    100316: Enclosed_Stairs_Ceiling
+    100318: Enclosed_Stairs_Entrance_Lower_Unused
+    100320: Enclosed_Stairs_Entrance_Upper
+    100322: Enclosed_Stairs_Entrance_Upper_2
+    100324: Enclosed_Stairs_Entrance_Upper_2_Steps
+    100326: Enclosed_Stairs_Lower
+    100328: Enclosed_Stairs_Entrance_Upper_3
+    100330: High_Wall_Clock
+    100332: High_Wall_Clock_Hours
+    100334: High_Wall_Clock_Minutes
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -317,6 +328,17 @@ ModelImporter:
     400308: Wall_Corner_2_Tunnel
     400310: Wall_Corner_2_Tunnel_M
     400312: Roof_Single_Collider
+    400314: Enclosed_Stairs
+    400316: Enclosed_Stairs_Ceiling
+    400318: Enclosed_Stairs_Entrance_Lower_Unused
+    400320: Enclosed_Stairs_Entrance_Upper
+    400322: Enclosed_Stairs_Entrance_Upper_2
+    400324: Enclosed_Stairs_Entrance_Upper_2_Steps
+    400326: Enclosed_Stairs_Lower
+    400328: Enclosed_Stairs_Entrance_Upper_3
+    400330: High_Wall_Clock
+    400332: High_Wall_Clock_Hours
+    400334: High_Wall_Clock_Minutes
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -470,6 +492,17 @@ ModelImporter:
     2300298: Wall_Corner_2_Tunnel
     2300300: Wall_Corner_2_Tunnel_M
     2300302: Roof_Single_Collider
+    2300304: Enclosed_Stairs
+    2300306: Enclosed_Stairs_Ceiling
+    2300308: Enclosed_Stairs_Entrance_Lower_Unused
+    2300310: Enclosed_Stairs_Entrance_Upper
+    2300312: Enclosed_Stairs_Entrance_Upper_2
+    2300314: Enclosed_Stairs_Entrance_Upper_2_Steps
+    2300316: Enclosed_Stairs_Lower
+    2300318: Enclosed_Stairs_Entrance_Upper_3
+    2300320: High_Wall_Clock
+    2300322: High_Wall_Clock_Hours
+    2300324: High_Wall_Clock_Minutes
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -622,6 +655,17 @@ ModelImporter:
     3300298: Wall_Corner_2_Tunnel
     3300300: Wall_Corner_2_Tunnel_M
     3300302: Roof_Single_Collider
+    3300304: Enclosed_Stairs
+    3300306: Enclosed_Stairs_Ceiling
+    3300308: Enclosed_Stairs_Entrance_Lower_Unused
+    3300310: Enclosed_Stairs_Entrance_Upper
+    3300312: Enclosed_Stairs_Entrance_Upper_2
+    3300314: Enclosed_Stairs_Entrance_Upper_2_Steps
+    3300316: Enclosed_Stairs_Lower
+    3300318: Enclosed_Stairs_Entrance_Upper_3
+    3300320: High_Wall_Clock
+    3300322: High_Wall_Clock_Hours
+    3300324: High_Wall_Clock_Minutes
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -774,6 +818,17 @@ ModelImporter:
     4300298: Wall_Corner_2_Tunnel_M
     4300300: Wall_Corner_2_Tunnel
     4300302: Roof_Single_Collider
+    4300304: Enclosed_Stairs_Entrance_Lower_Unused
+    4300306: Enclosed_Stairs
+    4300308: Enclosed_Stairs_Entrance_Upper_2_Steps
+    4300310: Enclosed_Stairs_Entrance_Upper_2
+    4300312: Enclosed_Stairs_Lower
+    4300314: Enclosed_Stairs_Ceiling
+    4300316: Enclosed_Stairs_Entrance_Upper
+    4300318: Enclosed_Stairs_Entrance_Upper_3
+    4300320: High_Wall_Clock
+    4300322: High_Wall_Clock_Minutes
+    4300324: High_Wall_Clock_Hours
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
