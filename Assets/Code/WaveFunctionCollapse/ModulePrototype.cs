@@ -55,8 +55,9 @@ public class ModulePrototype : MonoBehaviour {
 			this.Rotation = 0;
 		}
 	}
-	
+
 	public float Probability = 1.0f;
+	public bool Spawn = true;
 
 	public HorizontalFaceDetails Left;
 	public VerticalFaceDetails Down;
@@ -64,9 +65,6 @@ public class ModulePrototype : MonoBehaviour {
 	public HorizontalFaceDetails Right;
 	public VerticalFaceDetails Up;
 	public HorizontalFaceDetails Forward;
-
-	public bool CreateRotatedVariants = true;
-	public bool Spawn = true;
 
 	public FaceDetails[] Faces {
 		get {
@@ -212,17 +210,33 @@ public class ModulePrototype : MonoBehaviour {
 				}
 			}			
 		}
-
-		this.CreateRotatedVariants = !(this.Up.Invariant
-			&& this.Down.Invariant
-			&& (this.Forward.Connector == this.Back.Connector && this.Left.Connector == this.Right.Connector && this.Forward.Connector == this.Left.Connector)
-			&& (this.Forward.Symmetric || (this.Forward.Flipped == this.Back.Flipped && this.Left.Flipped == this.Right.Flipped && this.Forward.Flipped == this.Right.Flipped)));
 	}
 
 	private int getNewConnector(Dictionary<int, Fingerprint> dict) {
 		int result = 0;
 		while (dict.ContainsKey(result)) result++;
 		return result;
+	}
+
+	public bool CompareRotatedVariants(int r1, int r2) {
+		if (!(this.Faces[Orientations.UP] as VerticalFaceDetails).Invariant || !(this.Faces[Orientations.DOWN] as VerticalFaceDetails).Invariant) {
+			return false;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			var face1 = this.Faces[Orientations.Rotate(Orientations.HorizontalDirections[i], r1)] as HorizontalFaceDetails;
+			var face2 = this.Faces[Orientations.Rotate(Orientations.HorizontalDirections[i], r2)] as HorizontalFaceDetails;
+
+			if (face1.Connector != face2.Connector) {
+				return false;
+			}
+
+			if (!face1.Symmetric && !face2.Symmetric && face1.Flipped != face2.Flipped) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public static List<Module> CreateModules(bool respectNeigborExclusions) {
@@ -236,9 +250,11 @@ public class ModulePrototype : MonoBehaviour {
 				}
 			}
 
-			for (int rotation = 0; rotation < (prototype.CreateRotatedVariants ? 4 : 1); rotation++) {
-				modules.Add(new Module(prototype, rotation, count));
-				count++;
+			for (int rotation = 0; rotation < 4; rotation++) {
+				if (rotation == 0 || !prototype.CompareRotatedVariants(0, rotation)) {
+					modules.Add(new Module(prototype, rotation, count));
+					count++;
+				}
 			}
 		}
 
