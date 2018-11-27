@@ -171,6 +171,9 @@ ModelImporter:
     100330: High_Wall_Clock
     100332: High_Wall_Clock_Hours
     100334: High_Wall_Clock_Minutes
+    100336: Arch_Bridge
+    100338: Arch_Bridge_End
+    100340: Arch_Bridge_End_M
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -339,6 +342,9 @@ ModelImporter:
     400330: High_Wall_Clock
     400332: High_Wall_Clock_Hours
     400334: High_Wall_Clock_Minutes
+    400336: Arch_Bridge
+    400338: Arch_Bridge_End
+    400340: Arch_Bridge_End_M
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -503,6 +509,9 @@ ModelImporter:
     2300320: High_Wall_Clock
     2300322: High_Wall_Clock_Hours
     2300324: High_Wall_Clock_Minutes
+    2300326: Arch_Bridge
+    2300328: Arch_Bridge_End
+    2300330: Arch_Bridge_End_M
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -666,6 +675,9 @@ ModelImporter:
     3300320: High_Wall_Clock
     3300322: High_Wall_Clock_Hours
     3300324: High_Wall_Clock_Minutes
+    3300326: Arch_Bridge
+    3300328: Arch_Bridge_End
+    3300330: Arch_Bridge_End_M
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -829,6 +841,9 @@ ModelImporter:
     4300320: High_Wall_Clock
     4300322: High_Wall_Clock_Minutes
     4300324: High_Wall_Clock_Hours
+    4300326: Arch_Bridge_End_M
+    4300328: Arch_Bridge_End
+    4300330: Arch_Bridge
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
