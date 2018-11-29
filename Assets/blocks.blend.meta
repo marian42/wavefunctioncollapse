@@ -174,6 +174,17 @@ ModelImporter:
     100336: Arch_Bridge
     100338: Arch_Bridge_End
     100340: Arch_Bridge_End_M
+    100342: Interior_Corner
+    100344: Interior_Floor
+    100346: Interior_Tunnel
+    100348: Interior_Wall
+    100350: Interior_Wall_001
+    100352: Interior_Ceiling_Details
+    100354: High_Wall_Window
+    100356: Interior_Window
+    100358: Window_Prototypee
+    100360: Wall_Window_001
+    100362: Interior_Pillar_001
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -345,6 +356,17 @@ ModelImporter:
     400336: Arch_Bridge
     400338: Arch_Bridge_End
     400340: Arch_Bridge_End_M
+    400342: Interior_Corner
+    400344: Interior_Floor
+    400346: Interior_Tunnel
+    400348: Interior_Wall
+    400350: Interior_Wall_001
+    400352: Interior_Ceiling_Details
+    400354: High_Wall_Window
+    400356: Interior_Window
+    400358: Window_Prototypee
+    400360: Wall_Window_001
+    400362: Interior_Pillar_001
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -512,6 +534,17 @@ ModelImporter:
     2300326: Arch_Bridge
     2300328: Arch_Bridge_End
     2300330: Arch_Bridge_End_M
+    2300332: Interior_Corner
+    2300334: Interior_Floor
+    2300336: Interior_Tunnel
+    2300338: Interior_Wall
+    2300340: Interior_Wall_001
+    2300342: Interior_Ceiling_Details
+    2300344: High_Wall_Window
+    2300346: Interior_Window
+    2300348: Window_Prototypee
+    2300350: Wall_Window_001
+    2300352: Interior_Pillar_001
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -678,6 +711,17 @@ ModelImporter:
     3300326: Arch_Bridge
     3300328: Arch_Bridge_End
     3300330: Arch_Bridge_End_M
+    3300332: Interior_Corner
+    3300334: Interior_Floor
+    3300336: Interior_Tunnel
+    3300338: Interior_Wall
+    3300340: Interior_Wall_001
+    3300342: Interior_Ceiling_Details
+    3300344: High_Wall_Window
+    3300346: Interior_Window
+    3300348: Window_Prototypee
+    3300350: Wall_Window_001
+    3300352: Interior_Pillar_001
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -844,6 +888,17 @@ ModelImporter:
     4300326: Arch_Bridge_End_M
     4300328: Arch_Bridge_End
     4300330: Arch_Bridge
+    4300332: Interior_Floor
+    4300334: Interior_Tunnel
+    4300336: Interior_Wall
+    4300338: Interior_Corner
+    4300340: Interior_Wall_001
+    4300342: Interior_Ceiling_Details
+    4300344: High_Wall_Window
+    4300346: Window_Prototypee
+    4300348: Interior_Window
+    4300350: Wall_Window_001
+    4300352: Interior_Pillar_001
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
