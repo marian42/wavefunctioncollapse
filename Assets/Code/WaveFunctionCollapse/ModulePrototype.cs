@@ -242,37 +242,49 @@ public class ModulePrototype : MonoBehaviour {
 	public static List<Module> CreateModules(bool respectNeigborExclusions) {
 		int count = 0;
 		var modules = new List<Module>();
+
+		var prototypes = ModulePrototype.GetAll().ToArray();
+
+		var scenePrototype = new Dictionary<Module, ModulePrototype>();
 		
-		foreach (var prototype in ModulePrototype.GetAll()) {
+		for (int i = 0; i < prototypes.Length; i++) {
+			var prototype = prototypes[i];
 			for (int face = 0; face < 6; face++) {
 				if (prototype.Faces[face].ExcludedNeighbours == null) {
 					prototype.Faces[face].ExcludedNeighbours = new ModulePrototype[0];
 				}
 			}
 
+			var prefab = PrefabUtility.CreatePrefab("Assets/ModulePrefabs/" + prototype.gameObject.name + ".prefab", prototype.gameObject);
+
 			for (int rotation = 0; rotation < 4; rotation++) {
 				if (rotation == 0 || !prototype.CompareRotatedVariants(0, rotation)) {
-					modules.Add(new Module(prototype, rotation, count));
+					var module = new Module(prefab, rotation, count);
+					modules.Add(module);
+					scenePrototype[module] = prototype;
 					count++;
 				}
 			}
+			
+			EditorUtility.DisplayProgressBar("Creating module prototypes...", prototype.gameObject.name, (float)i / prototypes.Length);
 		}
 
 		foreach (var module in modules) {
 			module.PossibleNeighbors = new Module[6][];
 			for (int direction = 0; direction < 6; direction++) {
-				var face = module.Prototype.Faces[Orientations.Rotate(direction, module.Rotation)];
+				var face = scenePrototype[module].Faces[Orientations.Rotate(direction, module.Rotation)];
 				module.PossibleNeighbors[direction] = modules
 					.Where(neighbor => module.Fits(direction, neighbor)
 						&& (!respectNeigborExclusions || (
-							!face.ExcludedNeighbours.Contains(neighbor.Prototype)
-							&& !neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(module.Prototype))
-							&& (!face.EnforceWalkableNeighbor || neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
-							&& (face.Walkable || !neighbor.Prototype.Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
+							!face.ExcludedNeighbours.Contains(scenePrototype[neighbor])
+							&& !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(scenePrototype[module]))
+							&& (!face.EnforceWalkableNeighbor || scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
+							&& (face.Walkable || !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
 					)
 					.ToArray();
 			}
 		}
+		EditorUtility.ClearProgressBar();
 
 		return modules;
 	}

@@ -12,12 +12,16 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 
 	public BoundaryConstraint[] BoundaryConstraints;
 
-	[HideInInspector, UnityEngine.SerializeField]
-	public Module[] Modules;
+	public ModuleData ModuleData;
 	
 	public void CreateModules() {
-		this.Modules = ModulePrototype.CreateModules(true).ToArray();
-		Module.All = this.Modules;
+		if (this.ModuleData == null) {
+			Debug.LogError("ModuleData is not set. Please create a ModuleData object first and assign it to this MapBehaviour.");
+			return;
+		}
+		this.ModuleData.Modules = ModulePrototype.CreateModules(true).ToArray();
+		EditorUtility.SetDirty(this.ModuleData);
+		ModuleData.Current = this.ModuleData.Modules;
 	}
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
@@ -111,12 +115,12 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	public void OnBeforeSerialize() { }
 
 	public void OnAfterDeserialize() {
-		if (this.Modules != null && this.Modules.Length != 0) {
-			foreach (var module in this.Modules) {
-				module.DeserializeNeigbors(this.Modules);
+		if (this.ModuleData != null && this.ModuleData.Modules != null && this.ModuleData.Modules.Length != 0) {
+			foreach (var module in this.ModuleData.Modules) {
+				module.DeserializeNeigbors(this.ModuleData.Modules);
 			}
 		}
-		Module.All = this.Modules;
+		ModuleData.Current = this.ModuleData.Modules;
 	}
 
 	public bool VisualizeSlots = false;
@@ -131,7 +135,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 			return;
 		}
 		foreach (var slot in mapBehaviour.Map.GetAllSlots()) {
-			if (slot.Collapsed || slot.Modules.Count == Module.All.Length) {
+			if (slot.Collapsed || slot.Modules.Count == ModuleData.Current.Length) {
 				continue;
 			}
 			Handles.Label(mapBehaviour.GetWorldspacePosition(slot.Position), slot.Modules.Count.ToString());
@@ -178,6 +182,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 		}
 		Debug.Log("Removed " + count + " impossible neighbors.");
 		EditorUtility.ClearProgressBar();
+		EditorUtility.SetDirty(this.ModuleData);
 	}
 #endif
 }

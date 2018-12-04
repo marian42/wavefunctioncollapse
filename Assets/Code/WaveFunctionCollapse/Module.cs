@@ -1,14 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor;
 
 [System.Serializable]
 public class Module : ISerializationCallbackReceiver {
-	public static Module[] All;
+	public string Name;
 
 	public ModulePrototype Prototype;
+	public GameObject Prefab;
 
 	public int Rotation;
 	
@@ -16,17 +18,17 @@ public class Module : ISerializationCallbackReceiver {
 	[System.NonSerialized]
 	public Module[][] PossibleNeighbors;
 
+	[HideInInspector]
 	public int Index;
-
-	public string Name;
 
 	public Dictionary<Vector3i, ModuleSet> Cloud;
 
-	public Module(ModulePrototype prototype, int rotation, int index) {
-		this.Prototype = prototype;
+	public Module(GameObject prefab, int rotation, int index) {
 		this.Rotation = rotation;
 		this.Index = index;
-		this.Name = prototype.gameObject.name + " R" + rotation;
+		this.Prefab = prefab;
+		this.Prototype = this.Prefab.GetComponent<ModulePrototype>();
+		this.Name = this.Prototype.gameObject.name + " R" + rotation;
 	}
 
 	public bool Fits(int direction, Module module) {

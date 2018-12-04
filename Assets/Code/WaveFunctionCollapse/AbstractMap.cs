@@ -29,7 +29,7 @@ public abstract class AbstractMap {
 		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
 		this.BuildQueue = new Queue<Slot>();
 
-		this.InitialModuleHealth = this.createInitialModuleHealth(Module.All);
+		this.InitialModuleHealth = this.createInitialModuleHealth(ModuleData.Current);
 
 		this.backtrackBarrier = 0;
 	}
@@ -167,7 +167,7 @@ public abstract class AbstractMap {
 		for (int i = 0; i < modules.Length; i++) {
 			for (int d = 0; d < 6; d++) {
 				if (initialModuleHealth[d][i] == 0) {
-					Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prototype.gameObject);
+					Debug.LogError("Module " + modules[i].Name + " cannot be reached from direction " + d + " (" + modules[i].GetFace(d).ToString() + ")!", modules[i].Prefab);
 					throw new Exception("Unreachable module.");
 				}
 			}

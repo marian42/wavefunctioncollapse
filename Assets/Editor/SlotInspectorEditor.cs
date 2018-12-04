@@ -44,7 +44,7 @@ public class SlotInspectorEditor : Editor {
 			return;
 		}
 
-		GUILayout.Label("Possible modules: " + slot.Modules.Count() + " / " + mapBehaviour.Modules.Count());
+		GUILayout.Label("Possible modules: " + slot.Modules.Count() + " / " + ModuleData.Current.Count());
 		GUILayout.Label("Entropy: " + slot.Modules.Entropy);
 
 		if (GUILayout.Button("Collapse Random")) {
