@@ -115,6 +115,37 @@ public class ModuleSet : ICollection<Module> {
 		}
 	}
 
+	/// <summary>
+	/// Removes all modules that are not in the supplied set.
+	/// Returns true if this set was changed.
+	/// </summary>
+	/// <param name="moduleSet"></param>
+	/// <returns></returns>
+	
+	public bool Intersect(ModuleSet moduleSet) {
+		bool changed = false;
+
+		for (int i = 0; i < this.data.Length; i++) {
+			long current = this.data[i];
+			long mask = moduleSet.data[i];
+			long updated = current & mask;
+
+			if (current != updated) {
+				changed = true;
+
+				// TODO make count update faster
+				long removed = current ^= updated;
+				while (removed != 0) {
+					this.count--;
+					removed &= removed - 1;
+				}
+			}
+			this.data[i] = updated;
+		}
+
+		return changed;
+	}
+
 	public bool IsReadOnly {
 		get {
 			return false;
