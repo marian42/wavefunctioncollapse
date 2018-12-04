@@ -4,17 +4,29 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+[System.Serializable]
 public class ModuleSet : ICollection<Module> {
 	private const int bitsPerItem = 64;
 
+	[SerializeField]
 	private long[] data;
 
 	private float entropy;
 	private bool entropyOutdated = true;
 
+	[SerializeField]
+	private int count;
+
 	public int Count {
-		get;
-		private set;
+		get {
+			return this.count;
+		}
+	}
+
+	public bool Full {
+		get {
+			return this.count == ModuleData.Current.Length;
+		}
 	}
 
 	public float Entropy {
@@ -28,11 +40,11 @@ public class ModuleSet : ICollection<Module> {
 	}
 	
 	public ModuleSet(bool initializeFull = false) {
-		this.data = new long[Module.All.Length / bitsPerItem + (Module.All.Length % bitsPerItem == 0 ? 0 : 1)];
-		this.Count = 0;
+		this.data = new long[ModuleData.Current.Length / bitsPerItem + (ModuleData.Current.Length % bitsPerItem == 0 ? 0 : 1)];
+		this.count = 0;
 
 		if (initializeFull) {
-			this.Count = Module.All.Length;
+			this.count = ModuleData.Current.Length;
 			for (int i = 0; i < this.data.Length; i++) {
 				this.data[i] = ~0;
 			}
@@ -41,7 +53,7 @@ public class ModuleSet : ICollection<Module> {
 
 	public ModuleSet(ModuleSet source) {
 		this.data = source.data.ToArray();
-		this.Count = source.Count;
+		this.count = source.count;
 		this.entropy = source.Entropy;
 		this.entropyOutdated = false;
 	}
@@ -62,7 +74,7 @@ public class ModuleSet : ICollection<Module> {
 	
 		if ((value & mask) == 0) {
 			this.data[i] = value | mask;
-			this.Count++;
+			this.count++;
 			this.entropyOutdated = true;
 		}
 	}
@@ -75,7 +87,7 @@ public class ModuleSet : ICollection<Module> {
 	
 		if ((value & mask) != 0) {
 			this.data[i] = value & ~mask;
-			this.Count--;
+			this.count--;
 			this.entropyOutdated = true;
 			return true;
 		} else {
@@ -96,7 +108,7 @@ public class ModuleSet : ICollection<Module> {
 	}
 
 	public void Clear() {
-		this.Count = 0;
+		this.count = 0;
 		this.entropyOutdated = true;
 		for (int i = 0; i < this.data.Length; i++) {
 			this.data[i] = 0;
@@ -125,10 +137,10 @@ public class ModuleSet : ICollection<Module> {
 			}
 			for (int j = 0; j < bitsPerItem; j++) {
 				if ((value & ((long)1 << j)) != 0) {
-					yield return Module.All[index];
+					yield return ModuleData.Current[index];
 				}
 				index++;
-				if (index >= Module.All.Length) {
+				if (index >= ModuleData.Current.Length) {
 					yield break;
 				}
 			}
@@ -140,7 +152,7 @@ public class ModuleSet : ICollection<Module> {
 	}
 
 	public void PrintDebug() {
-		var s = this.Count + ": " + string.Join("-", this.data.Select(l => Convert.ToString(l, 2)).ToArray()) + "   --   " + string.Join(", ", this.Select(m => m.Index.ToString()).ToArray());
+		var s = this.count + ": " + string.Join("-", this.data.Select(l => Convert.ToString(l, 2)).ToArray()) + "   --   " + string.Join(", ", this.Select(m => m.Index.ToString()).ToArray());
 		Debug.Log(s);
 	}
 
