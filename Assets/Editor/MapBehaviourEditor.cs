@@ -13,20 +13,6 @@ public class MapBehaviourEditor : Editor {
 		DrawDefaultInspector();
 
 		MapBehaviour mapBehaviour = (MapBehaviour)target;
-
-		if (GUILayout.Button("Create module data")) {
-			mapBehaviour.CreateModules();
-			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-		}
-
-		if (GUILayout.Button("Simplify module data")) {
-			mapBehaviour.CreateModules();
-			mapBehaviour.SimplifyNeighborData();
-			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-		}
-
-		GUILayout.Space(20f);
-
 		if (GUILayout.Button("Clear")) {
 			mapBehaviour.Clear();
 			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());

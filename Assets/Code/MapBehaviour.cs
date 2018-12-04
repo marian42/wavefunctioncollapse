@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
+public class MapBehaviour : MonoBehaviour {
 	public InfiniteMap Map;
 
 	public int MapHeight = 6;
@@ -13,16 +13,6 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	public BoundaryConstraint[] BoundaryConstraints;
 
 	public ModuleData ModuleData;
-	
-	public void CreateModules() {
-		if (this.ModuleData == null) {
-			Debug.LogError("ModuleData is not set. Please create a ModuleData object first and assign it to this MapBehaviour.");
-			return;
-		}
-		this.ModuleData.Modules = ModulePrototype.CreateModules(true).ToArray();
-		EditorUtility.SetDirty(this.ModuleData);
-		ModuleData.Current = this.ModuleData.Modules;
-	}
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
 		return this.transform.position
@@ -45,6 +35,7 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 	}
 
 	public void Initialize() {
+		ModuleData.Current = this.ModuleData.Modules;
 		this.Clear();
 		this.Map = new InfiniteMap(this.MapHeight);
 		if (this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
@@ -111,17 +102,6 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 			this.BuildSlot(this.Map.BuildQueue.Dequeue());
 		}
 	}
-	
-	public void OnBeforeSerialize() { }
-
-	public void OnAfterDeserialize() {
-		if (this.ModuleData != null && this.ModuleData.Modules != null && this.ModuleData.Modules.Length != 0) {
-			foreach (var module in this.ModuleData.Modules) {
-				module.DeserializeNeigbors(this.ModuleData.Modules);
-			}
-		}
-		ModuleData.Current = this.ModuleData.Modules;
-	}
 
 	public bool VisualizeSlots = false;
 
@@ -140,49 +120,6 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 			}
 			Handles.Label(mapBehaviour.GetWorldspacePosition(slot.Position), slot.Modules.Count.ToString());
 		}
-	}
-#endif
-
-#if UNITY_EDITOR
-	public void SimplifyNeighborData() {
-		const int height = 12;
-		int count = 0;
-		var center = new Vector3i(0, height / 2, 0);
-		
-		int p = 0;
-		foreach (var module in ModuleData.Current) {
-			var map = new InfiniteMap(height);
-			var slot = map.GetSlot(center);
-			try {
-				slot.Collapse(module);
-			}
-			catch (CollapseFailedException exception) {
-				this.BuildAllSlots();
-				throw new InvalidOperationException("Module " + module.Name + " creates a failure at relative position " + (exception.Slot.Position - center) + ".");
-			}
-			for (int direction = 0; direction < 6; direction++) {
-				var neighbor = slot.GetNeighbor(direction);
-				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
-				module.PossibleNeighbors[direction] = module.PossibleNeighbors[direction].Where(m => neighbor.Modules.Contains(m)).ToArray();
-				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Length;
-			}
-			module.Cloud = new Dictionary<Vector3i, ModuleSet>();
-			foreach (var cloudSlot in map.GetAllSlots()) {
-				if (cloudSlot.Position.Equals(center)) {
-					continue;
-				}
-				if (cloudSlot.Modules.Full) {
-					continue;
-				}
-				module.Cloud[cloudSlot.Position - center] = cloudSlot.Modules;
-			}
-			Debug.Log(module.Cloud.Keys.Count);
-			p++;
-			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / ModuleData.Current.Length);
-		}
-		Debug.Log("Removed " + count + " impossible neighbors.");
-		EditorUtility.ClearProgressBar();
-		EditorUtility.SetDirty(this.ModuleData);
 	}
 #endif
 }
