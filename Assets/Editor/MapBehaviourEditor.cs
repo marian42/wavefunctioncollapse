@@ -37,7 +37,9 @@ public class MapBehaviourEditor : Editor {
 
 		if (GUILayout.Button("Initialize " + this.collapseAreaSize + "x" + this.collapseAreaSize + " area")) {
 			mapBehaviour.Initialize();
+			var startTime = System.DateTime.Now;
 			mapBehaviour.Map.Collapse(Vector3i.zero, new Vector3i(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
+			Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
 			mapBehaviour.BuildAllSlots();
 		}
 		GUILayout.EndHorizontal();
