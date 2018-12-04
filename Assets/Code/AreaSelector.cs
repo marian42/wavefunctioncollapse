@@ -31,7 +31,7 @@ public class AreaSelector : MonoBehaviour {
 	}
 
 #if UNITY_EDITOR
-	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
+	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmoForMyScript(AreaSelector areaSelector, GizmoType gizmoType) {
 		if (areaSelector.MapBehaviour == null || !areaSelector.MapBehaviour.Initialized) {
 			return;
