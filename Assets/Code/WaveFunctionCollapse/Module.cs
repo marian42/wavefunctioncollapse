@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -19,6 +19,8 @@ public class Module : ISerializationCallbackReceiver {
 	public int Index;
 
 	public string Name;
+
+	public Dictionary<Vector3i, ModuleSet> Cloud;
 
 	public Module(ModulePrototype prototype, int rotation, int index) {
 		this.Prototype = prototype;
@@ -61,6 +63,20 @@ public class Module : ISerializationCallbackReceiver {
 
 	[UnityEngine.SerializeField]
 	private int[] possibleNeighborIds;
+
+	[System.Serializable]
+	private class SerializableVectorModuleSetKVP {
+		public Vector3i Position;
+		public ModuleSet ModuleSet;
+
+		public SerializableVectorModuleSetKVP(Vector3i position, ModuleSet moduleSet) {
+			this.Position = position;
+			this.ModuleSet = moduleSet;
+		}
+	}
+
+	[UnityEngine.SerializeField]
+	private SerializableVectorModuleSetKVP[] cloud;
 	
 	public void OnBeforeSerialize() {
 		if (this.PossibleNeighbors == null || this.PossibleNeighbors.Length != 6) {
@@ -80,9 +96,22 @@ public class Module : ISerializationCallbackReceiver {
 				}
 			}
 		}
+
+		if (this.Cloud != null) {
+			this.cloud = this.Cloud.Select(kvp => new SerializableVectorModuleSetKVP(kvp.Key, kvp.Value)).ToArray();
+		} else {
+			this.cloud = null;
+		}
 	}
 
-	public void OnAfterDeserialize() {}
+	public void OnAfterDeserialize() {
+		if (this.cloud != null) {
+			this.Cloud = new Dictionary<Vector3i, ModuleSet>();
+			foreach (var kvp in this.cloud) {
+				this.Cloud[kvp.Position] = kvp.ModuleSet;
+			}
+		}		
+	}
 
 	public void DeserializeNeigbors(Module[] modules) {
 		if (this.possibleNeighborIds == null || this.possibleNeighborIds.Length == 0) {

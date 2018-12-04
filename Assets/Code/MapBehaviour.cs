@@ -141,12 +141,13 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 
 #if UNITY_EDITOR
 	public void SimplifyNeighborData() {
+		const int height = 12;
 		int count = 0;
-		var center = new Vector3i(0, 3, 0);
+		var center = new Vector3i(0, height / 2, 0);
 		
 		int p = 0;
-		foreach (var module in Module.All) {
-			var map = new InfiniteMap(6);
+		foreach (var module in ModuleData.Current) {
+			var map = new InfiniteMap(height);
 			var slot = map.GetSlot(center);
 			try {
 				slot.Collapse(module);
@@ -161,8 +162,19 @@ public class MapBehaviour : MonoBehaviour, ISerializationCallbackReceiver {
 				module.PossibleNeighbors[direction] = module.PossibleNeighbors[direction].Where(m => neighbor.Modules.Contains(m)).ToArray();
 				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Length;
 			}
+			module.Cloud = new Dictionary<Vector3i, ModuleSet>();
+			foreach (var cloudSlot in map.GetAllSlots()) {
+				if (cloudSlot.Position.Equals(center)) {
+					continue;
+				}
+				if (cloudSlot.Modules.Full) {
+					continue;
+				}
+				module.Cloud[cloudSlot.Position - center] = cloudSlot.Modules;
+			}
+			Debug.Log(module.Cloud.Keys.Count);
 			p++;
-			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / this.Modules.Length);
+			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / ModuleData.Current.Length);
 		}
 		Debug.Log("Removed " + count + " impossible neighbors.");
 		EditorUtility.ClearProgressBar();
