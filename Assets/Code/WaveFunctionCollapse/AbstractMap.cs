@@ -80,54 +80,62 @@ public abstract class AbstractMap {
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets, bool showProgress = false) {
-		Slot.ResetIterationCount();
-		this.RemovalQueue.Clear();
-		this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
+		try {
+			Slot.ResetIterationCount();
+			this.RemovalQueue.Clear();
+			this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
 
-		while (this.workArea.Any()) {
-			float minEntropy = float.PositiveInfinity;
-			Slot selected = null;
+			while (this.workArea.Any()) {
+				float minEntropy = float.PositiveInfinity;
+				Slot selected = null;
 
-			foreach (var slot in workArea) {
-				float entropy = slot.Modules.Entropy;
-				if (entropy < minEntropy) {
-					selected = slot;
-					minEntropy = entropy;
+				foreach (var slot in workArea) {
+					float entropy = slot.Modules.Entropy;
+					if (entropy < minEntropy) {
+						selected = slot;
+						minEntropy = entropy;
+					}
 				}
-			}
-			try {
-				selected.CollapseRandom();
-			}
-			catch (CollapseFailedException) {
-				this.RemovalQueue.Clear();
-				if (this.History.TotalCount > this.backtrackBarrier) {
-					this.backtrackBarrier = this.History.TotalCount;
-					this.backtrackAmount = 2;
-				} else {
-					this.backtrackAmount *= 2;
+				try {
+					selected.CollapseRandom();
 				}
-				if (this.backtrackAmount > 10) {
-					Debug.Log("Backtracking " + this.backtrackAmount + " steps...");
+				catch (CollapseFailedException) {
+					this.RemovalQueue.Clear();
+					if (this.History.TotalCount > this.backtrackBarrier) {
+						this.backtrackBarrier = this.History.TotalCount;
+						this.backtrackAmount = 2;
+					} else {
+						this.backtrackAmount += 4;
+					}
+					if (this.backtrackAmount > 0) {
+						Debug.Log(this.History.Count + " Backtracking " + this.backtrackAmount + " steps...");
+					}
+					this.Undo(this.backtrackAmount);
 				}
-				this.Undo(this.backtrackAmount);
+
+#if UNITY_EDITOR
+				if (showProgress) {
+					if (EditorUtility.DisplayCancelableProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count())) {
+						EditorUtility.ClearProgressBar();
+						throw new Exception("Map generation cancelled.");
+					}
+				}
+#endif
 			}
 
 #if UNITY_EDITOR
 			if (showProgress) {
-				if (EditorUtility.DisplayCancelableProgressBar("Collapsing area... ", this.workArea.Count + " left...", 1f - (float)this.workArea.Count() / targets.Count())) {
-					EditorUtility.ClearProgressBar();
-					throw new Exception("Map generation cancelled.");
-				}
+				EditorUtility.ClearProgressBar();
 			}
+			Debug.Log("Collapsed " + targets.Count() + " slots in " + Slot.GetIterationCount() + " iterations (" + (float)Slot.GetIterationCount() / targets.Count() + " iterations per slot)");
 #endif
 		}
-
-#if UNITY_EDITOR
-		if (showProgress) {
-			EditorUtility.ClearProgressBar();
+		catch (Exception e) {
+			if (showProgress) {
+				EditorUtility.ClearProgressBar();
+				throw e;
+			}
 		}
-		Debug.Log("Collapsed " + targets.Count() + " slots in " + Slot.GetIterationCount() + " iterations (" + (float)Slot.GetIterationCount() / targets.Count() + " iterations per slot)");
-#endif
 	}
 
 	public void Collapse(Vector3i start, Vector3i size, bool showProgress = false) {
@@ -149,7 +157,13 @@ public abstract class AbstractMap {
 			foreach (var slotAddress in item.RemovedModules.Keys) {
 				this.GetSlot(slotAddress).AddModules(item.RemovedModules[slotAddress]);
 			}
+
+			item.Slot.Module = null;
+			this.NotifySlotCollapseUndone(item.Slot);
 			steps--;
+		}
+		if (this.History.Count == 0) {
+			this.backtrackBarrier = 0;
 		}
 	}
 

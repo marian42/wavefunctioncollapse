@@ -62,21 +62,30 @@ public class Slot {
 
 	public void CollapseFast(Module module) {
 		if (this.Collapsed) {
-			Debug.LogWarning("Trying to collapse already collapsed slot.");
-			return;
+			throw new System.InvalidOperationException("Trying to collapse already collapsed slot.");
 		}
 
+		var historyItem = new HistoryItem(this);
+		historyItem.RemovedModules[this.Position] = new ModuleSet(this.Modules);
+		this.map.History.Push(historyItem);
 		this.Module = module;
+		this.map.NotifySlotCollapsed(this);
 
 		foreach (var position in module.Cloud.Keys) {
 			var slot = this.map.GetSlot(this.Position + position);
 			if (slot == null || slot.Collapsed) {
 				continue;
 			}
-			slot.Modules.Intersect(module.Cloud[position]);
+			if (!historyItem.RemovedModules.ContainsKey(slot.Position)) {
+				historyItem.RemovedModules[slot.Position] = new ModuleSet();
+			}
+			var mask = module.Cloud[position];
+			historyItem.RemovedModules[slot.Position].UpdateHistory(slot.Modules, mask);
+			slot.Modules.Intersect(mask);
+			if (slot.Modules.Count == 0) {
+				throw new CollapseFailedException(this);
+			}
 		}
-
-		this.map.NotifySlotCollapsed(this);
 	}
 
 	private void checkConsistency(Module module) {
