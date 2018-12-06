@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HistoryItem {
-	// Use indices instead of references (int instead of Module) since references seem to confuse the garbage collector
 	public Dictionary<Vector3i, ModuleSet> RemovedModules;
 
 	public readonly Slot Slot;

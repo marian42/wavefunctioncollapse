@@ -237,7 +237,7 @@ public class ModulePrototype : MonoBehaviour {
 		}
 
 		return true;
-	}	
+	}
 
 	public static IEnumerable<ModulePrototype> GetAll() {
 		foreach (Transform transform in GameObject.FindObjectOfType<ModulePrototype>().transform.parent) {
