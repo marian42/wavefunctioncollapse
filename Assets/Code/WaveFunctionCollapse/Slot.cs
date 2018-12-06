@@ -142,8 +142,8 @@ public class Slot {
 					continue;
 				}
 
-				for (int i = 0; i < module.PossibleNeighbors[d].Length; i++) {
-					var possibleNeighbor = module.PossibleNeighbors[d][i];
+				for (int i = 0; i < module.PossibleNeighborsArray[d].Length; i++) {
+					var possibleNeighbor = module.PossibleNeighborsArray[d][i];
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
 						this.map.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
 					}

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -48,6 +48,12 @@ public class ModuleSet : ICollection<Module> {
 			for (int i = 0; i < this.data.Length; i++) {
 				this.data[i] = ~0;
 			}
+		}
+	}
+
+	public ModuleSet(IEnumerable<Module> source) : this() {
+		foreach (var module in source) {
+			this.Add(module);
 		}
 	}
 

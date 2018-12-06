@@ -35,9 +35,9 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 			}
 			for (int direction = 0; direction < 6; direction++) {
 				var neighbor = slot.GetNeighbor(direction);
-				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Length;
-				module.PossibleNeighbors[direction] = module.PossibleNeighbors[direction].Where(m => neighbor.Modules.Contains(m)).ToArray();
-				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Length;
+				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Count;
+				module.PossibleNeighbors[direction].Intersect(neighbor.Modules);
+				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Count;
 			}
 			module.Cloud = new Dictionary<Vector3i, ModuleSet>();
 			foreach (var cloudSlot in map.GetAllSlots()) {
@@ -49,7 +49,7 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 				}
 				module.Cloud[cloudSlot.Position - center] = cloudSlot.Modules;
 			}
-			Debug.Log(module.Cloud.Keys.Count);
+			module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
 			p++;
 			EditorUtility.DisplayProgressBar("Simplifying... " + count, module.Name, (float)p / this.Modules.Length);
 		}
@@ -89,33 +89,37 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 			EditorUtility.DisplayProgressBar("Creating module prototypes...", prototype.gameObject.name, (float)i / prototypes.Length);
 		}
 
+		ModuleData.Current = modules.ToArray();
+
 		foreach (var module in modules) {
-			module.PossibleNeighbors = new Module[6][];
+			module.PossibleNeighbors = new ModuleSet[6];
 			for (int direction = 0; direction < 6; direction++) {
 				var face = scenePrototype[module].Faces[Orientations.Rotate(direction, module.Rotation)];
-				module.PossibleNeighbors[direction] = modules
+				module.PossibleNeighbors[direction] = new ModuleSet(modules
 					.Where(neighbor => module.Fits(direction, neighbor)
 						&& (!respectNeigborExclusions || (
 							!face.ExcludedNeighbours.Contains(scenePrototype[neighbor])
 							&& !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].ExcludedNeighbours.Contains(scenePrototype[module]))
 							&& (!face.EnforceWalkableNeighbor || scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].Walkable)
 							&& (face.Walkable || !scenePrototype[neighbor].Faces[Orientations.Rotate((direction + 3) % 6, neighbor.Rotation)].EnforceWalkableNeighbor))
-					)
-					.ToArray();
+					));
 			}
+
+			module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
 		}
 		EditorUtility.ClearProgressBar();
 
 		return modules;
 	}
 
-	public void OnBeforeSerialize() { }
+	public void OnBeforeSerialize() {
+		
+	}
 
 	public void OnAfterDeserialize() {
-		if (this.Modules != null && this.Modules.Length != 0) {
-			foreach (var module in this.Modules) {
-				module.DeserializeNeigbors(this.Modules);
-			}
+		ModuleData.Current = this.Modules;
+		foreach (var module in this.Modules) {
+			module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
 		}
 	}
 }
