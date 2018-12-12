@@ -12,6 +12,8 @@ public class MapBehaviour : MonoBehaviour {
 
 	public BoundaryConstraint[] BoundaryConstraints;
 
+	public bool ApplyBoundaryConstraints = true;
+
 	public ModuleData ModuleData;
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
@@ -38,7 +40,7 @@ public class MapBehaviour : MonoBehaviour {
 		ModuleData.Current = this.ModuleData.Modules;
 		this.Clear();
 		this.Map = new InfiniteMap(this.MapHeight);
-		if (this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
+		if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
 			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
 		}
 	}
