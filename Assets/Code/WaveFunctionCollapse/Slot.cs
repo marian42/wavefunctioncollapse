@@ -179,7 +179,7 @@ public class Slot {
 	/// Add modules non-recursively.
 	/// Returns true if this lead to this slot changing from collapsed to not collapsed.
 	/// </summary>
-	public bool AddModules(ModuleSet modulesToAdd) {
+	public void AddModules(ModuleSet modulesToAdd) {
 		foreach (var module in modulesToAdd) {
 			if (this.Modules.Contains(module) || module == this.Module) {
 				continue;
@@ -201,9 +201,7 @@ public class Slot {
 		if (this.Collapsed && this.Modules.Count > 1) {
 			this.Module = null;
 			this.map.NotifySlotCollapseUndone(this);
-			return true;
 		}
-		return false;
 	}
 
 	public void EnforceConnector(int direction, int connector) {
