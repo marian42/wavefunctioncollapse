@@ -42,7 +42,7 @@ public class SlotInspectorEditor : Editor {
 			EditorGUILayout.PrefixLabel(proto.gameObject.name + " (" + (100f * list.Sum(module => module.Prototype.Probability) / slot.Modules.Sum(module => module.Prototype.Probability)).ToString("0.0") + "%)");
 			foreach (var module in list) {
 				if (GUILayout.Button("R" + module.Rotation)) {
-					slot.CollapseFast(module);
+					slot.Collapse(module);
 					mapBehaviour.BuildAllSlots();
 				}
 			}

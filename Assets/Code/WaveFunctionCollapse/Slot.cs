@@ -59,35 +59,7 @@ public class Slot {
 
 		this.map.NotifySlotCollapsed(this);
 	}
-
-	public void CollapseFast(Module module) {
-		if (this.Collapsed) {
-			throw new System.InvalidOperationException("Trying to collapse already collapsed slot.");
-		}
-
-		var historyItem = new HistoryItem(this);
-		historyItem.RemovedModules[this.Position] = new ModuleSet(this.Modules);
-		this.map.History.Push(historyItem);
-		this.Module = module;
-		this.map.NotifySlotCollapsed(this);
-
-		foreach (var position in module.Cloud.Keys) {
-			var slot = this.map.GetSlot(this.Position + position);
-			if (slot == null || slot.Collapsed) {
-				continue;
-			}
-			if (!historyItem.RemovedModules.ContainsKey(slot.Position)) {
-				historyItem.RemovedModules[slot.Position] = new ModuleSet();
-			}
-			var mask = module.Cloud[position];
-			historyItem.RemovedModules[slot.Position].UpdateHistory(slot.Modules, mask);
-			slot.Modules.Intersect(mask);
-			if (slot.Modules.Count == 0) {
-				throw new CollapseFailedException(this);
-			}
-		}
-	}
-
+	
 	private void checkConsistency(Module module) {
 		for (int d = 0; d < 6; d++) {
 			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbors[(d + 3) % 6].Contains(module)) {
@@ -114,11 +86,11 @@ public class Slot {
 		foreach (var candidate in this.Modules) {
 			p += candidate.Prototype.Probability;
 			if (p >= roll) {
-				this.CollapseFast(candidate);
+				this.Collapse(candidate);
 				return;
 			}
 		}
-		this.CollapseFast(this.Modules.First());
+		this.Collapse(this.Modules.First());
 	}
 
 	private static int iterationCount = 0;

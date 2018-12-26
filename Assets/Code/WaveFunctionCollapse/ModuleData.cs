@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -38,16 +38,6 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 				int unoptimizedNeighborCount = module.PossibleNeighbors[direction].Count;
 				module.PossibleNeighbors[direction].Intersect(neighbor.Modules);
 				count += unoptimizedNeighborCount - module.PossibleNeighbors[direction].Count;
-			}
-			module.Cloud = new Dictionary<Vector3i, ModuleSet>();
-			foreach (var cloudSlot in map.GetAllSlots()) {
-				if (cloudSlot.Position.Equals(center)) {
-					continue;
-				}
-				if (cloudSlot.Modules.Full) {
-					continue;
-				}
-				module.Cloud[cloudSlot.Position - center] = cloudSlot.Modules;
 			}
 			module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
 			p++;

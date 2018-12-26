@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEditor;
 
 [System.Serializable]
-public class Module : ISerializationCallbackReceiver {
+public class Module {
 	public string Name;
 
 	public ModulePrototype Prototype;
@@ -19,8 +19,6 @@ public class Module : ISerializationCallbackReceiver {
 
 	[HideInInspector]
 	public int Index;
-
-	public Dictionary<Vector3i, ModuleSet> Cloud;
 
 	public Module(GameObject prefab, int rotation, int index) {
 		this.Rotation = rotation;
@@ -71,25 +69,5 @@ public class Module : ISerializationCallbackReceiver {
 			this.Position = position;
 			this.ModuleSet = moduleSet;
 		}
-	}
-
-	[UnityEngine.SerializeField]
-	private SerializableVectorModuleSetKVP[] cloud;
-	
-	public void OnBeforeSerialize() {
-		if (this.Cloud != null) {
-			this.cloud = this.Cloud.Select(kvp => new SerializableVectorModuleSetKVP(kvp.Key, kvp.Value)).ToArray();
-		} else {
-			this.cloud = null;
-		}
-	}
-
-	public void OnAfterDeserialize() {
-		if (this.cloud != null) {
-			this.Cloud = new Dictionary<Vector3i, ModuleSet>();
-			foreach (var kvp in this.cloud) {
-				this.Cloud[kvp.Position] = kvp.ModuleSet;
-			}
-		}
-	}
+	}	
 }
