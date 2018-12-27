@@ -137,7 +137,7 @@ public class Slot {
 
 		this.Modules.Remove(modulesToRemove);
 
-		if (this.Modules.Count == 0) {
+		if (this.Modules.Empty) {
 			throw new CollapseFailedException(this);
 		}
 
@@ -177,7 +177,7 @@ public class Slot {
 			this.Modules.Add(module);
 		}
 
-		if (this.Collapsed && this.Modules.Count > 1) {
+		if (this.Collapsed && !this.Modules.Empty) {
 			this.Module = null;
 			this.map.NotifySlotCollapseUndone(this);
 		}

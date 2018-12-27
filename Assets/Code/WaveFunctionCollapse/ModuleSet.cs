@@ -14,18 +14,41 @@ public class ModuleSet : ICollection<Module> {
 	private float entropy;
 	private bool entropyOutdated = true;
 
-	[SerializeField]
-	private int count;
-
 	public int Count {
 		get {
-			return this.count;
+			int result = 0;
+			for (int i = 0; i < this.data.Length - 1; i++) {
+				result += countBits(this.data[i]);
+			}
+			return result + countBits(this.data[this.data.Length - 1] & this.lastItemUsageMask);
+		}
+	}
+
+	private long lastItemUsageMask {
+		get {
+			return ((long)1 << (ModuleData.Current.Length % 64)) - 1;
 		}
 	}
 
 	public bool Full {
 		get {
-			return this.count == ModuleData.Current.Length;
+			for (int i = 0; i < this.data.Length - 1; i++) {
+				if (this.data[i] != ~0) {
+					return false;
+				}
+			}
+			return (~this.data[this.data.Length - 1] & this.lastItemUsageMask) == 0;
+		}
+	}
+
+	public bool Empty {
+		get {
+			for (int i = 0; i < this.data.Length - 1; i++) {
+				if (this.data[i] != 0) {
+					return false;
+				}
+			}
+			return (this.data[this.data.Length - 1] & this.lastItemUsageMask) == 0;
 		}
 	}
 
@@ -41,10 +64,8 @@ public class ModuleSet : ICollection<Module> {
 	
 	public ModuleSet(bool initializeFull = false) {
 		this.data = new long[ModuleData.Current.Length / bitsPerItem + (ModuleData.Current.Length % bitsPerItem == 0 ? 0 : 1)];
-		this.count = 0;
-
+		
 		if (initializeFull) {
-			this.count = ModuleData.Current.Length;
 			for (int i = 0; i < this.data.Length; i++) {
 				this.data[i] = ~0;
 			}
@@ -59,7 +80,6 @@ public class ModuleSet : ICollection<Module> {
 
 	public ModuleSet(ModuleSet source) {
 		this.data = source.data.ToArray();
-		this.count = source.count;
 		this.entropy = source.Entropy;
 		this.entropyOutdated = false;
 	}
@@ -80,7 +100,6 @@ public class ModuleSet : ICollection<Module> {
 	
 		if ((value & mask) == 0) {
 			this.data[i] = value | mask;
-			this.count++;
 			this.entropyOutdated = true;
 		}
 	}
@@ -93,7 +112,6 @@ public class ModuleSet : ICollection<Module> {
 	
 		if ((value & mask) != 0) {
 			this.data[i] = value & ~mask;
-			this.count--;
 			this.entropyOutdated = true;
 			return true;
 		} else {
@@ -114,7 +132,6 @@ public class ModuleSet : ICollection<Module> {
 	}
 
 	public void Clear() {
-		this.count = 0;
 		this.entropyOutdated = true;
 		for (int i = 0; i < this.data.Length; i++) {
 			this.data[i] = 0;
@@ -134,15 +151,9 @@ public class ModuleSet : ICollection<Module> {
 			long updated = current & mask;
 
 			if (current != updated) {
-
-				// TODO make count update faster
-				long removed = current ^= updated;
-				while (removed != 0) {
-					this.count--;
-					removed &= removed - 1;
-				}
+				this.data[i] = updated;
+				this.entropyOutdated = true;
 			}
-			this.data[i] = updated;
 		}
 	}
 
@@ -152,14 +163,9 @@ public class ModuleSet : ICollection<Module> {
 			long updated = current | set.data[i];
 
 			if (current != updated) {
-				// TODO make count update faster
-				long added = current ^= updated;
-				while (added != 0) {
-					this.count++;
-					added &= added - 1;
-				}
+				this.data[i] = updated;
+				this.entropyOutdated = true;
 			}
-			this.data[i] = updated;
 		}
 	}
 
@@ -169,33 +175,17 @@ public class ModuleSet : ICollection<Module> {
 			long updated = current & ~set.data[i];
 
 			if (current != updated) {
-				// TODO make count update faster
-				long removed = current ^= updated;
-				while (removed != 0) {
-					this.count--;
-					removed &= removed - 1;
-				}
+				this.data[i] = updated;
+				this.entropyOutdated = true;
 			}
-			this.data[i] = updated;
 		}
 	}
 
-	public void RemoveCommon(ModuleSet set1, ModuleSet set2) {
-		for (int i = 0; i < this.data.Length; i++) {
-			long current = this.data[i];
-			long mask = set1.data[i] & set2.data[i];
-			long updated = current | mask;
-
-			if (current != updated) {
-				// TODO make count update faster
-				long added = current ^= updated;
-				while (added != 0) {
-					this.count++;
-					added &= added - 1;
-				}
-			}
-			this.data[i] = updated;
-		}
+	// https://stackoverflow.com/a/2709523/895589
+	private static int countBits(long i) {
+		i = i - ((i >> 1) & 0x5555555555555555);
+		i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
+		return (int)((((i + (i >> 4)) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56);
 	}
 
 	public bool IsReadOnly {
@@ -231,33 +221,8 @@ public class ModuleSet : ICollection<Module> {
 		}
 	}
 
-	public IEnumerable<Module> With(ModuleSet toExclude) {
-		int index = 0;
-		for (int i = 0; i < this.data.Length; i++) {
-			long value = this.data[i] & toExclude.data[i];
-			if (value == 0) {
-				index += bitsPerItem;
-				continue;
-			}
-			for (int j = 0; j < bitsPerItem; j++) {
-				if ((value & ((long)1 << j)) != 0) {
-					yield return ModuleData.Current[index];
-				}
-				index++;
-				if (index >= ModuleData.Current.Length) {
-					yield break;
-				}
-			}
-		}
-	}
-
 	IEnumerator IEnumerable.GetEnumerator() {
 		return (IEnumerator)this.GetEnumerator();
-	}
-
-	public void PrintDebug() {
-		var s = this.count + ": " + string.Join("-", this.data.Select(l => Convert.ToString(l, 2)).ToArray()) + "   --   " + string.Join(", ", this.Select(m => m.Index.ToString()).ToArray());
-		Debug.Log(s);
 	}
 
 	private float calculateEntropy() {
