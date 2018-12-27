@@ -561,6 +561,7 @@ MonoBehaviour:
     Direction: 2
     Mode: 1
     Connector: 31
+  ApplyBoundaryConstraints: 1
   ModuleData: {fileID: 11400000, guid: 11e00c257c1c9a74f97fa889218a97bd, type: 2}
   VisualizeSlots: 0
 --- !u!4 &1916848027

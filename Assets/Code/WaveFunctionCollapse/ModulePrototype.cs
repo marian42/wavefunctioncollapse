@@ -239,14 +239,5 @@ public class ModulePrototype : MonoBehaviour {
 		return true;
 	}
 
-	public static IEnumerable<ModulePrototype> GetAll() {
-		foreach (Transform transform in GameObject.FindObjectOfType<ModulePrototype>().transform.parent) {
-			var item = transform.GetComponent<ModulePrototype>();
-			if (item != null && item.enabled) {
-				yield return item;
-			}
-		}
-	}
-
 	void Update() { }
 }

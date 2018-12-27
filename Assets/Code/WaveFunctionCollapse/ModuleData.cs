@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -9,12 +9,9 @@ using System;
 public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 	public static Module[] Current;
 
+	public GameObject Prototypes;
+
 	public Module[] Modules;
-	
-	public void CreateModules() {
-		this.Modules = ModuleData.CreateModules(true).ToArray();
-		EditorUtility.SetDirty(this);
-	}
 
 #if UNITY_EDITOR
 	public void SimplifyNeighborData() {
@@ -49,11 +46,22 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 	}
 #endif
 
-	public static List<Module> CreateModules(bool respectNeigborExclusions) {
+
+
+	private IEnumerable<ModulePrototype> getPrototypes() {
+		foreach (Transform transform in this.Prototypes.transform) {
+			var item = transform.GetComponent<ModulePrototype>();
+			if (item != null && item.enabled) {
+				yield return item;
+			}
+		}
+	}
+
+	public void CreateModules(bool respectNeigborExclusions = true) {
 		int count = 0;
 		var modules = new List<Module>();
 
-		var prototypes = ModulePrototype.GetAll().ToArray();
+		var prototypes = this.getPrototypes().ToArray();
 
 		var scenePrototype = new Dictionary<Module, ModulePrototype>();
 
@@ -65,11 +73,9 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 				}
 			}
 
-			var prefab = PrefabUtility.CreatePrefab("Assets/ModulePrefabs/" + prototype.gameObject.name + ".prefab", prototype.gameObject);
-
 			for (int rotation = 0; rotation < 4; rotation++) {
 				if (rotation == 0 || !prototype.CompareRotatedVariants(0, rotation)) {
-					var module = new Module(prefab, rotation, count);
+					var module = new Module(prototype.gameObject, rotation, count);
 					modules.Add(module);
 					scenePrototype[module] = prototype;
 					count++;
@@ -99,7 +105,8 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 		}
 		EditorUtility.ClearProgressBar();
 
-		return modules;
+		this.Modules = modules.ToArray();
+		EditorUtility.SetDirty(this);
 	}
 
 	public void OnBeforeSerialize() {
