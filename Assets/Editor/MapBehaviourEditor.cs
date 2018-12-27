@@ -13,20 +13,6 @@ public class MapBehaviourEditor : Editor {
 		DrawDefaultInspector();
 
 		MapBehaviour mapBehaviour = (MapBehaviour)target;
-
-		if (GUILayout.Button("Create module data")) {
-			mapBehaviour.CreateModules();
-			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-		}
-
-		if (GUILayout.Button("Simplify module data")) {
-			mapBehaviour.CreateModules();
-			mapBehaviour.SimplifyNeighborData();
-			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-		}
-
-		GUILayout.Space(20f);
-
 		if (GUILayout.Button("Clear")) {
 			mapBehaviour.Clear();
 			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
@@ -37,7 +23,9 @@ public class MapBehaviourEditor : Editor {
 
 		if (GUILayout.Button("Initialize " + this.collapseAreaSize + "x" + this.collapseAreaSize + " area")) {
 			mapBehaviour.Initialize();
+			var startTime = System.DateTime.Now;
 			mapBehaviour.Map.Collapse(Vector3i.zero, new Vector3i(this.collapseAreaSize, mapBehaviour.Map.Height, this.collapseAreaSize), true);
+			Debug.Log("Initialized in " + (System.DateTime.Now - startTime).TotalSeconds + " seconds.");
 			mapBehaviour.BuildAllSlots();
 		}
 		GUILayout.EndHorizontal();

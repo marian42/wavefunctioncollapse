@@ -3,28 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor;
 
 [System.Serializable]
-public class Module : ISerializationCallbackReceiver {
-	public static Module[] All;
+public class Module {
+	public string Name;
 
 	public ModulePrototype Prototype;
+	public GameObject Prefab;
 
 	public int Rotation;
 	
-	// Direction -> Array of modules that may be placed adjacent in this direction
-	[System.NonSerialized]
-	public Module[][] PossibleNeighbors;
+	public ModuleSet[] PossibleNeighbors;
+	public Module[][] PossibleNeighborsArray;
 
+	[HideInInspector]
 	public int Index;
 
-	public string Name;
+	// This is precomputed to make entropy calculation faster
+	public float PLogP;
 
-	public Module(ModulePrototype prototype, int rotation, int index) {
-		this.Prototype = prototype;
+	public Module(GameObject prefab, int rotation, int index) {
 		this.Rotation = rotation;
 		this.Index = index;
-		this.Name = prototype.gameObject.name + " R" + rotation;
+		this.Prefab = prefab;
+		this.Prototype = this.Prefab.GetComponent<ModulePrototype>();
+		this.Name = this.Prototype.gameObject.name + " R" + rotation;
+		this.PLogP = this.Prototype.Probability * Mathf.Log(this.Prototype.Probability);
 	}
 
 	public bool Fits(int direction, Module module) {
@@ -59,46 +64,14 @@ public class Module : ISerializationCallbackReceiver {
 		return this.Name;
 	}
 
-	[UnityEngine.SerializeField]
-	private int[] possibleNeighborIds;
-	
-	public void OnBeforeSerialize() {
-		if (this.PossibleNeighbors == null || this.PossibleNeighbors.Length != 6) {
-			this.possibleNeighborIds = null;
-			return;
+	[System.Serializable]
+	private class SerializableVectorModuleSetKVP {
+		public Vector3i Position;
+		public ModuleSet ModuleSet;
+
+		public SerializableVectorModuleSetKVP(Vector3i position, ModuleSet moduleSet) {
+			this.Position = position;
+			this.ModuleSet = moduleSet;
 		}
-
-		int nMax = this.PossibleNeighbors.Max(a => a.Length);
-		this.possibleNeighborIds = new int[6 * nMax];
-
-		for (int d = 0; d < 6; d++) {
-			for (int i = 0; i < nMax; i++) {
-				if (this.PossibleNeighbors[d].Length > i) {
-					this.possibleNeighborIds[d * nMax + i] = this.PossibleNeighbors[d][i].Index;
-				} else {
-					this.possibleNeighborIds[d * nMax + i] = -1;
-				}
-			}
-		}
-	}
-
-	public void OnAfterDeserialize() {}
-
-	public void DeserializeNeigbors(Module[] modules) {
-		if (this.possibleNeighborIds == null || this.possibleNeighborIds.Length == 0) {
-			return;
-		}
-
-		this.PossibleNeighbors = new Module[6][];
-		int nMax = this.possibleNeighborIds.Length / 6;
-		for (int d = 0; d < 6; d++) {
-			var neighbors = new List<Module>();
-			for (int i = 0; i < nMax; i++) {
-				if (this.possibleNeighborIds[d * nMax + i] != -1) {
-					neighbors.Add(modules[this.possibleNeighborIds[d * nMax + i]]);
-				}
-			}
-			this.PossibleNeighbors[d] = neighbors.ToArray();
-		}
-	}
+	}	
 }

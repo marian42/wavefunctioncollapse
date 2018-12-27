@@ -19,7 +19,7 @@ public class InfiniteMap : AbstractMap {
 		this.Height = height;
 		this.slots = new Dictionary<Vector3i, Slot>();
 
-		if (Module.All == null || Module.All.Length == 0) {
+		if (ModuleData.Current == null || ModuleData.Current.Length == 0) {
 			throw new InvalidOperationException("Module data was not available, please create module data first.");
 		}
 	}
@@ -46,7 +46,7 @@ public class InfiniteMap : AbstractMap {
 		if (this.defaultColumn != null) {
 			this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
 		} else {
-			this.slots[position] = new Slot(position, this, true);
+			this.slots[position] = new Slot(position, this);
 		}
 		return this.slots[position];
 	}

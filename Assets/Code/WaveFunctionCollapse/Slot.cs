@@ -25,16 +25,16 @@ public class Slot {
 		}
 	}
 
-	public Slot(Vector3i position, AbstractMap map, bool initializeModuleHealth) {
+	public Slot(Vector3i position, AbstractMap map) {
 		this.Position = position;
 		this.map = map;
+		this.ModuleHealth = map.CopyInititalModuleHealth();
 		this.Modules = new ModuleSet(initializeFull: true);
-		if (initializeModuleHealth) {
-			this.ModuleHealth = map.CopyInititalModuleHealth();
-		}
 	}
 
-	public Slot(Vector3i position, AbstractMap map, Slot prototype) : this(position, map, false) {
+	public Slot(Vector3i position, AbstractMap map, Slot prototype) {
+		this.Position = position;
+		this.map = map;
 		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
 		this.Modules = new ModuleSet(prototype.Modules);
 	}
@@ -59,7 +59,7 @@ public class Slot {
 
 		this.map.NotifySlotCollapsed(this);
 	}
-
+	
 	private void checkConsistency(Module module) {
 		for (int d = 0; d < 6; d++) {
 			if (this.GetNeighbor(d) != null && this.GetNeighbor(d).Collapsed && !this.GetNeighbor(d).Module.PossibleNeighbors[(d + 3) % 6].Contains(module)) {
@@ -95,27 +95,33 @@ public class Slot {
 
 	private static int iterationCount = 0;
 
+
+	// This modifies the supplied ModuleSet as a side effect
 	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true) {
 #if UNITY_EDITOR
 		Slot.iterationCount++;
 #endif
 
-		foreach (var module in modulesToRemove) {
-			if (!this.Modules.Contains(module) || module == this.Module) {
+		modulesToRemove.Intersect(this.Modules);
+
+		if (this.map.History != null && this.map.History.Any()) {
+			var item = this.map.History.Peek();
+			if (!item.RemovedModules.ContainsKey(this.Position)) {
+				item.RemovedModules[this.Position] = new ModuleSet();
+			}
+			item.RemovedModules[this.Position].Add(modulesToRemove);
+		}
+
+		for (int d = 0; d < 6; d++) {
+			int inverseDirection = (d + 3) % 6;
+			var neighbor = this.GetNeighbor(d);
+			if (neighbor == null || neighbor.Forgotten) {
 				continue;
 			}
-			if (this.map.History != null && this.map.History.Any()) {
-				this.map.History.Peek().RemoveModule(this, module);
-			}
-			for (int d = 0; d < 6; d++) {
-				int inverseDirection = (d + 3) % 6;
-				var neighbor = this.GetNeighbor(d);
-				if (neighbor == null || neighbor.Forgotten) {
-					continue;
-				}
 
-				for (int i = 0; i < module.PossibleNeighbors[d].Length; i++) {
-					var possibleNeighbor = module.PossibleNeighbors[d][i];
+			foreach (var module in modulesToRemove) {
+				for (int i = 0; i < module.PossibleNeighborsArray[d].Length; i++) {
+					var possibleNeighbor = module.PossibleNeighborsArray[d][i];
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
 						this.map.RemovalQueue[neighbor.Position].Add(possibleNeighbor);
 					}
@@ -127,10 +133,11 @@ public class Slot {
 					neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index]--;
 				}
 			}
-			this.Modules.Remove(module);
 		}
 
-		if (this.Modules.Count == 0) {
+		this.Modules.Remove(modulesToRemove);
+
+		if (this.Modules.Empty) {
 			throw new CollapseFailedException(this);
 		}
 
@@ -151,7 +158,7 @@ public class Slot {
 	/// Add modules non-recursively.
 	/// Returns true if this lead to this slot changing from collapsed to not collapsed.
 	/// </summary>
-	public bool AddModules(ModuleSet modulesToAdd) {
+	public void AddModules(ModuleSet modulesToAdd) {
 		foreach (var module in modulesToAdd) {
 			if (this.Modules.Contains(module) || module == this.Module) {
 				continue;
@@ -170,12 +177,10 @@ public class Slot {
 			this.Modules.Add(module);
 		}
 
-		if (this.Collapsed && this.Modules.Count > 1) {
+		if (this.Collapsed && !this.Modules.Empty) {
 			this.Module = null;
 			this.map.NotifySlotCollapseUndone(this);
-			return true;
 		}
-		return false;
 	}
 
 	public void EnforceConnector(int direction, int connector) {
