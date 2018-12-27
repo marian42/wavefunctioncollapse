@@ -230,7 +230,7 @@ public class ModuleSet : ICollection<Module> {
 		float entropySum = 0;
 		foreach (var module in this) {
 			total += module.Prototype.Probability;
-			entropySum += module.Prototype.Probability * Mathf.Log(module.Prototype.Probability);
+			entropySum += module.PLogP;
 		}
 		return -1f / total * entropySum + Mathf.Log(total);
 	}

@@ -20,12 +20,16 @@ public class Module {
 	[HideInInspector]
 	public int Index;
 
+	// This is precomputed to make entropy calculation faster
+	public float PLogP;
+
 	public Module(GameObject prefab, int rotation, int index) {
 		this.Rotation = rotation;
 		this.Index = index;
 		this.Prefab = prefab;
 		this.Prototype = this.Prefab.GetComponent<ModulePrototype>();
 		this.Name = this.Prototype.gameObject.name + " R" + rotation;
+		this.PLogP = this.Prototype.Probability * Mathf.Log(this.Prototype.Probability);
 	}
 
 	public bool Fits(int direction, Module module) {
