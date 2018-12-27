@@ -46,7 +46,7 @@ public class InfiniteMap : AbstractMap {
 		if (this.defaultColumn != null) {
 			this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
 		} else {
-			this.slots[position] = new Slot(position, this, true);
+			this.slots[position] = new Slot(position, this);
 		}
 		return this.slots[position];
 	}

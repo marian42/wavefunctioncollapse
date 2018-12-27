@@ -25,16 +25,16 @@ public class Slot {
 		}
 	}
 
-	public Slot(Vector3i position, AbstractMap map, bool initializeModuleHealth) {
+	public Slot(Vector3i position, AbstractMap map) {
 		this.Position = position;
 		this.map = map;
+		this.ModuleHealth = map.CopyInititalModuleHealth();
 		this.Modules = new ModuleSet(initializeFull: true);
-		if (initializeModuleHealth) {
-			this.ModuleHealth = map.CopyInititalModuleHealth();
-		}
 	}
 
-	public Slot(Vector3i position, AbstractMap map, Slot prototype) : this(position, map, false) {
+	public Slot(Vector3i position, AbstractMap map, Slot prototype) {
+		this.Position = position;
+		this.map = map;
 		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
 		this.Modules = new ModuleSet(prototype.Modules);
 	}
