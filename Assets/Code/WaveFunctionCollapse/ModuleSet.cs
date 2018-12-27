@@ -123,21 +123,17 @@ public class ModuleSet : ICollection<Module> {
 
 	/// <summary>
 	/// Removes all modules that are not in the supplied set.
-	/// Returns true if this set was changed.
 	/// </summary>
 	/// <param name="moduleSet"></param>
 	/// <returns></returns>
 	
-	public bool Intersect(ModuleSet moduleSet) {
-		bool changed = false;
-
+	public void Intersect(ModuleSet moduleSet) {
 		for (int i = 0; i < this.data.Length; i++) {
 			long current = this.data[i];
 			long mask = moduleSet.data[i];
 			long updated = current & mask;
 
 			if (current != updated) {
-				changed = true;
 
 				// TODO make count update faster
 				long removed = current ^= updated;
@@ -148,8 +144,58 @@ public class ModuleSet : ICollection<Module> {
 			}
 			this.data[i] = updated;
 		}
+	}
 
-		return changed;
+	public void Add(ModuleSet set) {
+		for (int i = 0; i < this.data.Length; i++) {
+			long current = this.data[i];
+			long updated = current | set.data[i];
+
+			if (current != updated) {
+				// TODO make count update faster
+				long added = current ^= updated;
+				while (added != 0) {
+					this.count++;
+					added &= added - 1;
+				}
+			}
+			this.data[i] = updated;
+		}
+	}
+
+	public void Remove(ModuleSet set) {
+		for (int i = 0; i < this.data.Length; i++) {
+			long current = this.data[i];
+			long updated = current & ~set.data[i];
+
+			if (current != updated) {
+				// TODO make count update faster
+				long removed = current ^= updated;
+				while (removed != 0) {
+					this.count--;
+					removed &= removed - 1;
+				}
+			}
+			this.data[i] = updated;
+		}
+	}
+
+	public void RemoveCommon(ModuleSet set1, ModuleSet set2) {
+		for (int i = 0; i < this.data.Length; i++) {
+			long current = this.data[i];
+			long mask = set1.data[i] & set2.data[i];
+			long updated = current | mask;
+
+			if (current != updated) {
+				// TODO make count update faster
+				long added = current ^= updated;
+				while (added != 0) {
+					this.count++;
+					added &= added - 1;
+				}
+			}
+			this.data[i] = updated;
+		}
 	}
 
 	public bool IsReadOnly {
@@ -167,7 +213,28 @@ public class ModuleSet : ICollection<Module> {
 
 	public IEnumerator<Module> GetEnumerator() {
 		int index = 0;
-		foreach (long value in this.data) {
+		for (int i = 0; i < this.data.Length; i++) {
+			long value = this.data[i];
+			if (value == 0) {
+				index += bitsPerItem;
+				continue;
+			}
+			for (int j = 0; j < bitsPerItem; j++) {
+				if ((value & ((long)1 << j)) != 0) {
+					yield return ModuleData.Current[index];
+				}
+				index++;
+				if (index >= ModuleData.Current.Length) {
+					yield break;
+				}
+			}
+		}
+	}
+
+	public IEnumerable<Module> With(ModuleSet toExclude) {
+		int index = 0;
+		for (int i = 0; i < this.data.Length; i++) {
+			long value = this.data[i] & toExclude.data[i];
 			if (value == 0) {
 				index += bitsPerItem;
 				continue;

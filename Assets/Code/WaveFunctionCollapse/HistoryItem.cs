@@ -11,11 +11,4 @@ public class HistoryItem {
 		this.RemovedModules = new Dictionary<Vector3i, ModuleSet>();
 		this.Slot = slot;
 	}
-
-	public void RemoveModule(Slot slot, Module module) {
-		if (!this.RemovedModules.ContainsKey(slot.Position)) {
-			this.RemovedModules[slot.Position] = new ModuleSet();
-		}
-		this.RemovedModules[slot.Position].Add(module);
-	}
 }

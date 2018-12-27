@@ -95,25 +95,31 @@ public class Slot {
 
 	private static int iterationCount = 0;
 
+
+	// This modifies the supplied ModuleSet as a side effect
 	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true) {
 #if UNITY_EDITOR
 		Slot.iterationCount++;
 #endif
 
-		foreach (var module in modulesToRemove) {
-			if (!this.Modules.Contains(module) || module == this.Module) {
+		modulesToRemove.Intersect(this.Modules);
+
+		if (this.map.History != null && this.map.History.Any()) {
+			var item = this.map.History.Peek();
+			if (!item.RemovedModules.ContainsKey(this.Position)) {
+				item.RemovedModules[this.Position] = new ModuleSet();
+			}
+			item.RemovedModules[this.Position].Add(modulesToRemove);
+		}
+
+		for (int d = 0; d < 6; d++) {
+			int inverseDirection = (d + 3) % 6;
+			var neighbor = this.GetNeighbor(d);
+			if (neighbor == null || neighbor.Forgotten) {
 				continue;
 			}
-			if (this.map.History != null && this.map.History.Any()) {
-				this.map.History.Peek().RemoveModule(this, module);
-			}
-			for (int d = 0; d < 6; d++) {
-				int inverseDirection = (d + 3) % 6;
-				var neighbor = this.GetNeighbor(d);
-				if (neighbor == null || neighbor.Forgotten) {
-					continue;
-				}
 
+			foreach (var module in modulesToRemove) {
 				for (int i = 0; i < module.PossibleNeighborsArray[d].Length; i++) {
 					var possibleNeighbor = module.PossibleNeighborsArray[d][i];
 					if (neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index] == 1 && neighbor.Modules.Contains(possibleNeighbor)) {
@@ -127,8 +133,9 @@ public class Slot {
 					neighbor.ModuleHealth[inverseDirection][possibleNeighbor.Index]--;
 				}
 			}
-			this.Modules.Remove(module);
 		}
+
+		this.Modules.Remove(modulesToRemove);
 
 		if (this.Modules.Count == 0) {
 			throw new CollapseFailedException(this);
