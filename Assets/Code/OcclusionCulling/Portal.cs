@@ -49,4 +49,13 @@ public class Portal {
 			this.Room2 = null;
 		}
 	}
+
+	public void ReplaceRoom(Room oldRoom, Room newRoom) {
+		if (this.Room1 == oldRoom) {
+			this.Room1 = newRoom;
+		}
+		if (this.Room2 == oldRoom) {
+			this.Room2 = newRoom;
+		}
+	}
 }

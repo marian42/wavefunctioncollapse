@@ -16108,7 +16108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
-  IsInterior: 0
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 50
@@ -16510,7 +16510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
-  IsInterior: 0
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 51
@@ -17100,7 +17100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
-  IsInterior: 0
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 51
@@ -17295,7 +17295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
-  IsInterior: 0
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 51
@@ -21431,7 +21431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
-  IsInterior: 0
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 51

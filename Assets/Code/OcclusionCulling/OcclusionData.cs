@@ -43,7 +43,7 @@ public class OcclusionData {
 			if (neighbor.Collapsed && this.roomsByPosition.ContainsKey(neighbor.Position)) {
 				if (room == null) {
 					room = this.roomsByPosition[neighbor.Position];
-				} else {
+				} if (room != this.roomsByPosition[neighbor.Position]) {
 					room = this.mergeRooms(this.roomsByPosition[neighbor.Position], room);
 				}
 			}
@@ -66,11 +66,9 @@ public class OcclusionData {
 				this.OutsideFacingPortals.Remove(portal);
 			}
 		}
-
-		this.clearOutdatedSlots();
 	}
 
-	private void clearOutdatedSlots() {
+	public void ClearOutdatedSlots() {
 		if (!this.outdatedSlots.Any()) {
 			return;
 		}
@@ -111,6 +109,10 @@ public class OcclusionData {
 			this.roomsByPosition[slot.Position] = room2;
 			room2.Slots.Add(slot);
 		}
+		foreach (var portal in room1.Portals) {
+			portal.ReplaceRoom(room1, room2);
+			room2.Portals.Add(portal);
+		}
 		this.rooms.Remove(room1);
 		return room2;
 	}
@@ -139,4 +141,12 @@ public class OcclusionData {
 			return portal;
 		}
 	}
+
+#if UNITY_EDITOR
+	public void DrawGizmo(MapBehaviour map) {
+		foreach (var room in this.rooms) {
+			room.DrawGizmo(map);
+		}
+	}
+#endif
 }

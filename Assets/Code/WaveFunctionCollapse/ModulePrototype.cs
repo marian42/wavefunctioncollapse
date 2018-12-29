@@ -96,7 +96,7 @@ public class ModulePrototype : MonoBehaviour {
 	
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmoForMyScript(ModulePrototype modulePrototype, GizmoType gizmoType) {
+	static void DrawGizmo(ModulePrototype modulePrototype, GizmoType gizmoType) {
 		Vector3 position = modulePrototype.transform.position;
 
 		if (ModulePrototype.style == null) {

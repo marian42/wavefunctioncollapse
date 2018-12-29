@@ -16,6 +16,8 @@ public class MapBehaviour : MonoBehaviour {
 
 	public ModuleData ModuleData;
 
+	public OcclusionData OcclusionData;
+
 	public Vector3 GetWorldspacePosition(Vector3i position) {
 		return this.transform.position
 			+ Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
@@ -43,6 +45,7 @@ public class MapBehaviour : MonoBehaviour {
 		if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
 			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
 		}
+		this.OcclusionData = new global::OcclusionData(this.Map);
 	}
 
 	public bool Initialized {
@@ -68,10 +71,12 @@ public class MapBehaviour : MonoBehaviour {
 			}
 			this.Map.BuildQueue.Dequeue();
 		}
+		this.OcclusionData.ClearOutdatedSlots();
 	}
 
 	public bool BuildSlot(Slot slot) {
 		if (slot.GameObject != null) {
+			this.OcclusionData.RemoveSlot(slot.Position);
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(slot.GameObject);
 #else
@@ -96,6 +101,7 @@ public class MapBehaviour : MonoBehaviour {
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = slot;
 		slot.GameObject = gameObject;
+		this.OcclusionData.AddSlot(slot);
 		return true;
 	}
 
@@ -109,7 +115,11 @@ public class MapBehaviour : MonoBehaviour {
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmoForMyScript(MapBehaviour mapBehaviour, GizmoType gizmoType) {
+	static void DrawGizmo(MapBehaviour mapBehaviour, GizmoType gizmoType) {
+		if (mapBehaviour.OcclusionData != null) {
+			mapBehaviour.OcclusionData.DrawGizmo(mapBehaviour);
+		}
+
 		if (!mapBehaviour.VisualizeSlots) {
 			return;
 		}
