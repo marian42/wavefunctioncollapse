@@ -5,7 +5,7 @@ using System.Threading;
 using UnityEngine;
 using System.Linq;
 
-[RequireComponent(typeof(InfiniteMap))]
+[RequireComponent(typeof(MapBehaviour))]
 public class FollowPlayer : MonoBehaviour {
 
 	private MapBehaviour mapBehaviour;

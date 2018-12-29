@@ -22,6 +22,8 @@ public class ModulePrototype : MonoBehaviour {
 		public ModulePrototype[] ExcludedNeighbours;
 
 		public bool EnforceWalkableNeighbor = false;
+
+		public bool IsOcclusionPortal = false;
 	}
 
 	[System.Serializable]
@@ -58,6 +60,7 @@ public class ModulePrototype : MonoBehaviour {
 
 	public float Probability = 1.0f;
 	public bool Spawn = true;
+	public bool IsInterior = false;
 
 	public HorizontalFaceDetails Left;
 	public VerticalFaceDetails Down;
@@ -111,6 +114,12 @@ public class ModulePrototype : MonoBehaviour {
 			if (modulePrototype.Faces[i].Walkable) {
 				Gizmos.color = Color.red;
 				Gizmos.DrawLine(modulePrototype.transform.position + Vector3.down * 0.1f, modulePrototype.transform.position + modulePrototype.transform.rotation * Orientations.Rotations[i] * Vector3.forward + Vector3.down * 0.1f);
+			}
+			if (modulePrototype.Faces[i].IsOcclusionPortal) {
+				Gizmos.color = Color.blue;
+
+				var dir = modulePrototype.transform.rotation * Orientations.Rotations[i] * Vector3.forward;
+				Gizmos.DrawWireCube(modulePrototype.transform.position + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z))) * 2f);
 			}
 		}
 	}
