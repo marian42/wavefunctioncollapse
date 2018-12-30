@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -20,6 +20,7 @@ public class OcclusionCulling : MonoBehaviour {
 	private HashSet<Vector3i> outdatedSlots;
 
 	public Camera Camera;
+	public Plane[] cameraFrustumPlanes;
 
 	public int RoomCount;
 	public int RoomsVisible;
@@ -149,6 +150,7 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	void Update() {
+		this.cameraFrustumPlanes = GeometryUtility.CalculateFrustumPlanes(this.Camera);
 		foreach (var room in this.rooms) {
 			room.SetVisibility(false);
 		}

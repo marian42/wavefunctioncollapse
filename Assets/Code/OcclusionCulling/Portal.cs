@@ -41,11 +41,15 @@ public class Portal {
 		this.Direction = direction;
 		this.Position2 = this.Position1 + Orientations.Direction[direction];
 		this.cullingData = cullingData;
+
+		var dir = Orientations.Direction[this.Direction].ToVector3();
+		this.Bounds = new Bounds(cullingData.MapBehaviour.GetWorldspacePosition(this.Position1) + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z))) * 2f);
 	}
 
-	public bool IsVisibleFromOutside(Camera camera) {
+	public bool IsVisibleFromOutside() {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
-		return Vector3.Angle(camera.transform.forward, -normal) < camera.fieldOfView / 2f + 90f;
+		return Vector3.Angle(this.cullingData.Camera.transform.forward, -normal) < this.cullingData.Camera.fieldOfView / 2f + 90f
+			&& GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
 	}
 
 	public void DrawGizmo(MapBehaviour map, Color color) {
