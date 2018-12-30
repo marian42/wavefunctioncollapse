@@ -27,6 +27,11 @@ public class MapBehaviour : MonoBehaviour {
 				(float)(position.Z) * InfiniteMap.BLOCK_SIZE);
 	}
 
+	public Vector3i GetMapPosition(Vector3 worldSpacePosition) {
+		var pos = (worldSpacePosition - this.transform.position) / InfiniteMap.BLOCK_SIZE;
+		return new Vector3i(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
+	}
+
 	public void Clear() {
 		var children = new List<Transform>();
 		foreach (Transform child in this.transform) {

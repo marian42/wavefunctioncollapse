@@ -61,7 +61,7 @@ public class SlotInspectorEditor : Editor {
 			return;
 		}
 
-		var position = slotInspector.GetPosition();
+		var position = slotInspector.MapBehaviour.GetMapPosition(slotInspector.transform.position);
 		GUILayout.Label("Position: " + position);
 
 		if (!mapBehaviour.Initialized) {
