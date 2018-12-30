@@ -6,10 +6,22 @@ public class Portal {
 
 	public readonly Vector3i Position1;
 	public readonly Vector3i Position2;
-	public int Direction;
+	public readonly int Direction;
 
-	public Room Room1;
-	public Room Room2;
+	private readonly OcclusionCulling cullingData;
+
+	public readonly Bounds Bounds;
+
+	public Room Room1 {
+		get {
+			return this.cullingData.GetRoom(this.Position1);
+		}
+	}
+	public Room Room2 {
+		get {
+			return this.cullingData.GetRoom(this.Position2);
+		}
+	}
 
 	public bool IsInside {
 		get {
@@ -17,45 +29,29 @@ public class Portal {
 		}
 	}
 
+	public Room Room {
+		get {
+			return this.Room1 ?? this.Room2;
+		}
+	}
+
 	// Direction must be 0, 1 or 2
-	public Portal(Vector3i position, int direction) {
+	public Portal(Vector3i position, int direction, OcclusionCulling cullingData) {
 		this.Position1 = position;
 		this.Direction = direction;
 		this.Position2 = this.Position1 + Orientations.Direction[direction];
+		this.cullingData = cullingData;
 	}
 
-	public void SetRoom(Vector3i position, Room room) {
-		if (position == this.Position1) {
-			if (this.Room1 != null) {
-				this.Room1.Portals.Remove(this);
-			}
-			this.Room1 = room;
-		} else if (position == this.Position2) {
-			if (this.Room2 != null) {
-				this.Room2.Portals.Remove(this);
-			}
-			this.Room2 = room;
-		} else {
-			throw new System.InvalidOperationException("Tried to assign a room to a portal for a slot position that the portal doesn't touch.");
-		}
-		room.Portals.Add(this);
+	public bool IsVisibleFromOutside(Camera camera) {
+		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
+		return Vector3.Angle(camera.transform.forward, -normal) < camera.fieldOfView / 2f + 90f;
 	}
 
-	public void RemoveRoom(Room room) {
-		if (this.Room1 == room) {
-			this.Room1 = null;
-		}
-		if (this.Room2 == room) {
-			this.Room2 = null;
-		}
-	}
-
-	public void ReplaceRoom(Room oldRoom, Room newRoom) {
-		if (this.Room1 == oldRoom) {
-			this.Room1 = newRoom;
-		}
-		if (this.Room2 == oldRoom) {
-			this.Room2 = newRoom;
-		}
+	public void DrawGizmo(MapBehaviour map, Color color) {
+		var pos = 0.5f * (map.GetWorldspacePosition(this.Position1) + map.GetWorldspacePosition(this.Position2));
+		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
+		Gizmos.color = color;
+		Gizmos.DrawLine(pos, pos + normal.normalized * 0.4f);
 	}
 }

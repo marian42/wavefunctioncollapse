@@ -9,10 +9,27 @@ public class Room {
 
 	public readonly Color Color;
 
+	public bool Visible;
+	public bool VisibilityOutdated;
+
+	public List<Renderer> Renderers;
+
 	public Room() {
 		this.Slots = new HashSet<Slot>();
 		this.Portals = new List<Portal>();
+		this.Renderers = new List<Renderer>();
 		this.Color = Color.HSVToRGB(Random.Range(0f, 1f), 1f, 1f);
+	}
+
+	public void SetVisibility(bool visible) {
+		if (!this.VisibilityOutdated && visible == this.Visible) {
+			return;
+		}
+		this.VisibilityOutdated = false;
+		this.Visible = visible;
+		foreach (var renderer in this.Renderers) {
+			renderer.enabled = visible;
+		}
 	}
 
 #if UNITY_EDITOR

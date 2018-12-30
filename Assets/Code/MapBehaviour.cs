@@ -16,7 +16,7 @@ public class MapBehaviour : MonoBehaviour {
 
 	public ModuleData ModuleData;
 
-	public OcclusionData OcclusionData;
+	public OcclusionCulling OcclusionData;
 
 	public Vector3 GetWorldspacePosition(Vector3i position) {
 		return this.transform.position
@@ -45,7 +45,8 @@ public class MapBehaviour : MonoBehaviour {
 		if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
 			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
 		}
-		this.OcclusionData = new global::OcclusionData(this.Map);
+		this.OcclusionData = this.GetComponent<OcclusionCulling>();
+		this.OcclusionData.Initialize();
 	}
 
 	public bool Initialized {
@@ -76,7 +77,7 @@ public class MapBehaviour : MonoBehaviour {
 
 	public bool BuildSlot(Slot slot) {
 		if (slot.GameObject != null) {
-			this.OcclusionData.RemoveSlot(slot.Position);
+			this.OcclusionData.RemoveSlot(slot);
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(slot.GameObject);
 #else
@@ -116,10 +117,6 @@ public class MapBehaviour : MonoBehaviour {
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmo(MapBehaviour mapBehaviour, GizmoType gizmoType) {
-		if (mapBehaviour.OcclusionData != null) {
-			mapBehaviour.OcclusionData.DrawGizmo(mapBehaviour);
-		}
-
 		if (!mapBehaviour.VisualizeSlots) {
 			return;
 		}
