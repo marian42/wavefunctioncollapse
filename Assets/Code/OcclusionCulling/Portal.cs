@@ -46,10 +46,73 @@ public class Portal {
 		this.Bounds = new Bounds(cullingData.MapBehaviour.GetWorldspacePosition(this.Position1) + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z))) * 2f);
 	}
 
+	public Room Follow(Room currentRoom) {
+		if (this.Room1 == currentRoom) {
+			return this.Room2;
+		} else {
+			return this.Room1;
+		}
+	}
+
 	public bool IsVisibleFromOutside() {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
 		return Vector3.Angle(this.cullingData.Camera.transform.forward, -normal) < this.cullingData.Camera.fieldOfView / 2f + 90f
 			&& GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+	}
+
+	public bool IsVisibleFromInside() {
+		return GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+	}
+
+	public Plane[] GetFrustumPlanes(Vector3 cameraPosition) {
+		var planes = new Plane[5];
+
+		Vector3 center = this.Bounds.center;
+
+		var corners = new Vector3[4];
+
+		switch (this.Direction) {
+			case 0:
+				corners[0] = new Vector3(0, +1, +1);
+				corners[1] = new Vector3(0, +1, -1);
+				corners[2] = new Vector3(0, -1, -1);
+				corners[3] = new Vector3(0, -1, +1);
+				break;
+			case 1:
+				corners[0] = new Vector3(+1, 0, +1);
+				corners[1] = new Vector3(+1, 0, -1);
+				corners[2] = new Vector3(-1, 0, -1);
+				corners[3] = new Vector3(-1, 0, +1);
+				break;
+			case 2:
+				corners[0] = new Vector3(+1, +1, 0);
+				corners[1] = new Vector3(+1, -1, 0);
+				corners[2] = new Vector3(-1, -1, 0);
+				corners[3] = new Vector3(-1, +1, 0);
+				break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			corners[i] += center;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			var normal = Vector3.Cross((corners[i] - cameraPosition).normalized, (corners[i] - corners[(i + 1) % 4]).normalized);
+			if (Vector3.Dot(normal, (center - corners[i]).normalized) < 0) {
+				normal *= -1f;
+			}
+
+			planes[i] = new Plane(normal, cameraPosition);
+			Debug.DrawLine(cameraPosition, corners[i]);
+		}
+
+		var portalNormal = Orientations.Direction[this.Direction].ToVector3();
+		if (Vector3.Dot(portalNormal, (center - cameraPosition).normalized) < 0) {
+			portalNormal *= -1f;
+		}
+		planes[4] = new Plane(portalNormal, center);
+
+		return planes;
 	}
 
 	public void DrawGizmo(MapBehaviour map, Color color) {
