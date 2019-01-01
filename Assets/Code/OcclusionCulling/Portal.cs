@@ -60,8 +60,8 @@ public class Portal {
 			&& GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
 	}
 
-	public bool IsVisibleFromInside() {
-		return GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+	public bool IsVisibleFromInside(Vector3 cameraPosition) {
+		return GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds) || this.Bounds.Contains(cameraPosition);
 	}
 
 	public Plane[] GetFrustumPlanes(Vector3 cameraPosition) {
@@ -103,7 +103,6 @@ public class Portal {
 			}
 
 			planes[i] = new Plane(normal, cameraPosition);
-			Debug.DrawLine(cameraPosition, corners[i]);
 		}
 
 		var portalNormal = Orientations.Direction[this.Direction].ToVector3();
