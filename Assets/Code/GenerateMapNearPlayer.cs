@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(MapBehaviour))]
-public class FollowPlayer : MonoBehaviour {
+public class GenerateMapNearPlayer : MonoBehaviour {
 
 	private MapBehaviour mapBehaviour;
 	private InfiniteMap map;
@@ -17,30 +17,20 @@ public class FollowPlayer : MonoBehaviour {
 
 	public float Range = 30;
 
-	public float UnloadRange = 60;
-
-	private Dictionary<Vector3i, bool> chunkVisibility;
-
 	private Vector3 targetPosition;
 	private Vector3 mapPosition;
 
-	private Queue<Vector3i> showQueue;
-	private Queue<Vector3i> hideQueue;
+	private HashSet<Vector3i> generatedChunks;
 
 	private Thread thread;
 
-	private int stepsWithoutVisibilityUpdate = 0;
-
 	void Start() {
-		this.chunkVisibility = new Dictionary<Vector3i, bool>();
+		this.generatedChunks = new HashSet<Vector3i>();
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
 		this.mapBehaviour.Initialize();
 		this.map = this.mapBehaviour.Map;
 		this.generate();
 		this.mapBehaviour.BuildAllSlots();
-
-		this.showQueue = new Queue<Vector3i>();
-		this.hideQueue = new Queue<Vector3i>();
 
 		this.thread = new Thread(this.generatorThread);
 		this.thread.Start();
@@ -66,10 +56,7 @@ public class FollowPlayer : MonoBehaviour {
 		for (int x = Mathf.FloorToInt(chunkX - this.Range / chunkSize); x < chunkX + this.Range / chunkSize; x++) {
 			for (int z = Mathf.FloorToInt(chunkZ - this.Range / chunkSize); z < chunkZ + this.Range / chunkSize; z++) {
 				var chunk = new Vector3i(x, 0, z);
-				if (this.chunkVisibility.ContainsKey(chunk)) {
-					if (!this.chunkVisibility[chunk]) {
-						this.setChunkVisible(chunk, true);
-					}
+				if (this.generatedChunks.Contains(chunk)) {
 					continue;
 				}
 				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
@@ -85,37 +72,14 @@ public class FollowPlayer : MonoBehaviour {
 
 		if (any) {
 			this.createChunk(closestMissingChunk);
-			this.stepsWithoutVisibilityUpdate++;
 		}
-
-		if (!any || this.stepsWithoutVisibilityUpdate > 15) {
-			foreach (var kvp in this.chunkVisibility.ToList()) {
-				var chunk = kvp.Key;
-				var center = (chunk.ToVector3() + new Vector3(0.5f, 0f, 0.5f)) * chunkSize - new Vector3(1f, 0f, 1f) * InfiniteMap.BLOCK_SIZE / 2;
-				bool inRange = Vector3.Distance(center, this.targetPosition - Vector3.up * this.targetPosition.y) < this.UnloadRange;
-				if (inRange != kvp.Value) {
-					this.setChunkVisible(chunk, inRange);
-				}
-			}
-			this.stepsWithoutVisibilityUpdate = 0;
-			Thread.Sleep(80);
-		}
-	}
-
-	private void setChunkVisible(Vector3i chunkAddress, bool visible) {
-		if (visible) {
-			this.showQueue.Enqueue(chunkAddress);
-		} else {
-			this.hideQueue.Enqueue(chunkAddress);
-		}
-		this.chunkVisibility[chunkAddress] = visible;
 	}
 
 	private void createChunk(Vector3i chunkAddress) {
 		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
 		this.map.rangeLimit = this.ChunkSize + 20;
 		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.map.Height, this.ChunkSize));
-		this.chunkVisibility[chunkAddress] = true;
+		this.generatedChunks.Add(chunkAddress);
 	}
 
 	private void generatorThread() {
@@ -146,20 +110,5 @@ public class FollowPlayer : MonoBehaviour {
 	void Update () {
 		this.targetPosition = this.Target.position;
 		this.mapPosition = this.mapBehaviour.transform.position;
-
-		if (this.showQueue.Count != 0) {
-			foreach (var slot in this.getSlotsInChunk(this.showQueue.Dequeue())) {
-				if (slot.GameObject != null) {
-					slot.GameObject.SetActive(true);
-				}
-			}
-		}
-		if (this.hideQueue.Count != 0) {
-			foreach (var slot in this.getSlotsInChunk(this.hideQueue.Dequeue())) {
-				if (slot.GameObject != null) {
-					slot.GameObject.SetActive(false);
-				}
-			}
-		}
 	}
 }
