@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -48,12 +48,15 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	public void AddSlot(Slot slot) {
+		if (!slot.Collapsed) {
+			return;
+		}
 		if (!slot.Module.Prototype.IsInterior) {
 			for (int i = 0; i < 6; i++) {
 				var face = slot.Module.GetFace(i);
 				if (face.IsOcclusionPortal) {
 					var portal = this.getPortal(slot.Position, i);
-					if (portal.Room != null && portal.Room.Portals.Contains(portal)) {
+					if (portal.Room != null && !portal.Room.Portals.Contains(portal)) {
 						portal.Room.Portals.Add(portal);
 					}
 				}
@@ -73,7 +76,7 @@ public class OcclusionCulling : MonoBehaviour {
 			if (neighbor == null) {
 				continue;
 			}
-			if (neighbor.Collapsed && this.roomsByPosition.ContainsKey(neighbor.Position)) {
+			if (neighbor.Collapsed && this.roomsByPosition.ContainsKey(neighbor.Position) && !neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal) {
 				if (room == null) {
 					room = this.roomsByPosition[neighbor.Position];
 				} if (room != this.roomsByPosition[neighbor.Position]) {
@@ -98,9 +101,13 @@ public class OcclusionCulling : MonoBehaviour {
 				continue;
 			}
 			var neighbor = slot.GetNeighbor(i);
-			if (face.IsOcclusionPortal || (neighbor != null && neighbor.Collapsed && !neighbor.Module.Prototype.IsInterior)) {
+			if (face.IsOcclusionPortal || (neighbor != null && neighbor.Collapsed && (!neighbor.Module.Prototype.IsInterior || neighbor.Module.GetFace((i + 3) % 6).IsOcclusionPortal))) {
 				var portal = this.getPortal(slot.Position, i);
 				room.Portals.Add(portal);
+				var otherRoom = portal.Follow(room);
+				if (otherRoom != null && !otherRoom.Portals.Contains(portal)) {
+					otherRoom.Portals.Add(portal);
+				}
 			}
 		}
 
@@ -124,20 +131,30 @@ public class OcclusionCulling : MonoBehaviour {
 		}
 	}
 
+	private void removePortal(Portal portal) {
+		this.portalsByPosition[portal.Position1][portal.Direction] = null;
+		this.Portals.Remove(portal);
+		if (portal.Room1 != null) {
+			portal.Room1.Portals.Remove(portal);
+		}
+		if (portal.Room2 != null) {
+			portal.Room2.Portals.Remove(portal);
+		}
+	}
+
 	public void RemoveSlot(Slot slot) {
 		this.exteriorBlocks.Remove(slot.Position);
 
 		if (this.roomsByPosition.ContainsKey(slot.Position)) {
 			var room = this.roomsByPosition[slot.Position];
+			foreach (var portal in room.Portals.ToArray()) {
+				this.removePortal(portal);
+			}
 			foreach (var roomSlot in room.Slots) {
 				this.outdatedSlots.Add(roomSlot.Position);
 				this.roomsByPosition.Remove(roomSlot.Position);
 			}
 			this.rooms.Remove(room);
-			foreach (var portal in room.Portals) {
-				this.portalsByPosition[portal.Position1][portal.Direction] = null;
-				this.Portals.Remove(portal);
-			}
 		}
 		this.outdatedSlots.Remove(slot.Position);
 	}
