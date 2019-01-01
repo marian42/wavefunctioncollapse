@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -9,33 +9,50 @@ public class OcclusionCulling : MonoBehaviour {
 	public MapBehaviour MapBehaviour;
 	public AbstractMap Map;
 
-	private List<Room> rooms;
-
 	private Dictionary<Vector3i, Room> roomsByPosition;
 
 	private Dictionary<Vector3i, Portal[]> portalsByPosition;
 
-	public List<Portal> Portals;
-
 	private HashSet<Vector3i> outdatedSlots;
 
-	public Dictionary<Vector3i, ExteriorBlock> exteriorBlocks;
-
 	private HashSet<Portal> visiblePortals;
+
+	private Dictionary<Vector3i, Chunk> chunks;
+	private List<Chunk> visibleChunks;
 
 	public Camera Camera;
 	public Plane[] cameraFrustumPlanes;
 
+	public int ChunkSize = 3;
+
 	public void Initialize() {
 		this.MapBehaviour = this.GetComponent<MapBehaviour>();
 		this.Map = this.MapBehaviour.Map;
-		this.rooms = new List<Room>();
 		this.roomsByPosition = new Dictionary<Vector3i, Room>();
 		this.portalsByPosition = new Dictionary<Vector3i, Portal[]>();
-		this.Portals = new List<Portal>();
 		this.outdatedSlots = new HashSet<Vector3i>();
-		this.exteriorBlocks = new Dictionary<Vector3i, ExteriorBlock>();
 		this.visiblePortals = new HashSet<Portal>();
+		this.chunks = new Dictionary<Vector3i, Chunk>();
+		this.visibleChunks = new List<Chunk>();
+	}
+
+	private Vector3i getChunkAddress(Vector3i position) {
+		return new Vector3i(Mathf.FloorToInt((float)position.X / this.ChunkSize), Mathf.FloorToInt((float)position.Y / this.ChunkSize), Mathf.FloorToInt((float)position.Z / this.ChunkSize));
+	}
+
+	private Chunk getChunk(Vector3i chunkAddress) {
+		if (this.chunks.ContainsKey(chunkAddress)) {
+			return this.chunks[chunkAddress];
+		}
+		var center = this.MapBehaviour.GetWorldspacePosition(chunkAddress * this.ChunkSize) + (this.ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
+		var chunk = new Chunk(new Bounds(center, Vector3.one * AbstractMap.BLOCK_SIZE * this.ChunkSize));
+		this.chunks[chunkAddress] = chunk;
+		this.visibleChunks.Add(chunk);
+		return chunk;
+	}
+
+	public Chunk getChunkFromPosition(Vector3i position) {
+		return this.getChunk(this.getChunkAddress(position));
 	}
 
 	public Room GetRoom(Vector3i position) {
@@ -50,6 +67,7 @@ public class OcclusionCulling : MonoBehaviour {
 		if (!slot.Collapsed) {
 			return;
 		}
+		var chunk = this.getChunkFromPosition(slot.Position);
 		if (!slot.Module.Prototype.IsInterior) {
 			for (int i = 0; i < 6; i++) {
 				var face = slot.Module.GetFace(i);
@@ -61,7 +79,7 @@ public class OcclusionCulling : MonoBehaviour {
 				}
 			}
 
-			this.exteriorBlocks[slot.Position] = new ExteriorBlock(slot, this.MapBehaviour);
+			chunk.AddBlock(new ExteriorBlock(slot, this.MapBehaviour), slot.Position);
 			return;
 		}
 
@@ -85,7 +103,7 @@ public class OcclusionCulling : MonoBehaviour {
 		}
 		if (room == null) {
 			room = new Room();
-			this.rooms.Add(room);
+			chunk.Rooms.Add(room);
 		}
 		room.Slots.Add(slot);
 		foreach (var renderer in slot.GameObject.GetComponentsInChildren<Renderer>()) {
@@ -128,7 +146,8 @@ public class OcclusionCulling : MonoBehaviour {
 
 	private void removePortal(Portal portal) {
 		this.portalsByPosition[portal.Position1][portal.Direction] = null;
-		this.Portals.Remove(portal);
+		this.getChunkFromPosition(portal.Position1).Portals.Remove(portal);
+		this.getChunkFromPosition(portal.Position2).Portals.Remove(portal);
 		if (portal.Room1 != null) {
 			portal.Room1.Portals.Remove(portal);
 		}
@@ -138,7 +157,8 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	public void RemoveSlot(Slot slot) {
-		this.exteriorBlocks.Remove(slot.Position);
+		var chunk = this.getChunkFromPosition(slot.Position);
+		chunk.RemoveBlock(slot.Position);
 
 		if (this.roomsByPosition.ContainsKey(slot.Position)) {
 			var room = this.roomsByPosition[slot.Position];
@@ -149,9 +169,18 @@ public class OcclusionCulling : MonoBehaviour {
 				this.outdatedSlots.Add(roomSlot.Position);
 				this.roomsByPosition.Remove(roomSlot.Position);
 			}
-			this.rooms.Remove(room);
+			this.removeRoom(room);
 		}
 		this.outdatedSlots.Remove(slot.Position);
+	}
+
+	private void removeRoom(Room room) {
+		foreach (var slot in room.Slots) {
+			var chunk = this.getChunkFromPosition(slot.Position);
+			if (chunk.Rooms.Contains(room)) {
+				chunk.Rooms.Remove(room);
+			}
+		}
 	}
 
 	private Room mergeRooms(Room room1, Room room2) {
@@ -164,7 +193,7 @@ public class OcclusionCulling : MonoBehaviour {
 		foreach (var portal in room1.Portals) {
 			room2.Portals.Add(portal);
 		}
-		this.rooms.Remove(room1);
+		this.removeRoom(room1);
 		return room2;
 	}
 
@@ -182,43 +211,49 @@ public class OcclusionCulling : MonoBehaviour {
 			}
 		} else {
 			// Looking outside
-			foreach (var outsideBlock in this.exteriorBlocks.Values) {
-				if (!outsideBlock.Visible && GeometryUtility.TestPlanesAABB(frustumPlanes, outsideBlock.Bounds)) {
-					outsideBlock.SetVisibility(true);
-				}
-			}
-			foreach (var outsidePortal in this.Portals) {
-				if (outsidePortal.IsInside || this.visiblePortals.Contains(outsidePortal) || !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds)) {
-					continue;
-				}
-				var otherRoom = outsidePortal.Room;
-				if (otherRoom == null) {
-					continue;
-				}
-				otherRoom.SetVisibility(true);
-				foreach (var roomPortal in otherRoom.Portals) {
-					if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
-						this.ShowPortal(roomPortal, otherRoom);
+			foreach (var chunk in this.visibleChunks) {
+				if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.Bounds) && GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
+					chunk.SetExteriorVisibility(true);
+					// TODO skip frustum test?
+					// TODO check portal normal
+					// TODO skip visiblePortals check???
+					foreach (var outsidePortal in chunk.Portals) {
+						if (outsidePortal.IsInside || this.visiblePortals.Contains(outsidePortal) || !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds)) {
+							continue;
+						}
+						var otherRoom = outsidePortal.Room;
+						if (otherRoom == null) {
+							continue;
+						}
+						otherRoom.SetVisibility(true);
+						foreach (var roomPortal in otherRoom.Portals) {
+							if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+								this.ShowPortal(roomPortal, otherRoom);
+							}
+						}
 					}
-				}
+				}				
 			}
+			
 		}
 	}
 
 	void Update() {
+		var start = System.DateTime.Now;
+
 		this.cameraFrustumPlanes = GeometryUtility.CalculateFrustumPlanes(this.Camera);
 		var cameraPosition = this.MapBehaviour.GetMapPosition(this.Camera.transform.position);
 		
-		foreach (var room in this.rooms) {
-			room.SetVisibility(false);
+		foreach (var chunk in this.visibleChunks) {
+			chunk.SetRoomVisibility(false);
 		}
 
 		this.visiblePortals.Clear();
 
 		if (this.roomsByPosition.ContainsKey(cameraPosition)) {
 			// Camera is inside a room
-			foreach (var exteriorBlock in this.exteriorBlocks.Values) {
-				exteriorBlock.SetVisibility(false);
+			foreach (var chunk in this.visibleChunks) {
+				chunk.SetExteriorVisibility(false);
 			}
 			var cameraRoom = this.roomsByPosition[cameraPosition];
 			cameraRoom.SetVisibility(true);
@@ -231,33 +266,51 @@ public class OcclusionCulling : MonoBehaviour {
 			}
 		} else {
 			// Camera is outside of any room
-			foreach (var exteriorBlock in this.exteriorBlocks.Values) {
-				exteriorBlock.SetVisibility(true);
+			foreach (var chunk in this.visibleChunks) {
+				chunk.SetExteriorVisibility(true);
 			}
-			foreach (var portal in this.Portals) {
-				if (portal.Room == null || portal.IsInside || this.visiblePortals.Contains(portal)) {
+			foreach (var chunk in this.visibleChunks) {
+				if (!GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
 					continue;
 				}
-				if (portal.IsVisibleFromOutside()) {
-					var room = portal.Room;
-					room.SetVisibility(true);
-					var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
-					foreach (var roomPortal in room.Portals) {
-						if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
-							this.ShowPortal(roomPortal, room);
+				foreach (var portal in chunk.Portals) {
+					// TODO skip visiblePortals ?
+					if (portal.Room == null || portal.IsInside || this.visiblePortals.Contains(portal)) {
+						continue;
+					}
+					if (portal.IsVisibleFromOutside()) {
+						var room = portal.Room;
+						room.SetVisibility(true);
+						var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
+						foreach (var roomPortal in room.Portals) {
+							if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+								this.ShowPortal(roomPortal, room);
+							}
 						}
 					}
-				}				
+				}
 			}
-		}	
+		}
+
+		var time = (System.DateTime.Now - start).TotalMilliseconds;
+		this.CullingTime = time;
 	}
 
+	public double CullingTime;
+
 	void OnDisable() {
-		foreach (var room in this.rooms) {
-			room.SetVisibility(true);
+		foreach (var chunk in this.chunks.Values) {
+			chunk.SetExteriorVisibility(true);
+			chunk.SetRoomVisibility(true);
 		}
-		foreach (var block in this.exteriorBlocks.Values) {
-			block.SetVisibility(true);
+	}
+
+	private void addPortalToChunks(Portal portal) {
+		var chunk1 = this.getChunkFromPosition(portal.Position1);
+		chunk1.Portals.Add(portal);
+		var chunk2 = this.getChunkFromPosition(portal.Position2);
+		if (chunk2 != chunk1) {
+			chunk2.Portals.Add(portal);
 		}
 	}
 
@@ -271,7 +324,7 @@ public class OcclusionCulling : MonoBehaviour {
 			if (array[direction] == null) {
 				var portal = new Portal(position, direction, this);
 				array[direction] = portal;
-				this.Portals.Add(portal);
+				this.addPortalToChunks(portal);
 				return portal;
 			} else {
 				return array[direction];
@@ -281,7 +334,7 @@ public class OcclusionCulling : MonoBehaviour {
 			var array = new Portal[3];
 			array[direction] = portal;
 			this.portalsByPosition[position] = array;
-			this.Portals.Add(portal);
+			this.addPortalToChunks(portal);
 			return portal;
 		}
 	}
@@ -291,19 +344,19 @@ public class OcclusionCulling : MonoBehaviour {
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmo(OcclusionCulling occlusion, GizmoType gizmoType) {
-		if (occlusion.rooms == null || occlusion.Portals == null) {
+		if (occlusion.visibleChunks == null) {
 			return;
 		}
-		if (occlusion.ShowRooms) {
-			foreach (var room in occlusion.rooms) {
-				room.DrawGizmo(occlusion.MapBehaviour);
+		foreach (var chunk in occlusion.visibleChunks) {
+			if (occlusion.ShowRooms) {
+				foreach (var room in chunk.Rooms) {
+					room.DrawGizmo(occlusion.MapBehaviour);
+				}
 			}
-		}
-		foreach (var portals in occlusion.portalsByPosition.Values) {
-			foreach (var portal in portals.Where(p => p != null)) {
+			foreach (var portal in chunk.Portals) {
 				portal.DrawGizmo(occlusion.MapBehaviour, portal.IsInside ? Color.black : Color.red);
 			}
-		}
+		}		
 	}
 #endif
 }

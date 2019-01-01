@@ -86,6 +86,7 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		try {
 			while (true) {
 				this.generate();
+				Thread.Sleep(50);
 			}
 		}
 		catch (Exception exception) {

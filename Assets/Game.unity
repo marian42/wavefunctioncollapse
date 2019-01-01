@@ -464,7 +464,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1277591053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.485, y: 5.45, z: -23.28}
+  m_LocalPosition: {x: -11.14, y: 6.72, z: -1.802}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -521,6 +521,7 @@ GameObject:
   - component: {fileID: 1916848027}
   - component: {fileID: 1916848026}
   - component: {fileID: 1916848028}
+  - component: {fileID: 1916848029}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -563,6 +564,7 @@ MonoBehaviour:
     Connector: 31
   ApplyBoundaryConstraints: 1
   ModuleData: {fileID: 11400000, guid: 11e00c257c1c9a74f97fa889218a97bd, type: 2}
+  OcclusionData: {fileID: 1916848029}
   VisualizeSlots: 0
 --- !u!4 &1916848027
 Transform:
@@ -591,4 +593,19 @@ MonoBehaviour:
   Target: {fileID: 784786034}
   ChunkSize: 5
   Range: 36
-  UnloadRange: 80
+--- !u!114 &1916848029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1916848025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a09e6760d7b1804888872376291fa21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapBehaviour: {fileID: 1916848026}
+  Camera: {fileID: 282840813}
+  ChunkSize: 6
+  CullingTime: 0
+  ShowRooms: 1
