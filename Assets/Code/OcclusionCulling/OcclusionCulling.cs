@@ -198,6 +198,8 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	private void ShowPortal(Portal portal, Room currentRoom) {
+		portal.Draw(Color.green);
+		portal.DrawFrustum(this.Camera.transform.position, Color.red);
 		this.visiblePortals.Add(portal);
 		var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
 		if (portal.IsInside) {
@@ -232,6 +234,8 @@ public class OcclusionCulling : MonoBehaviour {
 							continue;
 						}
 						otherRoom.SetVisibility(true);
+						portal.Draw(Color.yellow);
+						portal.DrawFrustum(this.Camera.transform.position, Color.cyan);
 						foreach (var roomPortal in otherRoom.Portals) {
 							if (roomPortal != portal && portal.IsInside && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
 								this.ShowPortal(roomPortal, otherRoom);

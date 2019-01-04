@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -34,6 +34,9 @@ public class Room {
 
 #if UNITY_EDITOR
 	public void DrawGizmo(MapBehaviour map) {
+		if (!this.Visible || this.VisibilityOutdated) {
+			return;
+		}
 		Gizmos.color = this.Color;
 
 		foreach (var slot in this.Slots) {

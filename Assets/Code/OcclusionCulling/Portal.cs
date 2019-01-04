@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,6 +65,66 @@ public class Portal {
 
 	public bool IsVisibleFromInside(Vector3 cameraPosition) {
 		return GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds) || this.Bounds.Contains(cameraPosition);
+	}
+
+	public void Draw(Color color) {
+		var corners = new Vector3[4];
+
+		switch (this.Direction) {
+			case 0:
+				corners[0] = new Vector3(0, +1, +1);
+				corners[1] = new Vector3(0, +1, -1);
+				corners[2] = new Vector3(0, -1, -1);
+				corners[3] = new Vector3(0, -1, +1);
+				break;
+			case 1:
+				corners[0] = new Vector3(+1, 0, +1);
+				corners[1] = new Vector3(+1, 0, -1);
+				corners[2] = new Vector3(-1, 0, -1);
+				corners[3] = new Vector3(-1, 0, +1);
+				break;
+			case 2:
+				corners[0] = new Vector3(+1, +1, 0);
+				corners[1] = new Vector3(+1, -1, 0);
+				corners[2] = new Vector3(-1, -1, 0);
+				corners[3] = new Vector3(-1, +1, 0);
+				break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			Debug.DrawLine(this.Bounds.center + corners[i], this.Bounds.center + corners[(i + 1) % 4], color);
+		}
+	}
+
+	public void DrawFrustum(Vector3 cameraPosition, Color color) {
+		var corners = new Vector3[4];
+
+		switch (this.Direction) {
+			case 0:
+				corners[0] = new Vector3(0, +1, +1);
+				corners[1] = new Vector3(0, +1, -1);
+				corners[2] = new Vector3(0, -1, -1);
+				corners[3] = new Vector3(0, -1, +1);
+				break;
+			case 1:
+				corners[0] = new Vector3(+1, 0, +1);
+				corners[1] = new Vector3(+1, 0, -1);
+				corners[2] = new Vector3(-1, 0, -1);
+				corners[3] = new Vector3(-1, 0, +1);
+				break;
+			case 2:
+				corners[0] = new Vector3(+1, +1, 0);
+				corners[1] = new Vector3(+1, -1, 0);
+				corners[2] = new Vector3(-1, -1, 0);
+				corners[3] = new Vector3(-1, +1, 0);
+				break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			var pos = this.Bounds.center + corners[i];
+			var dir = (pos - cameraPosition).normalized;
+			Debug.DrawLine(pos, pos + dir * 10f, color);
+		}
 	}
 
 	public Plane[] GetFrustumPlanes(Vector3 cameraPosition) {
