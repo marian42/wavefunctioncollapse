@@ -33,7 +33,7 @@ public class Chunk {
 			return;
 		}
 		foreach (var renderer in this.Renderers) {
-			renderer.enabled = value;
+			renderer.shadowCastingMode = value ? UnityEngine.Rendering.ShadowCastingMode.On : UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 		}
 		this.ExteriorBlocksVisible = value;
 	}
