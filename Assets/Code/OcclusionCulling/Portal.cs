@@ -137,11 +137,4 @@ public class Portal {
 
 		return planes;
 	}
-
-	public void DrawGizmo(MapBehaviour map, Color color) {
-		var pos = 0.5f * (map.GetWorldspacePosition(this.Position1) + map.GetWorldspacePosition(this.Position2));
-		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
-		Gizmos.color = color;
-		Gizmos.DrawLine(pos, pos + normal.normalized * 0.4f);
-	}
 }

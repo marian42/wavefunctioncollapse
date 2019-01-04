@@ -389,8 +389,6 @@ public class OcclusionCulling : MonoBehaviour {
 		}
 	}
 
-	public bool ShowRooms = true;
-
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmo(OcclusionCulling occlusion, GizmoType gizmoType) {
@@ -398,15 +396,10 @@ public class OcclusionCulling : MonoBehaviour {
 			return;
 		}
 		foreach (var chunk in occlusion.chunksInRange) {
-			if (occlusion.ShowRooms) {
-				foreach (var room in chunk.Rooms) {
-					room.DrawGizmo(occlusion.MapBehaviour);
-				}
+			foreach (var room in chunk.Rooms) {
+				room.DrawGizmo(occlusion.MapBehaviour);
 			}
-			foreach (var portal in chunk.Portals) {
-				portal.DrawGizmo(occlusion.MapBehaviour, portal.IsInside ? Color.black : Color.red);
-			}
-		}		
+		}
 	}
 #endif
 }
