@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,9 +55,12 @@ public class Portal {
 	}
 
 	public bool IsVisibleFromOutside() {
+		return this.FacesCamera() && GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+	}
+
+	public bool FacesCamera() {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
-		return Vector3.Angle(this.cullingData.Camera.transform.forward, -normal) < this.cullingData.Camera.fieldOfView / 2f + 90f
-			&& GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+		return Vector3.Angle(this.cullingData.Camera.transform.forward, -normal) < this.cullingData.Camera.fieldOfView / 2f + 90f;
 	}
 
 	public bool IsVisibleFromInside(Vector3 cameraPosition) {
@@ -102,7 +105,7 @@ public class Portal {
 				normal *= -1f;
 			}
 
-			planes[i] = new Plane(normal, cameraPosition);
+			planes[i] = new Plane(normal, cameraPosition + normal * 0.01f);
 		}
 
 		var portalNormal = Orientations.Direction[this.Direction].ToVector3();

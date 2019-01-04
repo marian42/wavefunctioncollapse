@@ -205,7 +205,10 @@ public class OcclusionCulling : MonoBehaviour {
 			var otherRoom = portal.Follow(currentRoom);
 			otherRoom.SetVisibility(true);
 			foreach (var roomPortal in otherRoom.Portals) {
-				if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+				if (roomPortal != portal
+					&& !this.visiblePortals.Contains(roomPortal)
+					&& GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)
+					&& GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, portal.Bounds)) {
 					this.ShowPortal(roomPortal, otherRoom);
 				}
 			}
@@ -215,26 +218,28 @@ public class OcclusionCulling : MonoBehaviour {
 				if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.Bounds) && GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
 					chunk.SetExteriorVisibility(true);
 					// TODO skip frustum test?
-					// TODO check portal normal
 					// TODO skip visiblePortals check???
 					foreach (var outsidePortal in chunk.Portals) {
-						if (outsidePortal.IsInside || this.visiblePortals.Contains(outsidePortal) || !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds)) {
+						if (outsidePortal.IsInside 
+							|| this.visiblePortals.Contains(outsidePortal) 
+							|| !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds)
+							|| !outsidePortal.FacesCamera()) {
 							continue;
 						}
+						this.visiblePortals.Add(outsidePortal);
 						var otherRoom = outsidePortal.Room;
 						if (otherRoom == null) {
 							continue;
 						}
 						otherRoom.SetVisibility(true);
 						foreach (var roomPortal in otherRoom.Portals) {
-							if (roomPortal != portal && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+							if (roomPortal != portal && portal.IsInside && !this.visiblePortals.Contains(roomPortal) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
 								this.ShowPortal(roomPortal, otherRoom);
 							}
 						}
 					}
 				}				
-			}
-			
+			}			
 		}
 	}
 
@@ -274,7 +279,6 @@ public class OcclusionCulling : MonoBehaviour {
 					continue;
 				}
 				foreach (var portal in chunk.Portals) {
-					// TODO skip visiblePortals ?
 					if (portal.Room == null || portal.IsInside || this.visiblePortals.Contains(portal)) {
 						continue;
 					}
