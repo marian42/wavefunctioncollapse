@@ -6,12 +6,17 @@ public class Chunk {
 	public readonly Bounds Bounds;
 
 	public List<Renderer> Renderers;
+	public List<GameObject> GameObjects;
 	public List<Portal> Portals;
 	public List<Room> Rooms;
 
 	private Dictionary<Vector3i, Renderer[]> renderersByPosition;
 
 	public bool ExteriorBlocksVisible = true;
+	public bool InRenderRange {
+		get;
+		private set;
+	}
 
 	public Chunk(Bounds bounds) {
 		this.Bounds = bounds;
@@ -19,12 +24,21 @@ public class Chunk {
 		this.Portals = new List<Portal>();
 		this.Rooms = new List<Room>();
 		this.renderersByPosition = new Dictionary<Vector3i, Renderer[]>();
+		this.GameObjects = new List<GameObject>();
+		this.InRenderRange = true;
 	}
 
-	public void SetVisibility(bool value) {
-		this.SetExteriorVisibility(value);
-		if (!value) {
-			this.SetRoomVisibility(false);
+	public void SetInRenderRange(bool value) {
+		this.InRenderRange = value;
+		foreach (var gameObject in this.GameObjects) {
+			gameObject.SetActive(value);
+		}
+		// This only works for small rooms.
+		// It will fail if a room has blocks outside the render range and close to the player. 
+		foreach (var room in this.Rooms) {
+			foreach (var slot in room.Slots) {
+				slot.GameObject.SetActive(value);
+			}
 		}
 	}
 
@@ -44,23 +58,27 @@ public class Chunk {
 		}
 	}
 
-	public void AddBlock(Renderer[] renderers, Vector3i position) {
-		if (this.renderersByPosition.ContainsKey(position)) {
-			foreach (var renderer in this.renderersByPosition[position]) {
+	public void AddBlock(Slot slot) {
+		if (this.renderersByPosition.ContainsKey(slot.Position)) {
+			foreach (var renderer in this.renderersByPosition[slot.Position]) {
 				this.Renderers.Remove(renderer);
 			}
 		}
-		this.renderersByPosition[position] = renderers;
+		var renderers = slot.GameObject.GetComponentsInChildren<Renderer>();
+		this.renderersByPosition[slot.Position] = renderers;
 		this.Renderers.AddRange(renderers);
 		this.ExteriorBlocksVisible = true;
+		this.GameObjects.Add(slot.GameObject);
+		slot.GameObject.SetActive(this.InRenderRange);
 	}
 
-	public void RemoveBlock(Vector3i position) {
-		if (!this.renderersByPosition.ContainsKey(position)) {
+	public void RemoveBlock(Slot slot) {
+		if (!this.renderersByPosition.ContainsKey(slot.Position)) {
 			return;
 		}
-		foreach (var renderer in this.renderersByPosition[position]) {
+		foreach (var renderer in this.renderersByPosition[slot.Position]) {
 			this.Renderers.Remove(renderer);
 		}
+		this.GameObjects.Remove(slot.GameObject);
 	}
 }

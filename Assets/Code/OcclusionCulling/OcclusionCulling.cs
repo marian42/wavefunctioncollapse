@@ -16,12 +16,15 @@ public class OcclusionCulling : MonoBehaviour {
 	private HashSet<Vector3i> outdatedSlots;
 
 	private Dictionary<Vector3i, Chunk> chunks;
-	private List<Chunk> visibleChunks;
+	private List<Chunk> chunksInRange;
 
 	public Camera Camera;
 	public Plane[] cameraFrustumPlanes;
 
 	public int ChunkSize = 3;
+
+	public float RenderRange;
+	private Vector3i previousChunkAddress;
 
 	public void Initialize() {
 		this.MapBehaviour = this.GetComponent<MapBehaviour>();
@@ -30,21 +33,24 @@ public class OcclusionCulling : MonoBehaviour {
 		this.portalsByPosition = new Dictionary<Vector3i, Portal[]>();
 		this.outdatedSlots = new HashSet<Vector3i>();
 		this.chunks = new Dictionary<Vector3i, Chunk>();
-		this.visibleChunks = new List<Chunk>();
+		this.chunksInRange = new List<Chunk>();
 	}
 
 	private Vector3i getChunkAddress(Vector3i position) {
 		return new Vector3i(Mathf.FloorToInt((float)position.X / this.ChunkSize), Mathf.FloorToInt((float)position.Y / this.ChunkSize), Mathf.FloorToInt((float)position.Z / this.ChunkSize));
 	}
 
+	private Vector3 getChunkCenter(Vector3i chunkAddress) {
+		return this.MapBehaviour.GetWorldspacePosition(chunkAddress * this.ChunkSize) + (this.ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
+	}
+
 	private Chunk getChunk(Vector3i chunkAddress) {
 		if (this.chunks.ContainsKey(chunkAddress)) {
 			return this.chunks[chunkAddress];
 		}
-		var center = this.MapBehaviour.GetWorldspacePosition(chunkAddress * this.ChunkSize) + (this.ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
-		var chunk = new Chunk(new Bounds(center, Vector3.one * AbstractMap.BLOCK_SIZE * this.ChunkSize));
+		var chunk = new Chunk(new Bounds(this.getChunkCenter(chunkAddress), Vector3.one * AbstractMap.BLOCK_SIZE * this.ChunkSize));
 		this.chunks[chunkAddress] = chunk;
-		this.visibleChunks.Add(chunk);
+		this.chunksInRange.Add(chunk);
 		return chunk;
 	}
 
@@ -76,7 +82,7 @@ public class OcclusionCulling : MonoBehaviour {
 				}
 			}
 
-			chunk.AddBlock(slot.GameObject.GetComponentsInChildren<Renderer>(), slot.Position);
+			chunk.AddBlock(slot);
 			return;
 		}
 
@@ -155,7 +161,7 @@ public class OcclusionCulling : MonoBehaviour {
 
 	public void RemoveSlot(Slot slot) {
 		var chunk = this.getChunkFromPosition(slot.Position);
-		chunk.RemoveBlock(slot.Position);
+		chunk.RemoveBlock(slot);
 
 		if (this.roomsByPosition.ContainsKey(slot.Position)) {
 			var room = this.roomsByPosition[slot.Position];
@@ -213,11 +219,9 @@ public class OcclusionCulling : MonoBehaviour {
 			}
 		} else {
 			// Looking outside
-			foreach (var chunk in this.visibleChunks) {
+			foreach (var chunk in this.chunksInRange) {
 				if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.Bounds) && GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
 					chunk.SetExteriorVisibility(true);
-					// TODO skip frustum test?
-					// TODO skip visiblePortals check???
 					foreach (var outsidePortal in chunk.Portals) {
 						if (outsidePortal.IsInside 
 							|| outsidePortal.Visible
@@ -247,10 +251,12 @@ public class OcclusionCulling : MonoBehaviour {
 	void Update() {
 		var start = System.DateTime.Now;
 
+		this.updateRenderRange();
+
 		this.cameraFrustumPlanes = GeometryUtility.CalculateFrustumPlanes(this.Camera);
 		var cameraPosition = this.MapBehaviour.GetMapPosition(this.Camera.transform.position);
 		
-		foreach (var chunk in this.visibleChunks) {
+		foreach (var chunk in this.chunksInRange) {
 			chunk.SetRoomVisibility(false);
 			foreach (var portal in chunk.Portals) {
 				portal.Visible = false;
@@ -259,7 +265,7 @@ public class OcclusionCulling : MonoBehaviour {
 
 		if (this.roomsByPosition.ContainsKey(cameraPosition)) {
 			// Camera is inside a room
-			foreach (var chunk in this.visibleChunks) {
+			foreach (var chunk in this.chunksInRange) {
 				chunk.SetExteriorVisibility(false);
 			}
 			var cameraRoom = this.roomsByPosition[cameraPosition];
@@ -273,10 +279,10 @@ public class OcclusionCulling : MonoBehaviour {
 			}
 		} else {
 			// Camera is outside of any room
-			foreach (var chunk in this.visibleChunks) {
+			foreach (var chunk in this.chunksInRange) {
 				chunk.SetExteriorVisibility(true);
 			}
-			foreach (var chunk in this.visibleChunks) {
+			foreach (var chunk in this.chunksInRange) {
 				if (!GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
 					continue;
 				}
@@ -300,6 +306,44 @@ public class OcclusionCulling : MonoBehaviour {
 
 		var time = (System.DateTime.Now - start).TotalMilliseconds;
 		this.CullingTime = time;
+	}
+
+	private void updateRenderRange() {
+		var cameraPosition = this.Camera.transform.position;
+		for (int i = 0; i < this.chunksInRange.Count; i++) {
+			if (Vector3.Distance(this.chunksInRange[i].Bounds.center, cameraPosition) > this.RenderRange) {
+				this.chunksInRange[i].SetInRenderRange(false);
+				this.chunksInRange.RemoveAt(i);
+				i--;
+			}
+		}
+
+		var currentChunkAddress = this.getChunkAddress(this.MapBehaviour.GetMapPosition(this.Camera.transform.position));
+		if (currentChunkAddress == this.previousChunkAddress) {
+			return;
+		}
+		this.previousChunkAddress = currentChunkAddress;
+
+		int chunkCount = (int)(this.RenderRange / (AbstractMap.BLOCK_SIZE * this.ChunkSize));
+		for (int x = currentChunkAddress.X - chunkCount; x <= currentChunkAddress.X + chunkCount; x++) {
+			for (int y = 0; y < Mathf.CeilToInt((float)this.MapBehaviour.MapHeight / this.ChunkSize); y++) {
+				for (int z = currentChunkAddress.Z - chunkCount; z <= currentChunkAddress.Z + chunkCount; z++) {
+					var address = new Vector3i(x, y, z);
+					if (Vector3.Distance(this.Camera.transform.position, this.getChunkCenter(address)) > this.RenderRange) {
+						continue;
+					}
+					if (!this.chunks.ContainsKey(address)) {
+						continue;
+					}
+					var chunk = this.chunks[address];
+					if (chunk.InRenderRange) {
+						continue;
+					}
+					chunk.SetInRenderRange(true);
+					this.chunksInRange.Add(chunk);
+				}
+			}
+		}
 	}
 
 	public double CullingTime;
@@ -350,10 +394,10 @@ public class OcclusionCulling : MonoBehaviour {
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
 	static void DrawGizmo(OcclusionCulling occlusion, GizmoType gizmoType) {
-		if (occlusion.visibleChunks == null) {
+		if (occlusion.chunksInRange == null) {
 			return;
 		}
-		foreach (var chunk in occlusion.visibleChunks) {
+		foreach (var chunk in occlusion.chunksInRange) {
 			if (occlusion.ShowRooms) {
 				foreach (var room in chunk.Rooms) {
 					room.DrawGizmo(occlusion.MapBehaviour);
