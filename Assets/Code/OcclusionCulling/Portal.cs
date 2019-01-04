@@ -12,8 +12,6 @@ public class Portal {
 
 	public readonly Bounds Bounds;
 
-	public bool Visible = false;
-
 	public Room Room1 {
 		get {
 			return this.cullingData.GetRoom(this.Position1);
