@@ -76,7 +76,7 @@ public class OcclusionCulling : MonoBehaviour {
 				}
 			}
 
-			chunk.AddBlock(new ExteriorBlock(slot, this.MapBehaviour), slot.Position);
+			chunk.AddBlock(slot.GameObject.GetComponentsInChildren<Renderer>(), slot.Position);
 			return;
 		}
 

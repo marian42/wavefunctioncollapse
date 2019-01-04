@@ -5,20 +5,20 @@ using UnityEngine;
 public class Chunk {
 	public readonly Bounds Bounds;
 
-	public List<ExteriorBlock> ExteriorBlocks;
+	public List<Renderer> Renderers;
 	public List<Portal> Portals;
 	public List<Room> Rooms;
 
-	private Dictionary<Vector3i, ExteriorBlock> exteriorblocksByPosition;
+	private Dictionary<Vector3i, Renderer[]> renderersByPosition;
 
 	public bool ExteriorBlocksVisible = true;
 
 	public Chunk(Bounds bounds) {
 		this.Bounds = bounds;
-		this.ExteriorBlocks = new List<ExteriorBlock>();
+		this.Renderers = new List<Renderer>();
 		this.Portals = new List<Portal>();
 		this.Rooms = new List<Room>();
-		this.exteriorblocksByPosition = new Dictionary<Vector3i,ExteriorBlock>();
+		this.renderersByPosition = new Dictionary<Vector3i, Renderer[]>();
 	}
 
 	public void SetVisibility(bool value) {
@@ -32,8 +32,8 @@ public class Chunk {
 		if (this.ExteriorBlocksVisible == value) {
 			return;
 		}
-		foreach (var block in this.ExteriorBlocks) {
-			block.SetVisibility(value);
+		foreach (var renderer in this.Renderers) {
+			renderer.enabled = value;
 		}
 		this.ExteriorBlocksVisible = value;
 	}
@@ -44,19 +44,23 @@ public class Chunk {
 		}
 	}
 
-	public void AddBlock(ExteriorBlock block, Vector3i position) {
-		if (this.exteriorblocksByPosition.ContainsKey(position)) {
-			this.ExteriorBlocks.Remove(this.exteriorblocksByPosition[position]);
+	public void AddBlock(Renderer[] renderers, Vector3i position) {
+		if (this.renderersByPosition.ContainsKey(position)) {
+			foreach (var renderer in this.renderersByPosition[position]) {
+				this.Renderers.Remove(renderer);
+			}
 		}
-		this.exteriorblocksByPosition[position] = block;
-		this.ExteriorBlocks.Add(block);
+		this.renderersByPosition[position] = renderers;
+		this.Renderers.AddRange(renderers);
 		this.ExteriorBlocksVisible = true;
 	}
 
 	public void RemoveBlock(Vector3i position) {
-		if (!this.exteriorblocksByPosition.ContainsKey(position)) {
+		if (!this.renderersByPosition.ContainsKey(position)) {
 			return;
 		}
-		this.ExteriorBlocks.Remove(this.exteriorblocksByPosition[position]);
+		foreach (var renderer in this.renderersByPosition[position]) {
+			this.Renderers.Remove(renderer);
+		}
 	}
 }
