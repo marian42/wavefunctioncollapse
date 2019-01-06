@@ -6672,7 +6672,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1638733152079642}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 356}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6681,7 +6681,7 @@ Transform:
   - {fileID: 4291531992368604}
   m_Father: {fileID: 4351978893227840}
   m_RootOrder: 89
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4608480321247792
 Transform:
   m_ObjectHideFlags: 1
@@ -6941,7 +6941,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937802199940194}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6949,7 +6949,7 @@ Transform:
   - {fileID: 4802562515703716}
   m_Father: {fileID: 4351978893227840}
   m_RootOrder: 33
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!4 &4666600903333612
 Transform:
   m_ObjectHideFlags: 1
@@ -8093,7 +8093,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1222644680726026}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 360}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8102,7 +8102,7 @@ Transform:
   - {fileID: 4263642870263872}
   m_Father: {fileID: 4351978893227840}
   m_RootOrder: 90
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4955522588963790
 Transform:
   m_ObjectHideFlags: 1
@@ -8243,7 +8243,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1798897361624724}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 396}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8252,7 +8252,7 @@ Transform:
   - {fileID: 4061021223966376}
   m_Father: {fileID: 4351978893227840}
   m_RootOrder: 99
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4990623250478376
 Transform:
   m_ObjectHideFlags: 1
@@ -15589,6 +15589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
@@ -15596,6 +15597,7 @@ MonoBehaviour:
     - {fileID: 114961771348178174}
     - {fileID: 114434336691468036}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -15603,6 +15605,7 @@ MonoBehaviour:
     Connector: 22
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -15610,6 +15613,7 @@ MonoBehaviour:
     Connector: 21
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -15617,6 +15621,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -15624,6 +15629,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -15631,6 +15637,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114001352537025072
@@ -15646,11 +15653,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.3
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -15658,6 +15667,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -15665,6 +15675,7 @@ MonoBehaviour:
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -15674,6 +15685,7 @@ MonoBehaviour:
     - {fileID: 114001352537025072}
     - {fileID: 114817087412830708}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -15681,6 +15693,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -15690,6 +15703,7 @@ MonoBehaviour:
     - {fileID: 114001352537025072}
     - {fileID: 114817087412830708}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114004196978421514
@@ -15705,12 +15719,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 10
     ExcludedNeighbours:
     - {fileID: 114004196978421514}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -15718,6 +15734,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -15726,6 +15743,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114004196978421514}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -15733,6 +15751,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -15740,6 +15759,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -15747,6 +15767,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114005575666563778
@@ -15762,12 +15783,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.01
   Spawn: 1
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 12
     ExcludedNeighbours:
     - {fileID: 114005575666563778}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -15775,6 +15798,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -15782,6 +15806,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -15790,6 +15815,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114005575666563778}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -15797,6 +15823,7 @@ MonoBehaviour:
     Connector: 42
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -15804,6 +15831,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114008529347442246
@@ -15819,6 +15847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -15829,6 +15858,7 @@ MonoBehaviour:
     - {fileID: 114300374707499016}
     - {fileID: 114598421262544050}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -15836,6 +15866,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -15843,6 +15874,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -15851,6 +15883,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -15858,6 +15891,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -15865,6 +15899,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114008621732716288
@@ -15880,6 +15915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 26
@@ -15887,6 +15923,7 @@ MonoBehaviour:
     - {fileID: 114037169779023298}
     - {fileID: 114809614854069088}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -15894,6 +15931,7 @@ MonoBehaviour:
     Connector: 32
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -15901,6 +15939,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -15908,6 +15947,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -15915,6 +15955,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -15922,6 +15963,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114028644593262716
@@ -15937,12 +15979,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -15950,6 +15994,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -15958,6 +16003,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114061348862437584}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -15965,6 +16011,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -15972,6 +16019,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -15979,6 +16027,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114037169779023298
@@ -15994,6 +16043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 26
@@ -16001,6 +16051,7 @@ MonoBehaviour:
     - {fileID: 114813444734626484}
     - {fileID: 114008621732716288}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -16008,6 +16059,7 @@ MonoBehaviour:
     Connector: 29
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -16016,6 +16068,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114434137239996358}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -16023,6 +16076,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16030,6 +16084,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -16037,6 +16092,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114047075399529182
@@ -16045,18 +16101,20 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1005094764303508}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 1
   Left:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16064,20 +16122,23 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16085,13 +16146,15 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114058093011058826
@@ -16107,6 +16170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 23
@@ -16114,6 +16178,7 @@ MonoBehaviour:
     - {fileID: 114360266194489088}
     - {fileID: 114589429232982796}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -16121,6 +16186,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16128,6 +16194,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -16136,6 +16203,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16143,6 +16211,7 @@ MonoBehaviour:
     Connector: 29
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -16150,6 +16219,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114059792848702728
@@ -16165,6 +16235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -16172,6 +16243,7 @@ MonoBehaviour:
     - {fileID: 114610145081776422}
     - {fileID: 114059792848702728}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16179,6 +16251,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16187,6 +16260,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114059792848702728}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -16195,6 +16269,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114059792848702728}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -16202,6 +16277,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -16212,6 +16288,7 @@ MonoBehaviour:
     - {fileID: 114059792848702728}
     - {fileID: 114516900796177166}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114061348862437584
@@ -16227,6 +16304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -16240,6 +16318,7 @@ MonoBehaviour:
     - {fileID: 114336343411649844}
     - {fileID: 114093039798155896}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16247,6 +16326,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16254,6 +16334,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -16262,6 +16343,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16269,6 +16351,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -16276,6 +16359,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114080132324384902
@@ -16291,6 +16375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -16298,6 +16383,7 @@ MonoBehaviour:
     - {fileID: 114799150288929568}
     - {fileID: 114080132324384902}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16305,6 +16391,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16313,6 +16400,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114483119966385886}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16321,6 +16409,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114483119966385886}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -16328,6 +16417,7 @@ MonoBehaviour:
     Connector: 25
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -16338,6 +16428,7 @@ MonoBehaviour:
     - {fileID: 114849678478373516}
     - {fileID: 114080132324384902}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114086542129876552
@@ -16353,12 +16444,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 13
     ExcludedNeighbours:
     - {fileID: 114312780269675398}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16367,6 +16460,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114086542129876552}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -16375,6 +16469,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114312780269675398}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16382,6 +16477,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -16390,6 +16486,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114086542129876552}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -16397,6 +16494,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114087743064926046
@@ -16405,18 +16503,20 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1369203807168090}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 1
   Left:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -16424,6 +16524,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16431,13 +16532,15 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -16447,13 +16550,15 @@ MonoBehaviour:
     - {fileID: 114344484078920764}
     - {fileID: 114526438781149350}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114093039798155896
@@ -16469,6 +16574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 38
@@ -16476,6 +16582,7 @@ MonoBehaviour:
     - {fileID: 114093039798155896}
     - {fileID: 114809514186350554}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -16483,6 +16590,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16492,6 +16600,7 @@ MonoBehaviour:
     - {fileID: 114205918318585034}
     - {fileID: 114061348862437584}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16500,6 +16609,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114093039798155896}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -16507,6 +16617,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -16514,6 +16625,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114094987019819146
@@ -16529,11 +16641,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -16541,6 +16655,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16548,6 +16663,7 @@ MonoBehaviour:
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -16556,6 +16672,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114567389959571968}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -16563,6 +16680,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -16573,6 +16691,7 @@ MonoBehaviour:
     - {fileID: 114205918318585034}
     - {fileID: 114349348894959008}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114100760419122172
@@ -16581,13 +16700,14 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1706330580515544}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 52
@@ -16607,6 +16727,7 @@ MonoBehaviour:
     - {fileID: 114457878356251986}
     - {fileID: 114240072550723950}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16616,6 +16737,7 @@ MonoBehaviour:
     - {fileID: 114345027764687954}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -16624,6 +16746,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -16631,6 +16754,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16638,6 +16762,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -16646,6 +16771,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114103303931856204
@@ -16661,11 +16787,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 0
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16673,6 +16801,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16680,6 +16809,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16687,6 +16817,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16694,6 +16825,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -16701,6 +16833,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114107826428363114
@@ -16716,12 +16849,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
     ExcludedNeighbours:
     - {fileID: 114434336691468036}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16729,6 +16864,7 @@ MonoBehaviour:
     Connector: 18
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -16736,6 +16872,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16743,6 +16880,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -16750,6 +16888,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -16757,6 +16896,7 @@ MonoBehaviour:
     Connector: 21
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114123310337369644
@@ -16772,11 +16912,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.01
   Spawn: 1
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 12
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16784,6 +16926,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16791,6 +16934,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16798,6 +16942,7 @@ MonoBehaviour:
     Connector: 12
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16805,6 +16950,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -16812,6 +16958,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114139026483625486
@@ -16827,11 +16974,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -16839,6 +16988,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16846,6 +16996,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16854,6 +17005,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16861,6 +17013,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -16868,6 +17021,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114165163965975360
@@ -16883,11 +17037,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 43
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -16895,6 +17051,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -16902,6 +17059,7 @@ MonoBehaviour:
     Connector: 40
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -16910,6 +17068,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -16917,6 +17076,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -16924,6 +17084,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114170379151134898
@@ -16932,18 +17093,20 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1798897361624724}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 1
   Left:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -16951,6 +17114,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -16958,6 +17122,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -16965,6 +17130,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -16974,13 +17140,15 @@ MonoBehaviour:
     - {fileID: 114344484078920764}
     - {fileID: 114526438781149350}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114194716996315060
@@ -16996,6 +17164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -17003,6 +17172,7 @@ MonoBehaviour:
     - {fileID: 114194716996315060}
     - {fileID: 114433358382409562}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17010,6 +17180,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -17019,6 +17190,7 @@ MonoBehaviour:
     - {fileID: 114433358382409562}
     - {fileID: 114194716996315060}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -17026,6 +17198,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -17033,6 +17206,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -17040,6 +17214,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114198908272860082
@@ -17055,11 +17230,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -17067,6 +17244,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17076,6 +17254,7 @@ MonoBehaviour:
     - {fileID: 114858857945122100}
     - {fileID: 114267910553588742}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -17084,6 +17263,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114198908272860082}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17091,6 +17271,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -17098,6 +17279,7 @@ MonoBehaviour:
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114201033983843696
@@ -17106,19 +17288,21 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1877040168692142}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 1
   Left:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114201033983843696}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -17126,6 +17310,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17134,14 +17319,16 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114201033983843696}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Right:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114201033983843696}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17149,13 +17336,15 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114205918318585034
@@ -17171,6 +17360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -17189,6 +17379,7 @@ MonoBehaviour:
     - {fileID: 114809514186350554}
     - {fileID: 114457878356251986}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17198,6 +17389,7 @@ MonoBehaviour:
     - {fileID: 114345027764687954}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17206,6 +17398,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -17213,6 +17406,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17220,6 +17414,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17228,6 +17423,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114206449826965272
@@ -17243,6 +17439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 12
@@ -17251,6 +17448,7 @@ MonoBehaviour:
     - {fileID: 114229311957058702}
     - {fileID: 114840178114473338}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17259,6 +17457,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17269,6 +17468,7 @@ MonoBehaviour:
     - {fileID: 114229311957058702}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -17276,6 +17476,7 @@ MonoBehaviour:
     Connector: 9
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17283,6 +17484,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17293,6 +17495,7 @@ MonoBehaviour:
     - {fileID: 114229311957058702}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114213353706373144
@@ -17308,11 +17511,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 10
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 17
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -17320,6 +17525,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17327,6 +17533,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17334,6 +17541,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17342,6 +17550,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114407343315346532}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -17349,6 +17558,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114213820782906944
@@ -17364,11 +17574,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17376,6 +17588,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17384,6 +17597,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114213820782906944}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17392,6 +17606,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114213820782906944}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17399,6 +17614,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17406,6 +17622,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114227378056999342
@@ -17421,12 +17638,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 12
     ExcludedNeighbours:
     - {fileID: 114229311957058702}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17434,6 +17653,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17441,6 +17661,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17448,6 +17669,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17455,6 +17677,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -17462,6 +17685,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114229311957058702
@@ -17477,6 +17701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 12
@@ -17487,6 +17712,7 @@ MonoBehaviour:
     - {fileID: 114943967204009904}
     - {fileID: 114227378056999342}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17495,6 +17721,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17505,6 +17732,7 @@ MonoBehaviour:
     - {fileID: 114206449826965272}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -17512,6 +17740,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17519,6 +17748,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17529,6 +17759,7 @@ MonoBehaviour:
     - {fileID: 114206449826965272}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114240072550723950
@@ -17537,13 +17768,14 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1231460878729912}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 52
@@ -17559,6 +17791,7 @@ MonoBehaviour:
     - {fileID: 114100760419122172}
     - {fileID: 114240072550723950}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17566,6 +17799,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17573,6 +17807,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17581,6 +17816,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17588,6 +17824,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17595,6 +17832,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114267910553588742
@@ -17610,6 +17848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -17618,6 +17857,7 @@ MonoBehaviour:
     - {fileID: 114267910553588742}
     - {fileID: 114610145081776422}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17625,6 +17865,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17632,6 +17873,7 @@ MonoBehaviour:
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17641,6 +17883,7 @@ MonoBehaviour:
     - {fileID: 114809514186350554}
     - {fileID: 114198908272860082}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17648,6 +17891,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -17655,6 +17899,7 @@ MonoBehaviour:
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114295954224542780
@@ -17670,12 +17915,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 4
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -17683,6 +17930,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -17690,6 +17938,7 @@ MonoBehaviour:
     Connector: 40
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17697,6 +17946,7 @@ MonoBehaviour:
     Connector: 43
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17704,6 +17954,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -17711,6 +17962,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114300374707499016
@@ -17726,12 +17978,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 38
     ExcludedNeighbours:
     - {fileID: 114514589174993930}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -17739,6 +17993,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Back:
@@ -17746,6 +18001,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17754,6 +18010,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -17761,6 +18018,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -17772,6 +18030,7 @@ MonoBehaviour:
     - {fileID: 114943967204009904}
     - {fileID: 114336343411649844}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114312780269675398
@@ -17787,12 +18046,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 16
     ExcludedNeighbours:
     - {fileID: 114312780269675398}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -17800,6 +18061,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17810,6 +18072,7 @@ MonoBehaviour:
     - {fileID: 114459682915331030}
     - {fileID: 114086542129876552}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -17819,6 +18082,7 @@ MonoBehaviour:
     - {fileID: 114312780269675398}
     - {fileID: 114086542129876552}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17826,6 +18090,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -17834,6 +18099,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114312780269675398}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114318533467422008
@@ -17849,11 +18115,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -17861,6 +18129,7 @@ MonoBehaviour:
     Connector: 20
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -17869,6 +18138,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114709934653240610}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -17876,6 +18146,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -17883,6 +18154,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -17890,6 +18162,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114336343411649844
@@ -17905,6 +18178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -17915,6 +18189,7 @@ MonoBehaviour:
     - {fileID: 114061348862437584}
     - {fileID: 114300374707499016}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17922,6 +18197,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Back:
@@ -17930,6 +18206,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -17937,6 +18214,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17944,6 +18222,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -17951,6 +18230,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114343832340258566
@@ -17966,11 +18246,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -17978,6 +18260,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -17985,6 +18268,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -17992,6 +18276,7 @@ MonoBehaviour:
     Connector: 17
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -17999,6 +18284,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -18006,6 +18292,7 @@ MonoBehaviour:
     Connector: 16
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114344484078920764
@@ -18021,12 +18308,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 47
     ExcludedNeighbours:
     - {fileID: 114344484078920764}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18036,6 +18325,7 @@ MonoBehaviour:
     - {fileID: 114087743064926046}
     - {fileID: 114170379151134898}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -18043,6 +18333,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -18051,6 +18342,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18058,6 +18350,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18065,6 +18358,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114345027764687954
@@ -18080,11 +18374,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 13
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18093,6 +18389,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114345027764687954}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18100,6 +18397,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18107,6 +18405,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18117,6 +18416,7 @@ MonoBehaviour:
     - {fileID: 114511629174354874}
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18124,6 +18424,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114349348894959008
@@ -18139,6 +18440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -18147,6 +18449,7 @@ MonoBehaviour:
     - {fileID: 114094987019819146}
     - {fileID: 114349348894959008}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18154,6 +18457,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -18161,6 +18465,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18168,6 +18473,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -18175,6 +18481,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18183,6 +18490,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114360266194489088
@@ -18198,6 +18506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 23
@@ -18205,6 +18514,7 @@ MonoBehaviour:
     - {fileID: 114058093011058826}
     - {fileID: 114799150288929568}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -18212,6 +18522,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -18219,6 +18530,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18226,6 +18538,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -18233,6 +18546,7 @@ MonoBehaviour:
     Connector: 33
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18240,6 +18554,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114407343315346532
@@ -18255,12 +18570,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 15
     ExcludedNeighbours:
     - {fileID: 114407343315346532}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -18270,6 +18587,7 @@ MonoBehaviour:
     - {fileID: 114213353706373144}
     - {fileID: 114407343315346532}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -18278,6 +18596,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114407343315346532}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18285,6 +18604,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18293,6 +18613,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114407343315346532}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -18300,6 +18621,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114414746814823930
@@ -18315,12 +18637,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 11
     ExcludedNeighbours:
     - {fileID: 114414746814823930}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18328,6 +18652,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -18335,6 +18660,7 @@ MonoBehaviour:
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -18342,6 +18668,7 @@ MonoBehaviour:
     Connector: 14
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18349,6 +18676,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18356,6 +18684,7 @@ MonoBehaviour:
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114424547203042476
@@ -18371,11 +18700,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18383,6 +18714,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18390,6 +18722,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18397,6 +18730,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18404,6 +18738,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18411,6 +18746,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114433358382409562
@@ -18426,6 +18762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -18433,6 +18770,7 @@ MonoBehaviour:
     - {fileID: 114433358382409562}
     - {fileID: 114194716996315060}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18440,6 +18778,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18447,6 +18786,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18454,6 +18794,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18461,6 +18802,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18468,6 +18810,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114434137239996358
@@ -18483,6 +18826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 5
@@ -18490,6 +18834,7 @@ MonoBehaviour:
     - {fileID: 114434137239996358}
     - {fileID: 114037169779023298}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -18497,6 +18842,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -18505,6 +18851,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114434137239996358}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18512,6 +18859,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18519,6 +18867,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18526,6 +18875,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114434336691468036
@@ -18541,11 +18891,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18553,6 +18905,7 @@ MonoBehaviour:
     Connector: 28
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18563,6 +18916,7 @@ MonoBehaviour:
     - {fileID: 114961771348178174}
     - {fileID: 114000110181928190}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -18570,6 +18924,7 @@ MonoBehaviour:
     Connector: 26
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -18577,6 +18932,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18584,6 +18940,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114455411509955576
@@ -18599,12 +18956,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 4
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -18612,6 +18971,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Back:
@@ -18619,6 +18979,7 @@ MonoBehaviour:
     Connector: 19
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -18626,6 +18987,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -18633,6 +18995,7 @@ MonoBehaviour:
     Connector: 20
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18640,6 +19003,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114457878356251986
@@ -18655,12 +19019,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18669,6 +19035,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18677,6 +19044,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114457878356251986}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18684,6 +19052,7 @@ MonoBehaviour:
     Connector: 41
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18691,6 +19060,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18699,6 +19069,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114457878356251986}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114459682915331030
@@ -18714,6 +19085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -18721,6 +19093,7 @@ MonoBehaviour:
     - {fileID: 114459682915331030}
     - {fileID: 114897602803080268}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18728,6 +19101,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -18735,6 +19109,7 @@ MonoBehaviour:
     Connector: 16
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18744,6 +19119,7 @@ MonoBehaviour:
     - {fileID: 114459682915331030}
     - {fileID: 114312780269675398}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18751,6 +19127,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -18758,6 +19135,7 @@ MonoBehaviour:
     Connector: 16
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114473004561023910
@@ -18773,12 +19151,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 3
     ExcludedNeighbours:
     - {fileID: 114629316561942900}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -18787,6 +19167,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18795,6 +19176,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -18802,6 +19184,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18809,6 +19192,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -18816,6 +19200,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114483119966385886
@@ -18831,11 +19216,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18843,6 +19230,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -18852,6 +19240,7 @@ MonoBehaviour:
     - {fileID: 114080132324384902}
     - {fileID: 114889021647730130}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -18860,6 +19249,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114080132324384902}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -18867,6 +19257,7 @@ MonoBehaviour:
     Connector: 28
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18875,6 +19266,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114080132324384902}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114506223312178904
@@ -18890,11 +19282,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -18902,6 +19296,7 @@ MonoBehaviour:
     Connector: 42
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Invariant: 0
     Rotation: 0
   Back:
@@ -18909,6 +19304,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18917,6 +19313,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18924,6 +19321,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -18931,6 +19329,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114511629174354874
@@ -18946,11 +19345,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 10
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 17
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -18959,6 +19360,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114345027764687954}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -18966,6 +19368,7 @@ MonoBehaviour:
     Connector: 15
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -18973,6 +19376,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -18980,6 +19384,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -18987,6 +19392,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114514589174993930
@@ -19002,12 +19408,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 38
     ExcludedNeighbours:
     - {fileID: 114300374707499016}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -19015,6 +19423,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -19023,6 +19432,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114567389959571968}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19031,6 +19441,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -19038,6 +19449,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -19045,6 +19457,7 @@ MonoBehaviour:
     Connector: 34
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114516900796177166
@@ -19060,6 +19473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -19067,6 +19481,7 @@ MonoBehaviour:
     - {fileID: 114928278068078860}
     - {fileID: 114059792848702728}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19074,6 +19489,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19081,6 +19497,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19089,6 +19506,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114928278068078860}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19096,6 +19514,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19103,6 +19522,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114526219484999554
@@ -19118,11 +19538,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19130,6 +19552,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19137,6 +19560,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19144,6 +19568,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19151,6 +19576,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19159,6 +19585,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114928278068078860}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114526438781149350
@@ -19174,12 +19601,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 39
     ExcludedNeighbours:
     - {fileID: 114526438781149350}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19189,6 +19618,7 @@ MonoBehaviour:
     - {fileID: 114087743064926046}
     - {fileID: 114170379151134898}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19197,6 +19627,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114526438781149350}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -19205,6 +19636,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19212,6 +19644,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -19220,6 +19653,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114526438781149350}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114550566138619964
@@ -19235,11 +19669,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.05
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19247,6 +19683,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19254,6 +19691,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19262,6 +19700,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19269,6 +19708,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19276,6 +19716,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114566250024934836
@@ -19291,11 +19732,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 10
   Spawn: 0
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19303,6 +19746,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19310,6 +19754,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19317,6 +19762,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19324,6 +19770,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19331,6 +19778,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114567389959571968
@@ -19346,11 +19794,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -19358,6 +19808,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19367,6 +19818,7 @@ MonoBehaviour:
     - {fileID: 114514589174993930}
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19375,6 +19827,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114094987019819146}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -19382,6 +19835,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 3
   Forward:
@@ -19389,6 +19843,7 @@ MonoBehaviour:
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114589429232982796
@@ -19404,6 +19859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 23
@@ -19411,6 +19867,7 @@ MonoBehaviour:
     - {fileID: 114058093011058826}
     - {fileID: 114799150288929568}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -19418,6 +19875,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19425,6 +19883,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -19433,6 +19892,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19440,6 +19900,7 @@ MonoBehaviour:
     Connector: 32
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -19447,6 +19908,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114598421262544050
@@ -19462,6 +19924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -19474,6 +19937,7 @@ MonoBehaviour:
     - {fileID: 114483119966385886}
     - {fileID: 114598421262544050}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19481,6 +19945,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19489,6 +19954,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114598421262544050}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -19496,6 +19962,7 @@ MonoBehaviour:
     Connector: 7
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -19503,6 +19970,7 @@ MonoBehaviour:
     Connector: 8
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -19511,6 +19979,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114598421262544050}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114610145081776422
@@ -19526,6 +19995,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -19533,6 +20003,7 @@ MonoBehaviour:
     - {fileID: 114059792848702728}
     - {fileID: 114610145081776422}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19540,6 +20011,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19549,6 +20021,7 @@ MonoBehaviour:
     - {fileID: 114928278068078860}
     - {fileID: 114610145081776422}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19557,6 +20030,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114610145081776422}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19564,6 +20038,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19574,6 +20049,7 @@ MonoBehaviour:
     - {fileID: 114267910553588742}
     - {fileID: 114610145081776422}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114621702313372886
@@ -19589,11 +20065,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.005
   Spawn: 1
+  IsInterior: 1
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19601,6 +20079,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19608,6 +20087,7 @@ MonoBehaviour:
     Connector: 12
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19615,6 +20095,7 @@ MonoBehaviour:
     Connector: 12
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19622,6 +20103,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19629,6 +20111,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114623583006861530
@@ -19644,6 +20127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
@@ -19665,6 +20149,7 @@ MonoBehaviour:
     - {fileID: 114589429232982796}
     - {fileID: 114344484078920764}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19672,6 +20157,7 @@ MonoBehaviour:
     Connector: 42
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Invariant: 0
     Rotation: 0
   Back:
@@ -19679,6 +20165,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19687,6 +20174,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114506223312178904}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19694,6 +20182,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19701,6 +20190,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114629316561942900
@@ -19716,11 +20206,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19728,6 +20220,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19737,6 +20230,7 @@ MonoBehaviour:
     - {fileID: 114629316561942900}
     - {fileID: 114779715844412370}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -19746,6 +20240,7 @@ MonoBehaviour:
     - {fileID: 114473004561023910}
     - {fileID: 114629316561942900}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -19753,6 +20248,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -19761,6 +20257,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114629396924594574
@@ -19776,11 +20273,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 7
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -19788,6 +20287,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19795,6 +20295,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19803,6 +20304,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19810,6 +20312,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19817,6 +20320,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114652892808063552
@@ -19832,11 +20336,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19844,6 +20350,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19851,6 +20358,7 @@ MonoBehaviour:
     Connector: 16
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -19858,6 +20366,7 @@ MonoBehaviour:
     Connector: 17
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -19865,6 +20374,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -19872,6 +20382,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114690336084714032
@@ -19887,11 +20398,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -19899,6 +20412,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19906,6 +20420,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19914,6 +20429,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19921,6 +20437,7 @@ MonoBehaviour:
     Connector: 24
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -19929,6 +20446,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114913616263479360}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114704062449543050
@@ -19944,11 +20462,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -19956,6 +20476,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -19963,6 +20484,7 @@ MonoBehaviour:
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -19970,6 +20492,7 @@ MonoBehaviour:
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -19977,6 +20500,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -19984,6 +20508,7 @@ MonoBehaviour:
     Connector: 11
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114709934653240610
@@ -19999,11 +20524,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -20011,6 +20538,7 @@ MonoBehaviour:
     Connector: 24
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20018,6 +20546,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20025,6 +20554,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20032,6 +20562,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20040,6 +20571,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114318533467422008}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114722857561812780
@@ -20055,6 +20587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
@@ -20062,6 +20595,7 @@ MonoBehaviour:
     - {fileID: 114858800306009696}
     - {fileID: 114722857561812780}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20069,6 +20603,7 @@ MonoBehaviour:
     Connector: 8
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20076,6 +20611,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20083,6 +20619,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20090,6 +20627,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20097,6 +20635,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114735929018134910
@@ -20112,12 +20651,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 4
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -20125,6 +20666,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -20132,6 +20674,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20139,6 +20682,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -20146,6 +20690,7 @@ MonoBehaviour:
     Connector: 24
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20154,6 +20699,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114913616263479360}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114772143138755320
@@ -20169,12 +20715,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 34
     ExcludedNeighbours:
     - {fileID: 114772143138755320}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -20182,6 +20730,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Back:
@@ -20190,6 +20739,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114772143138755320}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20197,6 +20747,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20204,6 +20755,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20211,6 +20763,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114779715844412370
@@ -20226,12 +20779,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 3
     ExcludedNeighbours:
     - {fileID: 114629316561942900}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -20239,6 +20794,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20246,6 +20802,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20253,6 +20810,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20260,6 +20818,7 @@ MonoBehaviour:
     Connector: 6
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -20268,6 +20827,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114794622073642298
@@ -20283,11 +20843,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20295,6 +20857,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20303,6 +20866,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114794622073642298}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20311,6 +20875,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114794622073642298}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -20318,6 +20883,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20326,6 +20892,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114799150288929568
@@ -20341,6 +20908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 23
@@ -20348,6 +20916,7 @@ MonoBehaviour:
     - {fileID: 114589429232982796}
     - {fileID: 114360266194489088}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -20355,6 +20924,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20364,6 +20934,7 @@ MonoBehaviour:
     - {fileID: 114080132324384902}
     - {fileID: 114889021647730130}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20371,6 +20942,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -20378,6 +20950,7 @@ MonoBehaviour:
     Connector: 30
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20385,6 +20958,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114809514186350554
@@ -20400,6 +20974,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 38
@@ -20408,6 +20983,7 @@ MonoBehaviour:
     - {fileID: 114093039798155896}
     - {fileID: 114858857945122100}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -20415,6 +20991,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20422,6 +20999,7 @@ MonoBehaviour:
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20432,6 +21010,7 @@ MonoBehaviour:
     - {fileID: 114205918318585034}
     - {fileID: 114858857945122100}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20439,6 +21018,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20447,6 +21027,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114336343411649844}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114809614854069088
@@ -20462,12 +21043,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 26
     ExcludedNeighbours:
     - {fileID: 114008621732716288}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -20475,6 +21058,7 @@ MonoBehaviour:
     Connector: 30
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20483,6 +21067,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114961771348178174}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20490,6 +21075,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -20497,6 +21083,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20504,6 +21091,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114813444734626484
@@ -20519,12 +21107,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 26
     ExcludedNeighbours:
     - {fileID: 114037169779023298}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -20532,6 +21122,7 @@ MonoBehaviour:
     Connector: 33
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20539,6 +21130,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20546,6 +21138,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -20553,6 +21146,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20560,6 +21154,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114814111426387428
@@ -20575,6 +21170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 11
@@ -20582,6 +21178,7 @@ MonoBehaviour:
     - {fileID: 114814111426387428}
     - {fileID: 114967495354242462}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20589,6 +21186,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -20596,6 +21194,7 @@ MonoBehaviour:
     Connector: 10
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -20603,6 +21202,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20610,6 +21210,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20617,6 +21218,7 @@ MonoBehaviour:
     Connector: 10
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114814513272928708
@@ -20632,12 +21234,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20645,6 +21249,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20652,6 +21257,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20661,6 +21267,7 @@ MonoBehaviour:
     - {fileID: 114814513272928708}
     - {fileID: 114858857945122100}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -20668,6 +21275,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -20677,6 +21285,7 @@ MonoBehaviour:
     - {fileID: 114814513272928708}
     - {fileID: 114809514186350554}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114817087412830708
@@ -20692,12 +21301,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.4
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20705,6 +21316,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20712,6 +21324,7 @@ MonoBehaviour:
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20721,6 +21334,7 @@ MonoBehaviour:
     - {fileID: 114001352537025072}
     - {fileID: 114817087412830708}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20728,6 +21342,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -20735,6 +21350,7 @@ MonoBehaviour:
     Connector: 35
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114840178114473338
@@ -20750,6 +21366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.6
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 12
@@ -20757,6 +21374,7 @@ MonoBehaviour:
     - {fileID: 114206449826965272}
     - {fileID: 114229311957058702}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20764,6 +21382,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20771,6 +21390,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -20779,6 +21399,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20786,6 +21407,7 @@ MonoBehaviour:
     Connector: 4
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20793,6 +21415,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114840978516473906
@@ -20801,19 +21424,21 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1622990896925434}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d74e57d446b974bbd4a945bcf152b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 1
   Left:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114840978516473906}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -20821,21 +21446,24 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
-    Walkable: 0
+    Walkable: 1
     Connector: 12
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Right:
-    Walkable: 0
+    Walkable: 1
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114840978516473906}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -20843,13 +21471,15 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
-    Walkable: 0
+    Walkable: 1
     Connector: 50
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114847251264102524
@@ -20865,12 +21495,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.01
   Spawn: 1
+  IsInterior: 1
   Left:
     Walkable: 1
     Connector: 39
     ExcludedNeighbours:
     - {fileID: 114847251264102524}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20878,6 +21510,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20885,6 +21518,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20893,6 +21527,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114847251264102524}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -20900,6 +21535,7 @@ MonoBehaviour:
     Connector: 42
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20907,6 +21543,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114849678478373516
@@ -20922,6 +21559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -20929,6 +21567,7 @@ MonoBehaviour:
     - {fileID: 114889021647730130}
     - {fileID: 114849678478373516}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20936,6 +21575,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -20944,6 +21584,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114080132324384902}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -20952,6 +21593,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114889021647730130}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -20959,6 +21601,7 @@ MonoBehaviour:
     Connector: 18
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -20966,6 +21609,7 @@ MonoBehaviour:
     Connector: 19
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114858800306009696
@@ -20981,6 +21625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.5
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 2
@@ -20989,6 +21634,7 @@ MonoBehaviour:
     - {fileID: 114722857561812780}
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -20997,6 +21643,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -21005,6 +21652,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114858800306009696}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Right:
@@ -21012,6 +21660,7 @@ MonoBehaviour:
     Connector: 9
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21019,6 +21668,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21027,6 +21677,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114858800306009696}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114858857945122100
@@ -21042,6 +21693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 38
@@ -21049,6 +21701,7 @@ MonoBehaviour:
     - {fileID: 114814513272928708}
     - {fileID: 114809514186350554}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Down:
@@ -21056,6 +21709,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21064,6 +21718,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114336343411649844}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21073,6 +21728,7 @@ MonoBehaviour:
     - {fileID: 114198908272860082}
     - {fileID: 114809514186350554}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21080,6 +21736,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 1
   Forward:
@@ -21087,6 +21744,7 @@ MonoBehaviour:
     Connector: 37
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114868762907150864
@@ -21102,12 +21760,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 9
     ExcludedNeighbours:
     - {fileID: 114868762907150864}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21115,6 +21775,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21123,6 +21784,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114868762907150864}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21131,6 +21793,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114868762907150864}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21138,6 +21801,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21146,6 +21810,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114868762907150864}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114889021647730130
@@ -21161,6 +21826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -21170,6 +21836,7 @@ MonoBehaviour:
     - {fileID: 114889021647730130}
     - {fileID: 114598421262544050}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21177,6 +21844,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21184,6 +21852,7 @@ MonoBehaviour:
     Connector: 19
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -21192,6 +21861,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114849678478373516}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -21199,6 +21869,7 @@ MonoBehaviour:
     Connector: 22
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -21208,6 +21879,7 @@ MonoBehaviour:
     - {fileID: 114799150288929568}
     - {fileID: 114889021647730130}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114897602803080268
@@ -21223,6 +21895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -21230,6 +21903,7 @@ MonoBehaviour:
     - {fileID: 114459682915331030}
     - {fileID: 114897602803080268}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21237,6 +21911,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21246,6 +21921,7 @@ MonoBehaviour:
     - {fileID: 114459682915331030}
     - {fileID: 114897602803080268}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21254,6 +21930,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114897602803080268}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -21261,6 +21938,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21269,6 +21947,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114897602803080268}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114907072303852500
@@ -21284,12 +21963,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 114205918318585034}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21297,6 +21978,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21305,6 +21987,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114061348862437584}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21312,6 +21995,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -21319,6 +22003,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -21326,6 +22011,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114913616263479360
@@ -21341,11 +22027,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Down:
@@ -21353,6 +22041,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21362,6 +22051,7 @@ MonoBehaviour:
     - {fileID: 114690336084714032}
     - {fileID: 114735929018134910}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -21370,6 +22060,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114623583006861530}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21377,6 +22068,7 @@ MonoBehaviour:
     Connector: 20
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -21384,6 +22076,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114928278068078860
@@ -21399,6 +22092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 31
@@ -21408,6 +22102,7 @@ MonoBehaviour:
     - {fileID: 114928278068078860}
     - {fileID: 114516900796177166}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21415,6 +22110,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21422,6 +22118,7 @@ MonoBehaviour:
     Connector: 36
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21433,6 +22130,7 @@ MonoBehaviour:
     - {fileID: 114526219484999554}
     - {fileID: 114516900796177166}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21440,6 +22138,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21449,6 +22148,7 @@ MonoBehaviour:
     - {fileID: 114610145081776422}
     - {fileID: 114928278068078860}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114933733571715168
@@ -21464,11 +22164,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21476,6 +22178,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -21483,6 +22186,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21490,6 +22194,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -21497,6 +22202,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21504,6 +22210,7 @@ MonoBehaviour:
     Connector: 5
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114939296100294512
@@ -21519,12 +22226,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.01
   Spawn: 1
+  IsInterior: 1
   Left:
     Walkable: 0
     Connector: 1
     ExcludedNeighbours:
     - {fileID: 114939296100294512}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21532,6 +22241,7 @@ MonoBehaviour:
     Connector: 42
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -21539,6 +22249,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21547,6 +22258,7 @@ MonoBehaviour:
     ExcludedNeighbours:
     - {fileID: 114939296100294512}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21554,6 +22266,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21561,6 +22274,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114943967204009904
@@ -21576,12 +22290,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.2
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 1
     Connector: 12
     ExcludedNeighbours:
     - {fileID: 114229311957058702}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 1
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21589,6 +22305,7 @@ MonoBehaviour:
     Connector: 1
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Back:
@@ -21598,6 +22315,7 @@ MonoBehaviour:
     - {fileID: 114300374707499016}
     - {fileID: 114061348862437584}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21605,6 +22323,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -21612,6 +22331,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Forward:
@@ -21619,6 +22339,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
 --- !u!114 &114961771348178174
@@ -21634,6 +22355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 2
@@ -21641,6 +22363,7 @@ MonoBehaviour:
     - {fileID: 114809614854069088}
     - {fileID: 114961771348178174}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21648,6 +22371,7 @@ MonoBehaviour:
     Connector: 25
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -21655,6 +22379,7 @@ MonoBehaviour:
     Connector: 2
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21662,6 +22387,7 @@ MonoBehaviour:
     Connector: 26
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
   Up:
@@ -21669,6 +22395,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21678,6 +22405,7 @@ MonoBehaviour:
     - {fileID: 114000110181928190}
     - {fileID: 114434336691468036}
     EnforceWalkableNeighbor: 1
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
 --- !u!114 &114967495354242462
@@ -21693,6 +22421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 11
@@ -21700,6 +22429,7 @@ MonoBehaviour:
     - {fileID: 114967495354242462}
     - {fileID: 114814111426387428}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21707,6 +22437,7 @@ MonoBehaviour:
     Connector: 3
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 2
   Back:
@@ -21716,6 +22447,7 @@ MonoBehaviour:
     - {fileID: 114967495354242462}
     - {fileID: 114814111426387428}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Right:
@@ -21723,6 +22455,7 @@ MonoBehaviour:
     Connector: 10
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Up:
@@ -21730,6 +22463,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 1
     Rotation: 0
   Forward:
@@ -21737,6 +22471,7 @@ MonoBehaviour:
     Connector: 10
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!114 &114993082003475480
@@ -21752,6 +22487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Probability: 0.1
   Spawn: 1
+  IsInterior: 0
   Left:
     Walkable: 0
     Connector: 1
@@ -21769,6 +22505,7 @@ MonoBehaviour:
     - {fileID: 114336343411649844}
     - {fileID: 114809514186350554}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Down:
@@ -21778,6 +22515,7 @@ MonoBehaviour:
     - {fileID: 114345027764687954}
     - {fileID: 114993082003475480}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Back:
@@ -21794,6 +22532,7 @@ MonoBehaviour:
     - {fileID: 114300374707499016}
     - {fileID: 114295954224542780}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 1
   Right:
@@ -21801,6 +22540,7 @@ MonoBehaviour:
     Connector: 0
     ExcludedNeighbours: []
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
   Up:
@@ -21815,6 +22555,7 @@ MonoBehaviour:
     - {fileID: 114205918318585034}
     - {fileID: 114457878356251986}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Invariant: 0
     Rotation: 0
   Forward:
@@ -21831,6 +22572,7 @@ MonoBehaviour:
     - {fileID: 114514589174993930}
     - {fileID: 114165163965975360}
     EnforceWalkableNeighbor: 0
+    IsOcclusionPortal: 0
     Symmetric: 0
     Flipped: 0
 --- !u!136 &136230063269482372

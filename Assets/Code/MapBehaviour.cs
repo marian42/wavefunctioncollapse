@@ -16,6 +16,8 @@ public class MapBehaviour : MonoBehaviour {
 
 	public ModuleData ModuleData;
 
+	public OcclusionCulling OcclusionData;
+
 	public Vector3 GetWorldspacePosition(Vector3i position) {
 		return this.transform.position
 			+ Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
@@ -23,6 +25,11 @@ public class MapBehaviour : MonoBehaviour {
 				(float)(position.X) * InfiniteMap.BLOCK_SIZE,
 				(float)(position.Y) * InfiniteMap.BLOCK_SIZE,
 				(float)(position.Z) * InfiniteMap.BLOCK_SIZE);
+	}
+
+	public Vector3i GetMapPosition(Vector3 worldSpacePosition) {
+		var pos = (worldSpacePosition - this.transform.position) / InfiniteMap.BLOCK_SIZE;
+		return new Vector3i(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
 	}
 
 	public void Clear() {
@@ -43,6 +50,8 @@ public class MapBehaviour : MonoBehaviour {
 		if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
 			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
 		}
+		this.OcclusionData = this.GetComponent<OcclusionCulling>();
+		this.OcclusionData.Initialize();
 	}
 
 	public bool Initialized {
@@ -68,10 +77,12 @@ public class MapBehaviour : MonoBehaviour {
 			}
 			this.Map.BuildQueue.Dequeue();
 		}
+		this.OcclusionData.ClearOutdatedSlots();
 	}
 
 	public bool BuildSlot(Slot slot) {
 		if (slot.GameObject != null) {
+			this.OcclusionData.RemoveSlot(slot);
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(slot.GameObject);
 #else
@@ -96,6 +107,7 @@ public class MapBehaviour : MonoBehaviour {
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = slot;
 		slot.GameObject = gameObject;
+		this.OcclusionData.AddSlot(slot);
 		return true;
 	}
 
@@ -109,7 +121,7 @@ public class MapBehaviour : MonoBehaviour {
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmoForMyScript(MapBehaviour mapBehaviour, GizmoType gizmoType) {
+	static void DrawGizmo(MapBehaviour mapBehaviour, GizmoType gizmoType) {
 		if (!mapBehaviour.VisualizeSlots) {
 			return;
 		}
