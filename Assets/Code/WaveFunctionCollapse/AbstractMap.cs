@@ -80,7 +80,9 @@ public abstract class AbstractMap {
 	}
 
 	public void Collapse(IEnumerable<Vector3i> targets, bool showProgress = false) {
+#if UNITY_EDITOR
 		try {
+#endif
 			Slot.ResetIterationCount();
 			this.RemovalQueue.Clear();
 			this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
@@ -128,7 +130,6 @@ public abstract class AbstractMap {
 				EditorUtility.ClearProgressBar();
 			}
 			Debug.Log("Collapsed " + targets.Count() + " slots in " + Slot.GetIterationCount() + " iterations (" + (float)Slot.GetIterationCount() / targets.Count() + " iterations per slot)");
-#endif
 		}
 		catch (Exception e) {
 			if (showProgress) {
@@ -136,6 +137,7 @@ public abstract class AbstractMap {
 				throw e;
 			}
 		}
+#endif
 	}
 
 	public void Collapse(Vector3i start, Vector3i size, bool showProgress = false) {

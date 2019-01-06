@@ -44,7 +44,6 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 		EditorUtility.ClearProgressBar();
 		EditorUtility.SetDirty(this);
 	}
-#endif
 
 
 
@@ -108,6 +107,7 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 		this.Modules = modules.ToArray();
 		EditorUtility.SetDirty(this);
 	}
+#endif
 
 	public void OnBeforeSerialize() {
 		
