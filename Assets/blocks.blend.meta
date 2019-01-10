@@ -185,6 +185,8 @@ ModelImporter:
     100358: Window_Prototypee
     100360: Wall_Window_001
     100362: Interior_Pillar_001
+    100364: Interior_Floor_001
+    100366: Interior_Pillar
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -367,6 +369,8 @@ ModelImporter:
     400358: Window_Prototypee
     400360: Wall_Window_001
     400362: Interior_Pillar_001
+    400364: Interior_Floor_001
+    400366: Interior_Pillar
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -545,6 +549,8 @@ ModelImporter:
     2300348: Window_Prototypee
     2300350: Wall_Window_001
     2300352: Interior_Pillar_001
+    2300354: Interior_Floor_001
+    2300356: Interior_Pillar
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -722,6 +728,8 @@ ModelImporter:
     3300348: Window_Prototypee
     3300350: Wall_Window_001
     3300352: Interior_Pillar_001
+    3300354: Interior_Floor_001
+    3300356: Interior_Pillar
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -899,6 +907,8 @@ ModelImporter:
     4300348: Interior_Window
     4300350: Wall_Window_001
     4300352: Interior_Pillar_001
+    4300354: Interior_Pillar
+    4300356: Interior_Floor_001
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
