@@ -10,6 +10,34 @@ XBOX Controls: Left Stick for walking, right stick for looking around, A to jump
 
 Flight mode: Use M to toggle between flight mode and normal mode. In flight mode, you fly across the world, without any controls.
 
-Read more about the WFC algorithm [here](https://github.com/mxgmn/WaveFunctionCollapse).
+Read more about this project [here](https://marian42.de/article/wfc/) and about the WFC algorithm [here](https://github.com/mxgmn/WaveFunctionCollapse).
 
 Play the game on Itch.io: [https://marian42.itch.io/wfc](https://marian42.itch.io/wfc)
+
+## Editing the module set
+
+By changing the module set, you can make some changes to the world generation without writing code.
+You can disable or enable modules, change their spawn probability, their connectors, their neighbor rules or you can add new ones.
+Here is how to do it:
+
+1. Open the scene file `Prototypes.scene`.
+2. Edit the blocks in the scene. You'll mostly change values in the `ModulePrototype` components.
+3. Select the "Prototypes" game object in the hieararchy and apply your changes to the prefab (Overrides -> Apply all).
+4. Select the file "ModuleData" in the asset folder.
+5. Click "Create module data".
+6. Optional: Click "Simplify module data". This takes some time, but will make world generation faster.
+7. Save your work and go back to the Game scene. You can now use your updated module set.
+
+## Generating worlds in the editor
+
+There are different ways to generate worlds in the editor:
+
+- Select the Map object. In the `MapBehaviour` component, select a size and click "Initialize NxN area".
+- Select the "Area Selector" object.
+Move and scale it to select an area, then use the "Generate" button to generate a map.
+- Use the "Slot Inspector" object to show details about a single position.
+It shows you which modules can be spawned at that position and lets you select modules manually.
+
+If you want to enter Play mode without losing your map, disable the "Generate Map Near Player" and the "Occlusion culling" script.
+Note that none of the components serialize, so you can't change the map once it has been serialized.
+That means that you can't change your map in Play mode unless you initialized it in Play mode.
