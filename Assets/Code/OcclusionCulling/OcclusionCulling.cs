@@ -200,51 +200,50 @@ public class OcclusionCulling : MonoBehaviour {
 		return room2;
 	}
 
-	private void ShowPortal(Portal portal, Room currentRoom) {
+	public void ShowOutside(Plane[] frustumPlanes) {
+		foreach (var chunk in this.chunksInRange) {
+			if ((frustumPlanes != null && !GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.Bounds)) || !GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
+				continue;
+			}
+			chunk.SetExteriorVisibility(true);
+			foreach (var outsidePortal in chunk.Portals) {
+				var otherRoom = outsidePortal.Room;
+				if (otherRoom == null
+					|| outsidePortal.IsInside
+					|| (frustumPlanes != null && !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds))
+					|| !GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, outsidePortal.Bounds)
+					|| !outsidePortal.FacesCamera()) {
+					continue;
+				}
+
+				otherRoom.SetVisibility(true);
+				this.ShowPortal(outsidePortal, true);
+			}
+		}
+	}
+
+	private void ShowPortal(Portal portal, bool insideOnly = false) {
+#if UNITY_EDITOR
 		portal.Draw(Color.green);
 		portal.DrawFrustum(this.Camera.transform.position, Color.red);
+#endif
 		var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
-		if (portal.IsInside) {
-			// Looking into another room
-			var otherRoom = portal.Follow(currentRoom);
-			otherRoom.SetVisibility(true);
-			foreach (var roomPortal in otherRoom.Portals) {
+		var room = portal.Follow();
+
+		if (room != null) {
+			// Looking into a room
+			room.SetVisibility(true);
+			foreach (var roomPortal in room.Portals) {
 				if (roomPortal != portal
-					&& roomPortal.FacesCamera(otherRoom)
+					&& roomPortal.FacesCamera(room)
 					&& GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)
 					&& GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, portal.Bounds)) {
-					this.ShowPortal(roomPortal, otherRoom);
+					this.ShowPortal(roomPortal, insideOnly);
 				}
 			}
-		} else {
+		} else if (!insideOnly) {
 			// Looking outside
-			foreach (var chunk in this.chunksInRange) {
-				if (GeometryUtility.TestPlanesAABB(frustumPlanes, chunk.Bounds) && GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
-					chunk.SetExteriorVisibility(true);
-					foreach (var outsidePortal in chunk.Portals) {
-						if (outsidePortal.IsInside 
-							|| !GeometryUtility.TestPlanesAABB(frustumPlanes, outsidePortal.Bounds)
-							|| !outsidePortal.FacesCamera()) {
-							continue;
-						}
-						var otherRoom = outsidePortal.Room;
-						if (otherRoom == null) {
-							continue;
-						}
-						otherRoom.SetVisibility(true);
-						portal.Draw(Color.yellow);
-						portal.DrawFrustum(this.Camera.transform.position, Color.cyan);
-						foreach (var roomPortal in otherRoom.Portals) {
-							if (roomPortal != portal 
-								&& roomPortal.IsInside
-								&& roomPortal.FacesCamera(otherRoom)
-								&& GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
-								this.ShowPortal(roomPortal, otherRoom);
-							}
-						}
-					}
-				}				
-			}			
+			this.ShowOutside(frustumPlanes);
 		}
 	}
 
@@ -255,50 +254,24 @@ public class OcclusionCulling : MonoBehaviour {
 
 		this.cameraFrustumPlanes = GeometryUtility.CalculateFrustumPlanes(this.Camera);
 		var cameraPosition = this.MapBehaviour.GetMapPosition(this.Camera.transform.position);
-		
+
+		bool insideRoom = this.roomsByPosition.ContainsKey(cameraPosition);
 		foreach (var chunk in this.chunksInRange) {
 			chunk.SetRoomVisibility(false);
+			chunk.SetExteriorVisibility(!insideRoom);
 		}
-
-		if (this.roomsByPosition.ContainsKey(cameraPosition)) {
-			// Camera is inside a room
-			foreach (var chunk in this.chunksInRange) {
-				chunk.SetExteriorVisibility(false);
-			}
+		
+		if (insideRoom) {
 			var cameraRoom = this.roomsByPosition[cameraPosition];
 			cameraRoom.SetVisibility(true);
 						
 			foreach (var portal in cameraRoom.Portals) {
-				if (!portal.IsVisibleFromInside(this.Camera.transform.position)) {
-					continue;
+				if (portal.IsVisibleFromInside(this.Camera.transform.position) && portal.FacesCamera(cameraRoom)) {
+					this.ShowPortal(portal);
 				}
-				this.ShowPortal(portal, cameraRoom);
 			}
 		} else {
-			// Camera is outside of any room
-			foreach (var chunk in this.chunksInRange) {
-				chunk.SetExteriorVisibility(true);
-			}
-			foreach (var chunk in this.chunksInRange) {
-				if (!GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, chunk.Bounds)) {
-					continue;
-				}
-				foreach (var portal in chunk.Portals) {
-					if (portal.Room == null || portal.IsInside) {
-						continue;
-					}
-					if (portal.IsVisibleFromOutside()) {
-						var room = portal.Room;
-						room.SetVisibility(true);
-						var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
-						foreach (var roomPortal in room.Portals) {
-							if (roomPortal != portal && roomPortal.FacesCamera(room) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
-								this.ShowPortal(roomPortal, room);
-							}
-						}
-					}
-				}
-			}
+			this.ShowOutside(null);
 		}
 
 		var time = (System.DateTime.Now - start).TotalMilliseconds;

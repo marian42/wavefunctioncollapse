@@ -54,6 +54,16 @@ public class Portal {
 		}
 	}
 
+	public Room Follow() {
+		var normal = Orientations.Direction[this.Direction].ToVector3();
+		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		if (Vector3.Dot(normal, lookDirection) > 0) {
+			return this.Room2;
+		} else {
+			return this.Room1;
+		}
+	}
+
 	public bool IsVisibleFromOutside() {
 		return this.FacesCamera() && GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
 	}
