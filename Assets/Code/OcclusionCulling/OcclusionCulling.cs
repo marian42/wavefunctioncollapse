@@ -234,7 +234,7 @@ public class OcclusionCulling : MonoBehaviour {
 						portal.Draw(Color.yellow);
 						portal.DrawFrustum(this.Camera.transform.position, Color.cyan);
 						foreach (var roomPortal in otherRoom.Portals) {
-							if (roomPortal != portal && portal.IsInside && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+							if (roomPortal != portal && roomPortal.IsInside && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
 								this.ShowPortal(roomPortal, otherRoom);
 							}
 						}
