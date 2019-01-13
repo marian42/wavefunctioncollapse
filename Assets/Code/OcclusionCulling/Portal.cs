@@ -60,7 +60,14 @@ public class Portal {
 
 	public bool FacesCamera() {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
-		return Vector3.Angle(this.cullingData.Camera.transform.forward, -normal) < this.cullingData.Camera.fieldOfView / 2f + 90f;
+		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		return Vector3.Dot(normal, lookDirection) < 0;
+	}
+
+	public bool FacesCamera(Room currentRoom) {
+		var normal = Orientations.Direction[this.Direction + (this.Room1 == currentRoom ? 3 : 0)].ToVector3();
+		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		return Vector3.Dot(normal, lookDirection) < 0;
 	}
 
 	public bool IsVisibleFromInside(Vector3 cameraPosition) {

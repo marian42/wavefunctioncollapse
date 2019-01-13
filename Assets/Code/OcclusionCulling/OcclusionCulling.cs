@@ -210,6 +210,7 @@ public class OcclusionCulling : MonoBehaviour {
 			otherRoom.SetVisibility(true);
 			foreach (var roomPortal in otherRoom.Portals) {
 				if (roomPortal != portal
+					&& roomPortal.FacesCamera(otherRoom)
 					&& GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)
 					&& GeometryUtility.TestPlanesAABB(this.cameraFrustumPlanes, portal.Bounds)) {
 					this.ShowPortal(roomPortal, otherRoom);
@@ -234,7 +235,10 @@ public class OcclusionCulling : MonoBehaviour {
 						portal.Draw(Color.yellow);
 						portal.DrawFrustum(this.Camera.transform.position, Color.cyan);
 						foreach (var roomPortal in otherRoom.Portals) {
-							if (roomPortal != portal && roomPortal.IsInside && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+							if (roomPortal != portal 
+								&& roomPortal.IsInside
+								&& roomPortal.FacesCamera(otherRoom)
+								&& GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
 								this.ShowPortal(roomPortal, otherRoom);
 							}
 						}
@@ -288,7 +292,7 @@ public class OcclusionCulling : MonoBehaviour {
 						room.SetVisibility(true);
 						var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
 						foreach (var roomPortal in room.Portals) {
-							if (roomPortal != portal && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
+							if (roomPortal != portal && roomPortal.FacesCamera(room) && GeometryUtility.TestPlanesAABB(frustumPlanes, roomPortal.Bounds)) {
 								this.ShowPortal(roomPortal, room);
 							}
 						}
