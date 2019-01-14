@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -114,10 +114,7 @@ public class Portal {
 	}
 
 	public void Draw(Color color) {
-		var corners = this.getCorners();
-		for (int i = 0; i < 4; i++) {
-			Debug.DrawLine(corners[i], corners[(i + 1) % 4], color);
-		}
+		this.Bounds.Draw(color);
 	}
 
 	public void DrawFrustum(Vector3 cameraPosition, Color color) {
