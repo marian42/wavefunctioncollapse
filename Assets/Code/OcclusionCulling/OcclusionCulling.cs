@@ -111,8 +111,8 @@ public class OcclusionCulling : MonoBehaviour {
 		room.Slots.Add(slot);
 		foreach (var renderer in slot.GameObject.GetComponentsInChildren<Renderer>()) {
 			room.Renderers.Add(renderer);
+			renderer.enabled = room.Visible;
 		}
-		room.VisibilityOutdated = true;
 		this.roomsByPosition[slot.Position] = room;
 
 		for (int i = 0; i < 6; i++) {
