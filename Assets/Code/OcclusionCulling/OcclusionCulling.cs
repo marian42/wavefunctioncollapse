@@ -9,13 +9,13 @@ public class OcclusionCulling : MonoBehaviour {
 	public MapBehaviour MapBehaviour;
 	public AbstractMap Map;
 
-	private Dictionary<Vector3i, Room> roomsByPosition;
+	private Dictionary<Vector3Int, Room> roomsByPosition;
 
-	private Dictionary<Vector3i, Portal[]> portalsByPosition;
+	private Dictionary<Vector3Int, Portal[]> portalsByPosition;
 
-	private HashSet<Vector3i> outdatedSlots;
+	private HashSet<Vector3Int> outdatedSlots;
 
-	private Dictionary<Vector3i, Chunk> chunks;
+	private Dictionary<Vector3Int, Chunk> chunks;
 	private List<Chunk> chunksInRange;
 
 	public Camera Camera;
@@ -24,27 +24,27 @@ public class OcclusionCulling : MonoBehaviour {
 	public int ChunkSize = 3;
 
 	public float RenderRange;
-	private Vector3i previousChunkAddress;
+	private Vector3Int previousChunkAddress;
 
 	public void Initialize() {
 		this.MapBehaviour = this.GetComponent<MapBehaviour>();
 		this.Map = this.MapBehaviour.Map;
-		this.roomsByPosition = new Dictionary<Vector3i, Room>();
-		this.portalsByPosition = new Dictionary<Vector3i, Portal[]>();
-		this.outdatedSlots = new HashSet<Vector3i>();
-		this.chunks = new Dictionary<Vector3i, Chunk>();
+		this.roomsByPosition = new Dictionary<Vector3Int, Room>();
+		this.portalsByPosition = new Dictionary<Vector3Int, Portal[]>();
+		this.outdatedSlots = new HashSet<Vector3Int>();
+		this.chunks = new Dictionary<Vector3Int, Chunk>();
 		this.chunksInRange = new List<Chunk>();
 	}
 
-	private Vector3i getChunkAddress(Vector3i position) {
-		return new Vector3i(Mathf.FloorToInt((float)position.X / this.ChunkSize), Mathf.FloorToInt((float)position.Y / this.ChunkSize), Mathf.FloorToInt((float)position.Z / this.ChunkSize));
+	private Vector3Int getChunkAddress(Vector3Int position) {
+		return new Vector3Int(Mathf.FloorToInt((float)position.x / this.ChunkSize), Mathf.FloorToInt((float)position.y / this.ChunkSize), Mathf.FloorToInt((float)position.z / this.ChunkSize));
 	}
 
-	private Vector3 getChunkCenter(Vector3i chunkAddress) {
+	private Vector3 getChunkCenter(Vector3Int chunkAddress) {
 		return this.MapBehaviour.GetWorldspacePosition(chunkAddress * this.ChunkSize) + (this.ChunkSize - 1) * 0.5f * AbstractMap.BLOCK_SIZE * Vector3.one;
 	}
 
-	private Chunk getChunk(Vector3i chunkAddress) {
+	private Chunk getChunk(Vector3Int chunkAddress) {
 		if (this.chunks.ContainsKey(chunkAddress)) {
 			return this.chunks[chunkAddress];
 		}
@@ -54,11 +54,11 @@ public class OcclusionCulling : MonoBehaviour {
 		return chunk;
 	}
 
-	public Chunk getChunkFromPosition(Vector3i position) {
+	public Chunk getChunkFromPosition(Vector3Int position) {
 		return this.getChunk(this.getChunkAddress(position));
 	}
 
-	public Room GetRoom(Vector3i position) {
+	public Room GetRoom(Vector3Int position) {
 		if (this.roomsByPosition.ContainsKey(position)) {
 			return this.roomsByPosition[position];
 		} else {
@@ -296,10 +296,10 @@ public class OcclusionCulling : MonoBehaviour {
 		this.previousChunkAddress = currentChunkAddress;
 
 		int chunkCount = (int)(this.RenderRange / (AbstractMap.BLOCK_SIZE * this.ChunkSize));
-		for (int x = currentChunkAddress.X - chunkCount; x <= currentChunkAddress.X + chunkCount; x++) {
+		for (int x = currentChunkAddress.x - chunkCount; x <= currentChunkAddress.x + chunkCount; x++) {
 			for (int y = 0; y < Mathf.CeilToInt((float)this.MapBehaviour.MapHeight / this.ChunkSize); y++) {
-				for (int z = currentChunkAddress.Z - chunkCount; z <= currentChunkAddress.Z + chunkCount; z++) {
-					var address = new Vector3i(x, y, z);
+				for (int z = currentChunkAddress.z - chunkCount; z <= currentChunkAddress.z + chunkCount; z++) {
+					var address = new Vector3Int(x, y, z);
 					if (Vector3.Distance(this.Camera.transform.position, this.getChunkCenter(address)) > this.RenderRange) {
 						continue;
 					}
@@ -335,7 +335,7 @@ public class OcclusionCulling : MonoBehaviour {
 		}
 	}
 
-	private Portal getPortal(Vector3i position, int direction) {
+	private Portal getPortal(Vector3Int position, int direction) {
 		if (direction >= 3) {
 			position = position + Orientations.Direction[direction];
 			direction -= 3;

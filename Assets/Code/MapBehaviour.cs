@@ -18,18 +18,18 @@ public class MapBehaviour : MonoBehaviour {
 
 	public OcclusionCulling OcclusionData;
 
-	public Vector3 GetWorldspacePosition(Vector3i position) {
+	public Vector3 GetWorldspacePosition(Vector3Int position) {
 		return this.transform.position
 			+ Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
 			+ new Vector3(
-				(float)(position.X) * InfiniteMap.BLOCK_SIZE,
-				(float)(position.Y) * InfiniteMap.BLOCK_SIZE,
-				(float)(position.Z) * InfiniteMap.BLOCK_SIZE);
+				(float)(position.x) * InfiniteMap.BLOCK_SIZE,
+				(float)(position.y) * InfiniteMap.BLOCK_SIZE,
+				(float)(position.z) * InfiniteMap.BLOCK_SIZE);
 	}
 
-	public Vector3i GetMapPosition(Vector3 worldSpacePosition) {
+	public Vector3Int GetMapPosition(Vector3 worldSpacePosition) {
 		var pos = (worldSpacePosition - this.transform.position) / InfiniteMap.BLOCK_SIZE;
-		return new Vector3i(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
+		return new Vector3Int(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
 	}
 
 	public void Clear() {

@@ -20,12 +20,12 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 	private Vector3 targetPosition;
 	private Vector3 mapPosition;
 
-	private HashSet<Vector3i> generatedChunks;
+	private HashSet<Vector3Int> generatedChunks;
 
 	private Thread thread;
 
 	void Start() {
-		this.generatedChunks = new HashSet<Vector3i>();
+		this.generatedChunks = new HashSet<Vector3Int>();
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
 		this.mapBehaviour.Initialize();
 		this.map = this.mapBehaviour.Map;
@@ -49,13 +49,13 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		int chunkX = Mathf.FloorToInt(targetX / chunkSize);
 		int chunkZ = Mathf.FloorToInt(targetZ / chunkSize);
 
-		Vector3i closestMissingChunk = Vector3i.zero;
+		Vector3Int closestMissingChunk = Vector3Int.zero;
 		float closestDistance = this.Range;
 		bool any = false;
 
 		for (int x = Mathf.FloorToInt(chunkX - this.Range / chunkSize); x < chunkX + this.Range / chunkSize; x++) {
 			for (int z = Mathf.FloorToInt(chunkZ - this.Range / chunkSize); z < chunkZ + this.Range / chunkSize; z++) {
-				var chunk = new Vector3i(x, 0, z);
+				var chunk = new Vector3Int(x, 0, z);
 				if (this.generatedChunks.Contains(chunk)) {
 					continue;
 				}
@@ -75,10 +75,10 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		}
 	}
 
-	private void createChunk(Vector3i chunkAddress) {
-		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3i(this.ChunkSize / 2, 0, this.ChunkSize / 2);
+	private void createChunk(Vector3Int chunkAddress) {
+		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3Int(this.ChunkSize / 2, 0, this.ChunkSize / 2);
 		this.map.rangeLimit = this.ChunkSize + 20;
-		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3i(this.ChunkSize, this.map.Height, this.ChunkSize));
+		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.generatedChunks.Add(chunkAddress);
 	}
 
@@ -98,11 +98,11 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		
 	}
 
-	private IEnumerable<Slot> getSlotsInChunk(Vector3i chunkAddress) {
+	private IEnumerable<Slot> getSlotsInChunk(Vector3Int chunkAddress) {
 		for (int x = 0; x < this.ChunkSize; x++) {
 			for (int y = 0; y < this.map.Height; y++) {
 				for (int z = 0; z < this.ChunkSize; z++) {
-					yield return this.map.GetSlot(chunkAddress * this.ChunkSize + new Vector3i(x, y, z));
+					yield return this.map.GetSlot(chunkAddress * this.ChunkSize + new Vector3Int(x, y, z));
 				}
 			}
 		}

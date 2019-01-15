@@ -66,10 +66,10 @@ public class Module {
 
 	[System.Serializable]
 	private class SerializableVectorModuleSetKVP {
-		public Vector3i Position;
+		public Vector3Int Position;
 		public ModuleSet ModuleSet;
 
-		public SerializableVectorModuleSetKVP(Vector3i position, ModuleSet moduleSet) {
+		public SerializableVectorModuleSetKVP(Vector3Int position, ModuleSet moduleSet) {
 			this.Position = position;
 			this.ModuleSet = moduleSet;
 		}

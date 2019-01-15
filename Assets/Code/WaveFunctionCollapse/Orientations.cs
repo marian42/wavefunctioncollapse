@@ -23,7 +23,7 @@ public class Orientations {
 
 	private static Quaternion[] rotations;
 	private static Vector3[] vectors;
-	private static Vector3i[] directions;
+	private static Vector3Int[] directions;
 
 	public static Quaternion[] Rotations {
 		get {
@@ -34,7 +34,7 @@ public class Orientations {
 		}
 	}
 
-	public static Vector3i[] Direction {
+	public static Vector3Int[] Direction {
 		get {
 			if (Orientations.directions == null) {
 				Orientations.initialize();
@@ -54,7 +54,7 @@ public class Orientations {
 		};
 
 		Orientations.rotations = Orientations.vectors.Select(vector => Quaternion.LookRotation(vector)).ToArray();
-		Orientations.directions = Orientations.vectors.Select(vector => new Vector3i(vector)).ToArray();
+		Orientations.directions = Orientations.vectors.Select(vector => vector.ToVector3Int()).ToArray();
 	}
 
 	public static readonly int[] HorizontalDirections = { 0, 2, 3, 5 };

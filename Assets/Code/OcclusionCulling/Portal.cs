@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Portal {
 
-	public readonly Vector3i Position1;
-	public readonly Vector3i Position2;
+	public readonly Vector3Int Position1;
+	public readonly Vector3Int Position2;
 	public readonly int Direction;
 
 	private readonly OcclusionCulling cullingData;
@@ -36,7 +36,7 @@ public class Portal {
 	}
 
 	// Direction must be 0, 1 or 2
-	public Portal(Vector3i position, int direction, OcclusionCulling cullingData) {
+	public Portal(Vector3Int position, int direction, OcclusionCulling cullingData) {
 		this.Position1 = position;
 		this.Direction = direction;
 		this.Position2 = this.Position1 + Orientations.Direction[direction];

@@ -6,26 +6,26 @@ using System;
 using UnityEditor;
 
 public class InfiniteMap : AbstractMap {
-	private Dictionary<Vector3i, Slot> slots;
+	private Dictionary<Vector3Int, Slot> slots;
 
 	public readonly int Height;
 
-	public Vector3i rangeLimitCenter;
+	public Vector3Int rangeLimitCenter;
 	public int rangeLimit = 80;
 
 	private TilingMap defaultColumn;
 
 	public InfiniteMap(int height) : base() {
 		this.Height = height;
-		this.slots = new Dictionary<Vector3i, Slot>();
+		this.slots = new Dictionary<Vector3Int, Slot>();
 
 		if (ModuleData.Current == null || ModuleData.Current.Length == 0) {
 			throw new InvalidOperationException("Module data was not available, please create module data first.");
 		}
 	}
 
-	public override Slot GetSlot(Vector3i position, bool create) {
-		if (position.Y >= this.Height || position.Y < 0) {
+	public override Slot GetSlot(Vector3Int position, bool create) {
+		if (position.y >= this.Height || position.y < 0) {
 			return null;
 		}
 
@@ -36,7 +36,7 @@ public class InfiniteMap : AbstractMap {
 			return null;
 		}
 
-		if ((position - this.rangeLimitCenter).Magnitude > this.rangeLimit) {
+		if ((position - this.rangeLimitCenter).magnitude > this.rangeLimit) {
 #if UNITY_EDITOR
 			Debug.LogWarning("Touched Range Limit!");
 #endif
@@ -52,7 +52,7 @@ public class InfiniteMap : AbstractMap {
 	}
 
 	public override void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints) {
-		this.defaultColumn = new TilingMap(new Vector3i(1, this.Height, 1));
+		this.defaultColumn = new TilingMap(new Vector3Int(1, this.Height, 1));
 
 		foreach (var constraint in constraints) {
 			int y = constraint.RelativeY;
@@ -72,10 +72,10 @@ public class InfiniteMap : AbstractMap {
 			foreach (int d in directions) {
 				switch (constraint.Mode) {
 					case BoundaryConstraint.ConstraintMode.EnforceConnector:
-						this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).EnforceConnector(d, constraint.Connector);
+						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).EnforceConnector(d, constraint.Connector);
 						break;
 					case BoundaryConstraint.ConstraintMode.ExcludeConnector:
-						this.defaultColumn.GetSlot(new Vector3i(0, y, 0)).ExcludeConnector(d, constraint.Connector);
+						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).ExcludeConnector(d, constraint.Connector);
 						break;
 				}
 			}			

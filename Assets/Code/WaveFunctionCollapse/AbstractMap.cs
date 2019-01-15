@@ -12,7 +12,7 @@ public abstract class AbstractMap {
 	public static System.Random Random;
 
 	public readonly RingBuffer<HistoryItem> History;
-	public readonly QueueDictionary<Vector3i, ModuleSet> RemovalQueue;
+	public readonly QueueDictionary<Vector3Int, ModuleSet> RemovalQueue;
 	private HashSet<Slot> workArea;
 	public readonly Queue<Slot> BuildQueue;
 
@@ -26,7 +26,7 @@ public abstract class AbstractMap {
 
 		this.History = new RingBuffer<HistoryItem>(AbstractMap.HISTORY_SIZE);
 		this.History.OnOverflow = item => item.Slot.Forget();
-		this.RemovalQueue = new QueueDictionary<Vector3i, ModuleSet>(() => new ModuleSet());
+		this.RemovalQueue = new QueueDictionary<Vector3Int, ModuleSet>(() => new ModuleSet());
 		this.BuildQueue = new Queue<Slot>();
 
 		this.InitialModuleHealth = this.createInitialModuleHealth(ModuleData.Current);
@@ -34,9 +34,9 @@ public abstract class AbstractMap {
 		this.backtrackBarrier = 0;
 	}
 
-	public abstract Slot GetSlot(Vector3i position, bool create);
+	public abstract Slot GetSlot(Vector3Int position, bool create);
 	
-	public Slot GetSlot(Vector3i position) {
+	public Slot GetSlot(Vector3Int position) {
 		return this.GetSlot(position, true);
 	}
 
@@ -67,19 +67,19 @@ public abstract class AbstractMap {
 		}
 	}
 
-	public void EnforceWalkway(Vector3i start, int direction) {
+	public void EnforceWalkway(Vector3Int start, int direction) {
 		var slot = this.GetSlot(start);
 		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable);
 		slot.RemoveModules(ModuleSet.FromEnumerable(toRemove));
 	}
 
-	public void EnforceWalkway(Vector3i start, Vector3i destination) {
-		int direction = Orientations.GetIndex((destination - start).ToVector3());
+	public void EnforceWalkway(Vector3Int start, Vector3Int destination) {
+		int direction = Orientations.GetIndex((Vector3)(destination - start));
 		this.EnforceWalkway(start, direction);
 		this.EnforceWalkway(destination, (direction + 3) % 6);
 	}
 
-	public void Collapse(IEnumerable<Vector3i> targets, bool showProgress = false) {
+	public void Collapse(IEnumerable<Vector3Int> targets, bool showProgress = false) {
 #if UNITY_EDITOR
 		try {
 #endif
@@ -140,12 +140,12 @@ public abstract class AbstractMap {
 #endif
 	}
 
-	public void Collapse(Vector3i start, Vector3i size, bool showProgress = false) {
-		var targets = new List<Vector3i>();
-		for (int x = 0; x < size.X; x++) {
-			for (int y = 0; y < size.Y; y++) {
-				for (int z = 0; z < size.Z; z++) {
-					targets.Add(start + new Vector3i(x, y, z));
+	public void Collapse(Vector3Int start, Vector3Int size, bool showProgress = false) {
+		var targets = new List<Vector3Int>();
+		for (int x = 0; x < size.x; x++) {
+			for (int y = 0; y < size.y; y++) {
+				for (int z = 0; z < size.z; z++) {
+					targets.Add(start + new Vector3Int(x, y, z));
 				}
 			}
 		}

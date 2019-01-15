@@ -10,7 +10,7 @@ public class Chunk {
 	public List<Portal> Portals;
 	public List<Room> Rooms;
 
-	private Dictionary<Vector3i, Renderer[]> renderersByPosition;
+	private Dictionary<Vector3Int, Renderer[]> renderersByPosition;
 
 	public bool ExteriorBlocksVisible = true;
 	public bool InRenderRange {
@@ -23,7 +23,7 @@ public class Chunk {
 		this.Renderers = new List<Renderer>();
 		this.Portals = new List<Portal>();
 		this.Rooms = new List<Room>();
-		this.renderersByPosition = new Dictionary<Vector3i, Renderer[]>();
+		this.renderersByPosition = new Dictionary<Vector3Int, Renderer[]>();
 		this.GameObjects = new List<GameObject>();
 		this.InRenderRange = true;
 	}

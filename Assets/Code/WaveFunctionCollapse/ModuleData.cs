@@ -18,7 +18,7 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 		ModuleData.Current = this.Modules;
 		const int height = 12;
 		int count = 0;
-		var center = new Vector3i(0, height / 2, 0);
+		var center = new Vector3Int(0, height / 2, 0);
 
 		int p = 0;
 		foreach (var module in this.Modules) {

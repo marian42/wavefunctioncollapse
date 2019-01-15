@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 public class Slot {
-	public Vector3i Position;
+	public Vector3Int Position;
 
 	// List of modules that can still be placed here
 	public ModuleSet Modules;
@@ -25,14 +25,14 @@ public class Slot {
 		}
 	}
 
-	public Slot(Vector3i position, AbstractMap map) {
+	public Slot(Vector3Int position, AbstractMap map) {
 		this.Position = position;
 		this.map = map;
 		this.ModuleHealth = map.CopyInititalModuleHealth();
 		this.Modules = new ModuleSet(initializeFull: true);
 	}
 
-	public Slot(Vector3i position, AbstractMap map, Slot prototype) {
+	public Slot(Vector3Int position, AbstractMap map, Slot prototype) {
 		this.Position = position;
 		this.map = map;
 		this.ModuleHealth = prototype.ModuleHealth.Select(a => a.ToArray()).ToArray();
