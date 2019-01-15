@@ -8,12 +8,9 @@ using UnityEditor;
 [RequireComponent(typeof(CullingData))]
 public class OcclusionCulling : MonoBehaviour {
 	public Camera Camera;
-	private Plane[] cameraFrustumPlanes;
 
 	private CullingData cullingData;
-
-	// For debug purposes
-	public double CullingTime;
+	private Plane[] cameraFrustumPlanes;
 
 	public void OnEnable() {
 		this.cullingData = this.GetComponent<CullingData>();
@@ -68,7 +65,6 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	void Update() {
-		var start = System.DateTime.Now;
 		this.cameraFrustumPlanes = GeometryUtility.CalculateFrustumPlanes(this.Camera);
 		var cameraPosition = this.cullingData.MapBehaviour.GetMapPosition(this.Camera.transform.position);
 
@@ -91,9 +87,6 @@ public class OcclusionCulling : MonoBehaviour {
 		} else {
 			this.ShowOutside(null);
 		}
-
-		var time = (System.DateTime.Now - start).TotalMilliseconds;
-		this.CullingTime = time;
 	}
 
 	void OnDisable() {
