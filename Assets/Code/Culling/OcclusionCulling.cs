@@ -83,7 +83,8 @@ public class OcclusionCulling : MonoBehaviour {
 			cameraRoom.SetVisibility(true);
 						
 			foreach (var portal in cameraRoom.Portals) {
-				if (portal.IsVisibleFromInside(this.cameraFrustumPlanes, this.Camera.transform.position) && portal.FacesCamera(cameraRoom, this.Camera.transform.position)) {
+				if ((GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, portal.Bounds) || portal.Bounds.Contains(cameraPosition))
+					&& portal.FacesCamera(cameraRoom, this.Camera.transform.position)) {
 					this.ShowPortal(portal);
 				}
 			}

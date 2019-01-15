@@ -64,10 +64,6 @@ public class Portal {
 		}
 	}
 
-	public bool IsVisibleFromOutside(Plane[] cameraFrustumPlanes, Vector3 cameraPosition) {
-		return this.FacesCamera(cameraPosition) && GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, this.Bounds);
-	}
-
 	public bool FacesCamera(Vector3 cameraPosition) {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
 		var lookDirection = this.Bounds.center - cameraPosition;
@@ -78,10 +74,6 @@ public class Portal {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == currentRoom ? 3 : 0)].ToVector3();
 		var lookDirection = this.Bounds.center - cameraPosition;
 		return Vector3.Dot(normal, lookDirection) < 0;
-	}
-
-	public bool IsVisibleFromInside(Plane[] cameraFrustumPlanes, Vector3 cameraPosition) {
-		return GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, this.Bounds) || this.Bounds.Contains(cameraPosition);
 	}
 
 	private Vector3[] getCorners() {
