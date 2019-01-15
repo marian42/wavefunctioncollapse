@@ -8,7 +8,7 @@ public class Portal {
 	public readonly Vector3Int Position2;
 	public readonly int Direction;
 
-	private readonly OcclusionCulling cullingData;
+	private readonly CullingData cullingData;
 
 	public readonly Bounds Bounds;
 
@@ -36,7 +36,7 @@ public class Portal {
 	}
 
 	// Direction must be 0, 1 or 2
-	public Portal(Vector3Int position, int direction, OcclusionCulling cullingData) {
+	public Portal(Vector3Int position, int direction, CullingData cullingData) {
 		this.Position1 = position;
 		this.Direction = direction;
 		this.Position2 = this.Position1 + Orientations.Direction[direction];
@@ -54,9 +54,9 @@ public class Portal {
 		}
 	}
 
-	public Room Follow() {
+	public Room Follow(Vector3 cameraPosition) {
 		var normal = Orientations.Direction[this.Direction].ToVector3();
-		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		var lookDirection = this.Bounds.center - cameraPosition;
 		if (Vector3.Dot(normal, lookDirection) > 0) {
 			return this.Room2;
 		} else {
@@ -64,24 +64,24 @@ public class Portal {
 		}
 	}
 
-	public bool IsVisibleFromOutside() {
-		return this.FacesCamera() && GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds);
+	public bool IsVisibleFromOutside(Plane[] cameraFrustumPlanes, Vector3 cameraPosition) {
+		return this.FacesCamera(cameraPosition) && GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, this.Bounds);
 	}
 
-	public bool FacesCamera() {
+	public bool FacesCamera(Vector3 cameraPosition) {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == null ? 3 : 0)].ToVector3();
-		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		var lookDirection = this.Bounds.center - cameraPosition;
 		return Vector3.Dot(normal, lookDirection) < 0;
 	}
 
-	public bool FacesCamera(Room currentRoom) {
+	public bool FacesCamera(Room currentRoom, Vector3 cameraPosition) {
 		var normal = Orientations.Direction[this.Direction + (this.Room1 == currentRoom ? 3 : 0)].ToVector3();
-		var lookDirection = this.Bounds.center - this.cullingData.Camera.transform.position;
+		var lookDirection = this.Bounds.center - cameraPosition;
 		return Vector3.Dot(normal, lookDirection) < 0;
 	}
 
-	public bool IsVisibleFromInside(Vector3 cameraPosition) {
-		return GeometryUtility.TestPlanesAABB(this.cullingData.cameraFrustumPlanes, this.Bounds) || this.Bounds.Contains(cameraPosition);
+	public bool IsVisibleFromInside(Plane[] cameraFrustumPlanes, Vector3 cameraPosition) {
+		return GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, this.Bounds) || this.Bounds.Contains(cameraPosition);
 	}
 
 	private Vector3[] getCorners() {

@@ -16,15 +16,12 @@ public class MapBehaviour : MonoBehaviour {
 
 	public ModuleData ModuleData;
 
-	public OcclusionCulling OcclusionData;
+	private CullingData cullingData;
 
 	public Vector3 GetWorldspacePosition(Vector3Int position) {
 		return this.transform.position
 			+ Vector3.up * InfiniteMap.BLOCK_SIZE / 2f
-			+ new Vector3(
-				(float)(position.x) * InfiniteMap.BLOCK_SIZE,
-				(float)(position.y) * InfiniteMap.BLOCK_SIZE,
-				(float)(position.z) * InfiniteMap.BLOCK_SIZE);
+			+ position.ToVector3() * InfiniteMap.BLOCK_SIZE;
 	}
 
 	public Vector3Int GetMapPosition(Vector3 worldSpacePosition) {
@@ -50,8 +47,8 @@ public class MapBehaviour : MonoBehaviour {
 		if (this.ApplyBoundaryConstraints && this.BoundaryConstraints != null && this.BoundaryConstraints.Any()) {
 			this.Map.ApplyBoundaryConstraints(this.BoundaryConstraints);
 		}
-		this.OcclusionData = this.GetComponent<OcclusionCulling>();
-		this.OcclusionData.Initialize();
+		this.cullingData = this.GetComponent<CullingData>();
+		this.cullingData.Initialize();
 	}
 
 	public bool Initialized {
@@ -77,12 +74,12 @@ public class MapBehaviour : MonoBehaviour {
 			}
 			this.Map.BuildQueue.Dequeue();
 		}
-		this.OcclusionData.ClearOutdatedSlots();
+		this.cullingData.ClearOutdatedSlots();
 	}
 
 	public bool BuildSlot(Slot slot) {
 		if (slot.GameObject != null) {
-			this.OcclusionData.RemoveSlot(slot);
+			this.cullingData.RemoveSlot(slot);
 #if UNITY_EDITOR
 			GameObject.DestroyImmediate(slot.GameObject);
 #else
@@ -107,7 +104,7 @@ public class MapBehaviour : MonoBehaviour {
 		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
 		blockBehaviour.Slot = slot;
 		slot.GameObject = gameObject;
-		this.OcclusionData.AddSlot(slot);
+		this.cullingData.AddSlot(slot);
 		return true;
 	}
 
