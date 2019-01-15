@@ -8,20 +8,10 @@ public class Portal {
 	public readonly Vector3Int Position2;
 	public readonly int Direction;
 
-	private readonly CullingData cullingData;
-
 	public readonly Bounds Bounds;
 
-	public Room Room1 {
-		get {
-			return this.cullingData.GetRoom(this.Position1);
-		}
-	}
-	public Room Room2 {
-		get {
-			return this.cullingData.GetRoom(this.Position2);
-		}
-	}
+	public Room Room1;
+	public Room Room2;
 
 	public bool IsInside {
 		get {
@@ -40,10 +30,21 @@ public class Portal {
 		this.Position1 = position;
 		this.Direction = direction;
 		this.Position2 = this.Position1 + Orientations.Direction[direction];
-		this.cullingData = cullingData;
+
+		this.Room1 = cullingData.GetRoom(this.Position1);
+		this.Room2 = cullingData.GetRoom(this.Position2);
 
 		var dir = Orientations.Direction[this.Direction].ToVector3();
-		this.Bounds = new Bounds(cullingData.MapBehaviour.GetWorldspacePosition(this.Position1) + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z)) * 0.8f) * 2f);
+		this.Bounds = new Bounds(cullingData.MapBehaviour.GetWorldspacePosition(this.Position1) + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z)) * 0.8f) * AbstractMap.BLOCK_SIZE);
+	}
+
+	public void ReplaceRoom(Room oldRoom, Room newRoom) {
+		if (this.Room1 == oldRoom) {
+			this.Room1 = newRoom;
+		}
+		if (this.Room2 == oldRoom) {
+			this.Room2 = newRoom;
+		}
 	}
 
 	public Room Follow(Room currentRoom) {

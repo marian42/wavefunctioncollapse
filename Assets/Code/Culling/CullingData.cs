@@ -122,6 +122,24 @@ public class CullingData : MonoBehaviour {
 				}
 			}
 		}
+		this.updatePortals(slot.Position, room);
+	}
+
+	private void updatePortals(Vector3Int position, Room room) {
+		Portal[] portals = null;
+		if (this.portalsByPosition.TryGetValue(position, out portals)) {
+			for (int i = 0; i < 3; i++) {
+				if (portals[i] != null) {
+					portals[i].Room1 = room;
+				}
+			}
+		}
+		for (int i = 0; i < 3; i++) {
+			var neighborPosition = position + Orientations.Direction[3 + i];
+			if (this.portalsByPosition.TryGetValue(neighborPosition, out portals) && portals[i] != null) {
+				portals[i].Room2 = room;
+			}
+		}
 	}
 
 	public void ClearOutdatedSlots() {
@@ -141,6 +159,9 @@ public class CullingData : MonoBehaviour {
 
 	private void removePortal(Portal portal) {
 		this.portalsByPosition[portal.Position1][portal.Direction] = null;
+		if (this.portalsByPosition[portal.Position1].All(p => p == null)) {
+			this.portalsByPosition.Remove(portal.Position1);
+		}
 		this.getChunkFromPosition(portal.Position1).Portals.Remove(portal);
 		this.getChunkFromPosition(portal.Position2).Portals.Remove(portal);
 		if (portal.Room1 != null) {
@@ -186,6 +207,7 @@ public class CullingData : MonoBehaviour {
 		room2.Renderers.AddRange(room1.Renderers);
 		room2.VisibilityOutdated = true;
 		foreach (var portal in room1.Portals) {
+			portal.ReplaceRoom(room1, room2);
 			room2.Portals.Add(portal);
 		}
 		this.removeRoom(room1);
