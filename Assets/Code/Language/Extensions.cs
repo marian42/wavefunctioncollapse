@@ -21,11 +21,7 @@ public static class Extensions
 		Debug.DrawLine(bounds.center + new Vector3(-e.x, +e.y, +e.z), bounds.center + new Vector3(-e.x, +e.y, -e.z), color);
 		Debug.DrawLine(bounds.center + new Vector3(-e.x, -e.y, +e.z), bounds.center + new Vector3(-e.x, -e.y, -e.z), color);
 	}
-
-	public static Vector3Int ToVector3Int(this Vector3 vector) {
-		return new Vector3Int((int)vector.x, (int)vector.y, (int)vector.z);
-	}
-
+	
 	public static Vector3 ToVector3(this Vector3Int vector) {
 		return (Vector3)(vector);
 	}

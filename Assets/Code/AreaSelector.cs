@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -8,7 +8,7 @@ public class AreaSelector : MonoBehaviour {
 
 	public Vector3Int StartPosition {
 		get {
-			var start = ((this.transform.position) / InfiniteMap.BLOCK_SIZE).ToVector3Int();
+			var start = Vector3Int.RoundToInt((this.transform.position) / InfiniteMap.BLOCK_SIZE);
 			if (start.y >= this.MapBehaviour.Map.Height) {
 				start.y = this.MapBehaviour.Map.Height - 1;
 			}
@@ -22,7 +22,7 @@ public class AreaSelector : MonoBehaviour {
 	public Vector3Int Size {
 		get {
 			var start = this.StartPosition;
-			var size = (this.transform.localScale / InfiniteMap.BLOCK_SIZE).ToVector3Int();
+			var size = Vector3Int.RoundToInt(this.transform.localScale / InfiniteMap.BLOCK_SIZE);
 			if (size.y + start.y >= this.MapBehaviour.Map.Height) {
 				size.y = System.Math.Max(0, this.MapBehaviour.Map.Height - start.y);
 			}

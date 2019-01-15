@@ -37,7 +37,7 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	private Vector3Int getChunkAddress(Vector3Int position) {
-		return new Vector3Int(Mathf.FloorToInt((float)position.x / this.ChunkSize), Mathf.FloorToInt((float)position.y / this.ChunkSize), Mathf.FloorToInt((float)position.z / this.ChunkSize));
+		return Vector3Int.FloorToInt(position.ToVector3() / this.ChunkSize);
 	}
 
 	private Vector3 getChunkCenter(Vector3Int chunkAddress) {

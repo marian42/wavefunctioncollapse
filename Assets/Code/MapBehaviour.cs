@@ -29,7 +29,7 @@ public class MapBehaviour : MonoBehaviour {
 
 	public Vector3Int GetMapPosition(Vector3 worldSpacePosition) {
 		var pos = (worldSpacePosition - this.transform.position) / InfiniteMap.BLOCK_SIZE;
-		return new Vector3Int(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z + 0.5f));
+		return Vector3Int.FloorToInt(pos + new Vector3(0.5f, 0, 0.5f));
 	}
 
 	public void Clear() {

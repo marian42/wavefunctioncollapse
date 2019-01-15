@@ -54,7 +54,7 @@ public class Orientations {
 		};
 
 		Orientations.rotations = Orientations.vectors.Select(vector => Quaternion.LookRotation(vector)).ToArray();
-		Orientations.directions = Orientations.vectors.Select(vector => vector.ToVector3Int()).ToArray();
+		Orientations.directions = Orientations.vectors.Select(vector => Vector3Int.RoundToInt(vector)).ToArray();
 	}
 
 	public static readonly int[] HorizontalDirections = { 0, 2, 3, 5 };
