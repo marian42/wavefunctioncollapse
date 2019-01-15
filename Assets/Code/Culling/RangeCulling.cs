@@ -26,8 +26,15 @@ public class RangeCulling : MonoBehaviour {
 	}
 
 	void Update() {
-		var chunksInRange = this.cullingData.ChunksInRange;
 		var cameraPosition = this.Camera.transform.position;
+
+		var currentChunkAddress = this.cullingData.GetChunkAddress(this.cullingData.MapBehaviour.GetMapPosition(cameraPosition));
+		if (currentChunkAddress == this.previousChunkAddress) {
+			return;
+		}
+		this.previousChunkAddress = currentChunkAddress;
+		
+		var chunksInRange = this.cullingData.ChunksInRange;
 		for (int i = 0; i < chunksInRange.Count; i++) {
 			if (Vector3.Distance(chunksInRange[i].Bounds.center, cameraPosition) > this.Range) {
 				chunksInRange[i].SetInRenderRange(false);
@@ -36,18 +43,12 @@ public class RangeCulling : MonoBehaviour {
 			}
 		}
 
-		var currentChunkAddress = this.cullingData.GetChunkAddress(this.cullingData.MapBehaviour.GetMapPosition(this.Camera.transform.position));
-		if (currentChunkAddress == this.previousChunkAddress) {
-			return;
-		}
-		this.previousChunkAddress = currentChunkAddress;
-
-		int chunkCount = (int)(this.Range / (AbstractMap.BLOCK_SIZE * this.Range));
+		int chunkCount = (int)(this.Range / (AbstractMap.BLOCK_SIZE * this.cullingData.ChunkSize));
 		for (int x = currentChunkAddress.x - chunkCount; x <= currentChunkAddress.x + chunkCount; x++) {
 			for (int y = 0; y < Mathf.CeilToInt((float)this.cullingData.MapBehaviour.MapHeight / this.cullingData.ChunkSize); y++) {
 				for (int z = currentChunkAddress.z - chunkCount; z <= currentChunkAddress.z + chunkCount; z++) {
 					var address = new Vector3Int(x, y, z);
-					if (Vector3.Distance(this.Camera.transform.position, this.cullingData.GetChunkCenter(address)) > this.Range) {
+					if (Vector3.Distance(cameraPosition, this.cullingData.GetChunkCenter(address)) > this.Range) {
 						continue;
 					}
 					if (!this.cullingData.Chunks.ContainsKey(address)) {
