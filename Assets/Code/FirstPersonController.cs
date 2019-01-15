@@ -14,13 +14,16 @@ public class FirstPersonController : MonoBehaviour {
 	[Range(1, 100f)]
 	public float JumpStrength = 2f;
 
-	private CharacterController characterController;
+    public const KeyCode InvertMouseLook = KeyCode.I;
+
+    private CharacterController characterController;
 	private Transform cameraTransform;
 
 	private float cameraTilt = 0f;
 	private float verticalSpeed = 0f;
 	private float timeInAir = 0f;
 	private bool jumpLocked = false;
+        private bool invertMouseLook = false;
 
 	void Start () {
 		this.characterController = this.GetComponent<CharacterController>();
@@ -33,6 +36,7 @@ public class FirstPersonController : MonoBehaviour {
 		bool touchesGround = this.onGround();
 		float runMultiplier = 1f + 2f * Input.GetAxis("Run");
 		float y = this.transform.position.y;
+                float mouseY = Input.GetAxis("Look Y") * (this.invertMouseLook ? -1 : 1);
 		Vector3 movementVector = this.transform.forward * Input.GetAxis("Move Y") + this.transform.right * Input.GetAxis("Move X");
 		if (movementVector.sqrMagnitude > 1) { // this check prevents partial joystick input from becoming 100% speed
 			movementVector.Normalize();  // this prevents diagonal movement form being too fast
@@ -43,7 +47,7 @@ public class FirstPersonController : MonoBehaviour {
 			this.transform.position += Vector3.down * verticalMovement;
 		}
 		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Look X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
-		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
+		this.cameraTilt = Mathf.Clamp(this.cameraTilt - mouseY * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
 
 		if (touchesGround) {
@@ -77,6 +81,10 @@ public class FirstPersonController : MonoBehaviour {
 			}
 			this.cameraTilt = 24;
 		}
+
+        if (Input.GetKeyDown(FirstPersonController.InvertMouseLook)) {
+            this.invertMouseLook = !this.invertMouseLook;
+        }
 	}
 
 	public void Enable() {
