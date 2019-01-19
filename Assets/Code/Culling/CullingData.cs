@@ -160,10 +160,12 @@ public class CullingData : MonoBehaviour {
 	}
 
 	private void removePortal(Portal portal) {
-		this.portalsByPosition[portal.Position1][portal.Direction] = null;
-		if (this.portalsByPosition[portal.Position1].All(p => p == null)) {
-			this.portalsByPosition.Remove(portal.Position1);
-		}
+		if (this.portalsByPosition.ContainsKey(portal.Position1)) {
+			this.portalsByPosition[portal.Position1][portal.Direction] = null;
+			if (this.portalsByPosition[portal.Position1].All(p => p == null)) {
+				this.portalsByPosition.Remove(portal.Position1);
+			}
+		}		
 		this.getChunkFromPosition(portal.Position1).Portals.Remove(portal);
 		this.getChunkFromPosition(portal.Position2).Portals.Remove(portal);
 		if (portal.Room1 != null) {
