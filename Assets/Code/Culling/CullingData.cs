@@ -19,6 +19,8 @@ public class CullingData : MonoBehaviour {
 
 	public int ChunkSize = 3;
 
+	public bool DrawGizmo = false;
+
 	public void Initialize() {
 		this.MapBehaviour = this.GetComponent<MapBehaviour>();
 		this.RoomsByPosition = new Dictionary<Vector3Int, Room>();
@@ -250,8 +252,8 @@ public class CullingData : MonoBehaviour {
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-	static void DrawGizmo(CullingData cullingData, GizmoType gizmoType) {
-		if (cullingData.ChunksInRange == null) {
+	static void DrawGizmos(CullingData cullingData, GizmoType gizmoType) {
+		if (!cullingData.DrawGizmo || cullingData.ChunksInRange == null) {
 			return;
 		}
 		foreach (var chunk in cullingData.ChunksInRange) {
