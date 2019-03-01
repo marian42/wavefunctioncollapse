@@ -3,6 +3,12 @@
 # Wave Function Collapse
 
 An infinite, procedurally generated city, assembled out of blocks using the Wave Function Collapse algorithm with backtracking.
+
+Read more about this project [here](https://marian42.de/article/wfc/) and about the WFC algorithm [here](https://github.com/mxgmn/WaveFunctionCollapse).
+
+## Play
+
+Download the game on Itch.io: [https://marian42.itch.io/wfc](https://marian42.itch.io/wfc)  
 Currently, there is no gameplay, you can only walk around and look at the scenery.
 
 Keyboard Controls: WASD for walking, Space to jump, Shift to run, Ctrl to jetpack.  
@@ -10,9 +16,8 @@ XBOX Controls: Left Stick for walking, right stick for looking around, A to jump
 
 Flight mode: Use M to toggle between flight mode and normal mode. In flight mode, you fly across the world, without any controls.
 
-Read more about this project [here](https://marian42.de/article/wfc/) and about the WFC algorithm [here](https://github.com/mxgmn/WaveFunctionCollapse).
-
-Play the game on Itch.io: [https://marian42.itch.io/wfc](https://marian42.itch.io/wfc)
+## Opening the project in Unity
+If you want to work on this project using the Untiy Editor, you need to have Blender installed on your computer.
 
 ## Editing the module set
 
@@ -20,13 +25,13 @@ By changing the module set, you can make some changes to the world generation wi
 You can disable or enable modules, change their spawn probability, their connectors, their neighbor rules or you can add new ones.
 Here is how to do it:
 
-1. Open the scene file `Prototypes.scene`.
+1. Open the `Prototypes` scene.
 2. Edit the blocks in the scene. You'll mostly change values in the `ModulePrototype` components.
 3. Select the "Prototypes" game object in the hieararchy and apply your changes to the prefab (Overrides -> Apply all).
 4. Select the file "ModuleData" in the asset folder.
 5. Click "Create module data".
 6. Optional: Click "Simplify module data". This takes some time, but will make world generation faster.
-7. Save your work and go back to the Game scene. You can now use your updated module set.
+7. Save your work and go back to the `Game` scene. You can now use your updated module set.
 
 ## Generating worlds in the editor
 
