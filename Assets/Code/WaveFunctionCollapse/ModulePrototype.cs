@@ -270,4 +270,17 @@ public class ModulePrototype : MonoBehaviour {
 	}
 
 	void Update() { }
+
+	void Reset() {
+		this.Up = new VerticalFaceDetails();
+		this.Down = new VerticalFaceDetails();
+		this.Right = new HorizontalFaceDetails();
+		this.Left = new HorizontalFaceDetails();
+		this.Forward = new HorizontalFaceDetails();
+		this.Back = new HorizontalFaceDetails();
+
+		foreach (var face in this.Faces) {
+			face.ExcludedNeighbours = new ModulePrototype[] { };
+		}
+	}
 }
