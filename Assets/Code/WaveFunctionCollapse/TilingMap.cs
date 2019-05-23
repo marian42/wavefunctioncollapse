@@ -26,7 +26,7 @@ public class TilingMap : AbstractMap {
 		}
 	}
 
-	public override Slot GetSlot(Vector3Int position, bool create) {
+	public override Slot GetSlot(Vector3Int position) {
 		if (position.y < 0 || position.y >= this.Size.y) {
 			return null;
 		}

@@ -34,11 +34,7 @@ public abstract class AbstractMap {
 		this.backtrackBarrier = 0;
 	}
 
-	public abstract Slot GetSlot(Vector3Int position, bool create);
-	
-	public Slot GetSlot(Vector3Int position) {
-		return this.GetSlot(position, true);
-	}
+	public abstract Slot GetSlot(Vector3Int position);
 
 	public abstract IEnumerable<Slot> GetAllSlots();
 

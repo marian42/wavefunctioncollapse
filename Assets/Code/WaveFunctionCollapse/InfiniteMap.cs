@@ -25,16 +25,13 @@ public class InfiniteMap : AbstractMap {
 		}
 	}
 
-	public override Slot GetSlot(Vector3Int position, bool create) {
+	public override Slot GetSlot(Vector3Int position) {
 		if (position.y >= this.Height || position.y < 0) {
 			return null;
 		}
 
 		if (this.slots.ContainsKey(position)) {
 			return this.slots[position];
-		}
-		if (!create) {
-			return null;
 		}
 
 		if ((position - this.rangeLimitCenter).magnitude > this.rangeLimit) {
@@ -87,5 +84,9 @@ public class InfiniteMap : AbstractMap {
 
 	public Slot GetDefaultSlot(int y) {
 		return this.defaultColumn.GetSlot(Vector3Int.up * y);
+	}
+	
+	public bool IsSlotInitialized(Vector3Int position) {
+		return this.slots.ContainsKey(position);
 	}
 }

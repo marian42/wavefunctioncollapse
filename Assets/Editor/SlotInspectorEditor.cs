@@ -109,14 +109,12 @@ public class SlotInspectorEditor : Editor {
 		}
 		GUILayout.Space(10f);
 
-		var slot = map.GetSlot(position, false);
-
-		if (slot == null) {
-			if (GUILayout.Button("CreateSlot")) {
+		if (map.IsSlotInitialized(position)) {
+			this.showEditor(map.GetSlot(position), mapBehaviour);
+		} else {
+			if (GUILayout.Button("Create Slot")) {
 				map.GetSlot(position);
 			}
-		} else {
-			this.showEditor(slot, mapBehaviour);
 		}
 	}
 }
