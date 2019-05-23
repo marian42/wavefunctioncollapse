@@ -18,6 +18,7 @@ public class InfiniteMap : AbstractMap {
 	public InfiniteMap(int height) : base() {
 		this.Height = height;
 		this.slots = new Dictionary<Vector3Int, Slot>();
+		this.defaultColumn = new TilingMap(new Vector3Int(1, height, 1));
 
 		if (ModuleData.Current == null || ModuleData.Current.Length == 0) {
 			throw new InvalidOperationException("Module data was not available, please create module data first.");
@@ -43,17 +44,11 @@ public class InfiniteMap : AbstractMap {
 			return null;
 		}
 
-		if (this.defaultColumn != null) {
-			this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));
-		} else {
-			this.slots[position] = new Slot(position, this);
-		}
+		this.slots[position] = new Slot(position, this, this.defaultColumn.GetSlot(position));		
 		return this.slots[position];
 	}
 
 	public override void ApplyBoundaryConstraints(IEnumerable<BoundaryConstraint> constraints) {
-		this.defaultColumn = new TilingMap(new Vector3Int(1, this.Height, 1));
-
 		foreach (var constraint in constraints) {
 			int y = constraint.RelativeY;
 			if (y < 0) {
@@ -88,5 +83,9 @@ public class InfiniteMap : AbstractMap {
 
 	public override IEnumerable<Slot> GetAllSlots() {
 		return this.slots.Values;
+	}
+
+	public Slot GetDefaultSlot(int y) {
+		return this.defaultColumn.GetSlot(Vector3Int.up * y);
 	}
 }

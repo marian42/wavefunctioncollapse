@@ -49,6 +49,36 @@ public class SlotInspectorEditor : Editor {
 
 			GUILayout.EndHorizontal();
 		}
+
+		var defaultSlot = mapBehaviour.Map.GetDefaultSlot(slot.Position.y);
+		var removedPrototypes = new List<ModulePrototype>();
+		var removedByDefault = new List<ModulePrototype>();
+
+		foreach (var module in ModuleData.Current) {
+			if (!prototypes.ContainsKey(module.Prototype)) {
+				prototypes.Add(module.Prototype, null);
+				if (defaultSlot != null && !defaultSlot.Modules.Contains(module)) {
+					removedByDefault.Add(module.Prototype);
+				} else {
+					removedPrototypes.Add(module.Prototype);
+				}
+			}
+		}
+
+		if (removedPrototypes.Any()) {
+			GUILayout.Space(15f);
+			GUILayout.Label("Removed modules:");
+			foreach (var prototype in removedPrototypes) {
+				GUILayout.Label(prototype.gameObject.name);
+			}
+		}
+		if (removedByDefault.Any()) {
+			GUILayout.Space(15f);
+			GUILayout.Label("Modules always removed at this y coordinate:");
+			foreach (var prototype in removedByDefault) {
+				GUILayout.Label(prototype.gameObject.name);
+			}
+		}
 	}
 
 	public override void OnInspectorGUI() {
