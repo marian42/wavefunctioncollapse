@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(SlotInspector))]
 public class SlotInspectorEditor : Editor {
+	private string filterString = "";
 
 	private void showEditor(Slot slot, MapBehaviour mapBehaviour) {
 		if (slot.Collapsed) {
@@ -34,7 +35,20 @@ public class SlotInspectorEditor : Editor {
 			prototypes[proto].Add(module);
 		}
 
+		if (prototypes.Any()) {
+			GUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Filter: ");
+			this.filterString = GUILayout.TextField(this.filterString);
+			GUILayout.EndHorizontal();
+		}
+
+		int hiddenByFilter = 0;
 		foreach (var proto in prototypes.Keys) {
+			if (this.filterString != "" && !proto.gameObject.name.ToLower().Contains(this.filterString.ToLower())) {
+				hiddenByFilter++;
+				continue;
+			}
+			
 			var list = prototypes[proto];
 
 			GUILayout.BeginHorizontal();
@@ -48,6 +62,10 @@ public class SlotInspectorEditor : Editor {
 			}
 
 			GUILayout.EndHorizontal();
+		}
+
+		if (hiddenByFilter > 0) {
+			GUILayout.Label("(+" + hiddenByFilter + " that don't match the filter query)");
 		}
 
 		var defaultSlot = mapBehaviour.Map.GetDefaultSlot(slot.Position.y);
