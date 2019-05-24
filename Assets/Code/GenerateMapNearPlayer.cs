@@ -77,7 +77,7 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 
 	private void createChunk(Vector3Int chunkAddress) {
 		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3Int(this.ChunkSize / 2, 0, this.ChunkSize / 2);
-		this.map.rangeLimit = this.ChunkSize + 20;
+		this.map.RangeLimit = this.ChunkSize + 20;
 		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.generatedChunks.Add(chunkAddress);
 	}

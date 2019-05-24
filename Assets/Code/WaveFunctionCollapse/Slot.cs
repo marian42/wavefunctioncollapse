@@ -116,6 +116,11 @@ public class Slot {
 			int inverseDirection = (d + 3) % 6;
 			var neighbor = this.GetNeighbor(d);
 			if (neighbor == null || neighbor.Forgotten) {
+#if UNITY_EDITOR
+				if (this.map is InfiniteMap && (this.map as InfiniteMap).IsOutsideOfRangeLimit(this.Position + Orientations.Direction[d])) {
+					(this.map as InfiniteMap).OnHitRangeLimit(this.Position + Orientations.Direction[d], modulesToRemove);
+				}
+#endif
 				continue;
 			}
 

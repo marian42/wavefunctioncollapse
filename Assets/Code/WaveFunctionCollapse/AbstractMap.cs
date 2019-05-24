@@ -51,7 +51,7 @@ public abstract class AbstractMap {
 		if (this.workArea != null) {
 			this.workArea.Add(slot);
 		}
-	}	
+	}
 	
 	public void FinishRemovalQueue() {
 		while (this.RemovalQueue.Any()) {
