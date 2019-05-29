@@ -17,7 +17,8 @@ XBOX Controls: Left Stick for walking, right stick for looking around, A to jump
 Flight mode: Use M to toggle between flight mode and normal mode. In flight mode, you fly across the world, without any controls.
 
 ## Opening the project in Unity
-If you want to work on this project using the Untiy Editor, you need to have Blender installed on your computer.
+
+If you want to work on this project using the Unity Editor, you need Blender installed on your computer.
 
 ## Editing the module set
 
@@ -27,7 +28,7 @@ Here is how to do it:
 
 1. Open the `Prototypes` scene.
 2. Edit the blocks in the scene. You'll mostly change values in the `ModulePrototype` components.
-3. Select the "Prototypes" game object in the hieararchy and apply your changes to the prefab (Overrides -> Apply all).
+3. Select the "Prototypes" game object in the hierarchy and apply your changes to the prefab (Overrides -> Apply all).
 4. Select the file "ModuleData" in the asset folder.
 5. Click "Create module data".
 6. Optional: Click "Simplify module data". This takes some time, but will make world generation faster.
