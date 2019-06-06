@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: 282133ebabc6e9a4aa3c4e494dfe17e4, type: 3}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.85629976, g: 0.8687268, b: 0.8753254, a: 1}
+  m_IndirectSpecularColor: {r: 0.8562988, g: 0.86872524, b: 0.87532234, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -241,7 +241,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282840810}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 784786034}
@@ -361,7 +361,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1
+  m_Height: 1.2
   m_Radius: 0.2
   m_SlopeLimit: 55
   m_StepOffset: 0.3
@@ -482,7 +482,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277591053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.14, y: 6.72, z: -1.802}
+  m_LocalPosition: {x: 4.19, y: 6.1, z: 24.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -526,8 +526,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288097635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.11, y: 0, z: -3.55}
-  m_LocalScale: {x: 14.266997, y: 82.83481, z: 14.360642}
+  m_LocalPosition: {x: -16.35, y: 2.77, z: 9.19}
+  m_LocalScale: {x: 9.984188, y: 9.877853, z: 10.049722}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -632,7 +632,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 282840813}
-  CullingTime: 0
 --- !u!114 &1916848030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,5 +658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fc3fba1613aade46ad15e51eddbf583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapBehaviour: {fileID: 0}
+  MapBehaviour: {fileID: 1916848026}
   ChunkSize: 3
+  DrawGizmo: 0

@@ -187,6 +187,37 @@ ModelImporter:
     100362: Interior_Pillar_001
     100364: Interior_Floor_001
     100366: Interior_Pillar
+    100368: Basic_Blocks
+    100370: Bridges
+    100372: Interior
+    100374: Interior_Ceiling_Corner
+    100376: Interior_Chandelier
+    100378: Interior_Corner_Inverted
+    100380: Interior_Corner_with_Door
+    100382: Interior_Corner_with_Door_M
+    100384: Interior_Door
+    100386: Interior_Floor_High_to_Low_Adapter
+    100388: Interior_High_Ceiling
+    100390: Interior_High_Ceiling_Adapter
+    100392: Interior_High_Ceiling_Adapter_M
+    100394: Interior_High_Ceiling_with_Corner_Railing
+    100396: Interior_High_Ceiling_with_Railing
+    100398: Interior_High_Corner
+    100400: Interior_High_Door
+    100402: Interior_High_Wall_Ceiling
+    100404: Interior_High_Window
+    100406: Interior_Railings
+    100408: Interior_Wall_High
+    100410: Interior_Wall_High_to_Low_Adapter
+    100412: Interior_Wall_High_to_Low_Adapter_M
+    100414: Railings
+    100416: Roofs
+    100418: Roofs_2
+    100420: Stairs_Outside
+    100422: Tunnel_Window
+    100424: Tunnels
+    100426: Interior_Floor_High
+    100428: Table
     400000: //RootNode
     400002: Rig
     400004: Tile
@@ -371,6 +402,37 @@ ModelImporter:
     400362: Interior_Pillar_001
     400364: Interior_Floor_001
     400366: Interior_Pillar
+    400368: Basic_Blocks
+    400370: Bridges
+    400372: Interior
+    400374: Interior_Ceiling_Corner
+    400376: Interior_Chandelier
+    400378: Interior_Corner_Inverted
+    400380: Interior_Corner_with_Door
+    400382: Interior_Corner_with_Door_M
+    400384: Interior_Door
+    400386: Interior_Floor_High_to_Low_Adapter
+    400388: Interior_High_Ceiling
+    400390: Interior_High_Ceiling_Adapter
+    400392: Interior_High_Ceiling_Adapter_M
+    400394: Interior_High_Ceiling_with_Corner_Railing
+    400396: Interior_High_Ceiling_with_Railing
+    400398: Interior_High_Corner
+    400400: Interior_High_Door
+    400402: Interior_High_Wall_Ceiling
+    400404: Interior_High_Window
+    400406: Interior_Railings
+    400408: Interior_Wall_High
+    400410: Interior_Wall_High_to_Low_Adapter
+    400412: Interior_Wall_High_to_Low_Adapter_M
+    400414: Railings
+    400416: Roofs
+    400418: Roofs_2
+    400420: Stairs_Outside
+    400422: Tunnel_Window
+    400424: Tunnels
+    400426: Interior_Floor_High
+    400428: Table
     2100000: unnamed
     2300000: Rig
     2300002: Tile
@@ -551,6 +613,29 @@ ModelImporter:
     2300352: Interior_Pillar_001
     2300354: Interior_Floor_001
     2300356: Interior_Pillar
+    2300358: Interior_Ceiling_Corner
+    2300360: Interior_Chandelier
+    2300362: Interior_Corner_Inverted
+    2300364: Interior_Corner_with_Door
+    2300366: Interior_Corner_with_Door_M
+    2300368: Interior_Door
+    2300370: Interior_Floor_High_to_Low_Adapter
+    2300372: Interior_High_Ceiling
+    2300374: Interior_High_Ceiling_Adapter
+    2300376: Interior_High_Ceiling_Adapter_M
+    2300378: Interior_High_Ceiling_with_Corner_Railing
+    2300380: Interior_High_Ceiling_with_Railing
+    2300382: Interior_High_Corner
+    2300384: Interior_High_Door
+    2300386: Interior_High_Wall_Ceiling
+    2300388: Interior_High_Window
+    2300390: Interior_Railings
+    2300392: Interior_Wall_High
+    2300394: Interior_Wall_High_to_Low_Adapter
+    2300396: Interior_Wall_High_to_Low_Adapter_M
+    2300398: Tunnel_Window
+    2300400: Interior_Floor_High
+    2300402: Table
     3300000: Rig
     3300002: Tile
     3300004: Tile_001
@@ -730,6 +815,29 @@ ModelImporter:
     3300352: Interior_Pillar_001
     3300354: Interior_Floor_001
     3300356: Interior_Pillar
+    3300358: Interior_Ceiling_Corner
+    3300360: Interior_Chandelier
+    3300362: Interior_Corner_Inverted
+    3300364: Interior_Corner_with_Door
+    3300366: Interior_Corner_with_Door_M
+    3300368: Interior_Door
+    3300370: Interior_Floor_High_to_Low_Adapter
+    3300372: Interior_High_Ceiling
+    3300374: Interior_High_Ceiling_Adapter
+    3300376: Interior_High_Ceiling_Adapter_M
+    3300378: Interior_High_Ceiling_with_Corner_Railing
+    3300380: Interior_High_Ceiling_with_Railing
+    3300382: Interior_High_Corner
+    3300384: Interior_High_Door
+    3300386: Interior_High_Wall_Ceiling
+    3300388: Interior_High_Window
+    3300390: Interior_Railings
+    3300392: Interior_Wall_High
+    3300394: Interior_Wall_High_to_Low_Adapter
+    3300396: Interior_Wall_High_to_Low_Adapter_M
+    3300398: Tunnel_Window
+    3300400: Interior_Floor_High
+    3300402: Table
     4300000: Tile_008
     4300002: Tile_007
     4300004: Tile_010
@@ -909,6 +1017,29 @@ ModelImporter:
     4300352: Interior_Pillar_001
     4300354: Interior_Pillar
     4300356: Interior_Floor_001
+    4300358: Interior_Chandelier
+    4300360: Interior_Railings
+    4300362: Interior_Ceiling_Corner
+    4300364: Interior_Corner_Inverted
+    4300366: Interior_Corner_with_Door
+    4300368: Interior_Corner_with_Door_M
+    4300370: Interior_Door
+    4300372: Interior_Floor_High_to_Low_Adapter
+    4300374: Interior_High_Ceiling
+    4300376: Interior_High_Ceiling_Adapter
+    4300378: Interior_High_Ceiling_Adapter_M
+    4300380: Interior_High_Ceiling_with_Corner_Railing
+    4300382: Interior_High_Ceiling_with_Railing
+    4300384: Interior_High_Corner
+    4300386: Interior_High_Door
+    4300388: Interior_High_Wall_Ceiling
+    4300390: Interior_High_Window
+    4300392: Interior_Wall_High
+    4300394: Interior_Wall_High_to_Low_Adapter
+    4300396: Interior_Wall_High_to_Low_Adapter_M
+    4300398: Tunnel_Window
+    4300400: Interior_Floor_High
+    4300402: Table
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
@@ -946,6 +1077,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -970,6 +1102,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
