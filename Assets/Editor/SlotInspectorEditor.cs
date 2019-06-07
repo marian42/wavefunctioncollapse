@@ -125,6 +125,12 @@ public class SlotInspectorEditor : Editor {
 			mapBehaviour.Initialize();
 			mapBehaviour.Map.GetSlot(position);
 		}
+
+		if (mapBehaviour.Map.History.Any() && GUILayout.Button("Undo Last Collapse")) {
+			GameObject.DestroyImmediate(mapBehaviour.Map.History.Peek().Slot.GameObject);
+			mapBehaviour.Map.Undo(1);
+		}
+
 		GUILayout.Space(10f);
 
 		if (map.IsSlotInitialized(position)) {
