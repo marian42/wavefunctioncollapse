@@ -25,7 +25,6 @@ public class ModuleDataEditor : Editor {
 
 		if (GUILayout.Button("Simplify module data")) {
 			moduleData.SimplifyNeighborData();
-			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 		}
 	}
 }

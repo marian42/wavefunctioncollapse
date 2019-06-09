@@ -43,6 +43,7 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 		Debug.Log("Removed " + count + " impossible neighbors.");
 		EditorUtility.ClearProgressBar();
 		EditorUtility.SetDirty(this);
+		AssetDatabase.SaveAssets();
 	}
 
 
@@ -106,6 +107,7 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 
 		this.Modules = modules.ToArray();
 		EditorUtility.SetDirty(this);
+		AssetDatabase.SaveAssets();
 	}
 #endif
 
