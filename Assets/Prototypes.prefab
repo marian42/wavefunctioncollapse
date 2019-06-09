@@ -13854,6 +13854,7 @@ MonoBehaviour:
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114840978516473906}
+    - {fileID: 2094716712235530809}
     EnforceWalkableNeighbor: 0
     IsOcclusionPortal: 0
     Symmetric: 0
@@ -13880,6 +13881,7 @@ MonoBehaviour:
     Connector: 51
     ExcludedNeighbours:
     - {fileID: 114840978516473906}
+    - {fileID: 8339403009299621954}
     EnforceWalkableNeighbor: 0
     IsOcclusionPortal: 0
     Symmetric: 0
@@ -24682,7 +24684,9 @@ MonoBehaviour:
   Forward:
     Walkable: 1
     Connector: 51
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 114840978516473906}
+    - {fileID: 8339403009299621954}
     EnforceWalkableNeighbor: 0
     IsOcclusionPortal: 0
     Symmetric: 0
@@ -24817,7 +24821,9 @@ MonoBehaviour:
   Back:
     Walkable: 1
     Connector: 51
-    ExcludedNeighbours: []
+    ExcludedNeighbours:
+    - {fileID: 114840978516473906}
+    - {fileID: 2094716712235530809}
     EnforceWalkableNeighbor: 0
     IsOcclusionPortal: 0
     Symmetric: 0
@@ -26958,8 +26964,9 @@ MonoBehaviour:
   Left:
     Walkable: 0
     Connector: 50
-    ExcludedNeighbours: []
-    EnforceWalkableNeighbor: 0
+    ExcludedNeighbours:
+    - {fileID: 3684555729821900289}
+    EnforceWalkableNeighbor: 1
     IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
@@ -26975,7 +26982,7 @@ MonoBehaviour:
     Walkable: 0
     Connector: 50
     ExcludedNeighbours: []
-    EnforceWalkableNeighbor: 0
+    EnforceWalkableNeighbor: 1
     IsOcclusionPortal: 0
     Symmetric: 1
     Flipped: 0
