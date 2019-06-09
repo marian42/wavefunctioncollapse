@@ -13,7 +13,7 @@ public class SlotInspectorEditor : Editor {
 			GUILayout.Label("Collapsed: " + slot.Module);
 			GUILayout.Space(20f);
 			GUILayout.Label("Add exclusion rules:");
-			this.createNeighborExlusionUI(slot);
+			this.createNeighborExlusionUI(slot, mapBehaviour);
 			return;
 		}
 
@@ -142,7 +142,7 @@ public class SlotInspectorEditor : Editor {
 		}
 	}
 
-	private void createNeighborExlusionUI(Slot slot) {
+	private void createNeighborExlusionUI(Slot slot, MapBehaviour mapBehaviour) {
 		var style = new GUIStyle();
 
 		for (int i = 0; i < 6; i++) {
@@ -178,6 +178,7 @@ public class SlotInspectorEditor : Editor {
 					neighborFace.ExcludedNeighbours = neighborFace.ExcludedNeighbours.Concat(new ModulePrototype[] { slot.Module.Prototype }).ToArray();
 				}
 
+				mapBehaviour.ModuleData.SavePrototypes();
 				Debug.Log("Added exclusion rule.");
 			}
 
@@ -193,10 +194,11 @@ public class SlotInspectorEditor : Editor {
 
 			if (!ownFace.EnforceWalkableNeighbor && !neighborFace.Walkable && GUILayout.Button("Enforce Walkable neighbor")) {
 				ownFace.EnforceWalkableNeighbor = true;
+				mapBehaviour.ModuleData.SavePrototypes();
+				Debug.Log("Added exclusion rule.");
 			}
 		}
 	}
-
 
 	private Color getColor(int direction) {
 		switch (direction) {

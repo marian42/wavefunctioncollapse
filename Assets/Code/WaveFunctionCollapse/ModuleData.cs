@@ -119,4 +119,12 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 			module.PossibleNeighborsArray = module.PossibleNeighbors.Select(ms => ms.ToArray()).ToArray();
 		}
 	}
+
+	public void SavePrototypes() {
+		EditorUtility.SetDirty(this.Prototypes);
+		AssetDatabase.SaveAssets();
+		foreach (var module in this.Modules) {
+			module.Prototype = module.Prefab.GetComponent<ModulePrototype>();
+		}
+	}
 }
