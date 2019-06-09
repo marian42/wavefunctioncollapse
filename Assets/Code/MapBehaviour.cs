@@ -101,8 +101,6 @@ public class MapBehaviour : MonoBehaviour {
 		gameObject.transform.parent = this.transform;
 		gameObject.transform.position = this.GetWorldspacePosition(slot.Position);
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * module.Rotation);
-		var blockBehaviour = gameObject.AddComponent<BlockBehaviour>();
-		blockBehaviour.Slot = slot;
 		slot.GameObject = gameObject;
 		this.cullingData.AddSlot(slot);
 		return true;
