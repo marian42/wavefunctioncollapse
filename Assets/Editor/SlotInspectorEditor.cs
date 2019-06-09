@@ -142,6 +142,11 @@ public class SlotInspectorEditor : Editor {
 		}
 	}
 
+	public void OnSceneGUI() {
+		SlotInspector slotInspector = (SlotInspector)this.target;
+		slotInspector.transform.position = slotInspector.MapBehaviour.GetWorldspacePosition(slotInspector.MapBehaviour.GetMapPosition(slotInspector.transform.position));
+	}
+
 	private void createNeighborExlusionUI(Slot slot, MapBehaviour mapBehaviour) {
 		var style = new GUIStyle();
 
