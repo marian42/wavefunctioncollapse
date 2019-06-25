@@ -94,10 +94,10 @@ public class Slot {
 	}
 
 	// This modifies the supplied ModuleSet as a side effect
-	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true) {
+	public void RemoveModules(ModuleSet modulesToRemove, bool recursive = true, bool updateHistory = true) {
 		modulesToRemove.Intersect(this.Modules);
 
-		if (this.map.History != null && this.map.History.Any()) {
+		if (this.map.History != null && this.map.History.Any() && updateHistory) {
 			var item = this.map.History.Peek();
 			if (!item.RemovedModules.ContainsKey(this.Position)) {
 				item.RemovedModules[this.Position] = new ModuleSet();
