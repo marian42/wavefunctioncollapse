@@ -66,7 +66,7 @@ public abstract class AbstractMap {
 	public void EnforceWalkway(Vector3Int start, int direction) {
 		var slot = this.GetSlot(start);
 		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable);
-		slot.RemoveModules(ModuleSet.FromEnumerable(toRemove));
+		slot.RemoveModules(ModuleSet.FromEnumerable(toRemove), updateHistory: false);
 	}
 
 	public void EnforceWalkway(Vector3Int start, Vector3Int destination) {
