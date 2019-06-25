@@ -103,6 +103,21 @@ public class MapBehaviour : MonoBehaviour {
 		gameObject.transform.rotation = Quaternion.Euler(Vector3.up * 90f * module.Rotation);
 		slot.GameObject = gameObject;
 		this.cullingData.AddSlot(slot);
+
+		if (slot.EnforcedWalkways != null) {
+			foreach (var direction in slot.EnforcedWalkways) {
+				var fromPosition = this.GetWorldspacePosition(slot.Position);
+				var toPosition = this.GetWorldspacePosition(slot.GetNeighbor(direction).Position);
+				var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				cube.transform.parent = gameObject.transform;
+				cube.transform.position = (fromPosition + toPosition) / 2f;
+				cube.transform.rotation = Quaternion.LookRotation(toPosition - fromPosition);
+				cube.transform.localScale = new Vector3(0.1f, 0.1f, 2.1f);
+				cube.GetComponent<MeshRenderer>().sharedMaterial.color = Color.red;
+				GameObject.DestroyImmediate(cube.GetComponent<BoxCollider>());
+			}
+		}
+
 		return true;
 	}
 

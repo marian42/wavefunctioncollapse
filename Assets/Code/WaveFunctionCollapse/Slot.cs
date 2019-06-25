@@ -19,6 +19,8 @@ public class Slot {
 
 	public GameObject GameObject;
 
+	public List<int> EnforcedWalkways;
+
 	public bool Collapsed {
 		get {
 			return this.Module != null;
