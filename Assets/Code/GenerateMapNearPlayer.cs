@@ -22,10 +22,13 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 
 	private HashSet<Vector3Int> generatedChunks;
 
+	private HashSet<Vector3Int> walkwaysComplete;
+
 	private Thread thread;
 
 	void Start() {
 		this.generatedChunks = new HashSet<Vector3Int>();
+		this.walkwaysComplete = new HashSet<Vector3Int>();
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
 		this.mapBehaviour.Initialize();
 		this.map = this.mapBehaviour.Map;
@@ -75,9 +78,36 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		}
 	}
 
+	private void prepareWalkwaysSingle(Vector3Int chunkAddress) {
+		var start = chunkAddress * this.ChunkSize;
+		var size = new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize);
+		for (int x = 0; x < size.x; x++) {
+			for (int y = 0; y < size.y; y++) {
+				for (int z = 0; z < size.z; z++) {
+					this.map.UpdateWalkways(start + new Vector3Int(x, y, z));
+				}
+			}
+		}
+		this.walkwaysComplete.Add(chunkAddress);
+	}
+
+	private void prepareWalkways(Vector3Int chunkAddress) {
+		for (int x = -1; x < 2; x++) {
+			for (int z = -1; z < 2; z++) {
+				var currentAddress = chunkAddress + new Vector3Int(x, 0, z);
+				if (this.walkwaysComplete.Contains(currentAddress)) {
+					continue;
+				}
+
+				this.prepareWalkwaysSingle(currentAddress);
+			}
+		}
+	}
+
 	private void createChunk(Vector3Int chunkAddress) {
 		this.map.rangeLimitCenter = chunkAddress * this.ChunkSize + new Vector3Int(this.ChunkSize / 2, 0, this.ChunkSize / 2);
 		this.map.RangeLimit = this.ChunkSize + 20;
+		this.prepareWalkways(chunkAddress);
 		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.generatedChunks.Add(chunkAddress);
 	}

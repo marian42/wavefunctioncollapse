@@ -65,6 +65,14 @@ public abstract class AbstractMap {
 
 	public void EnforceWalkway(Vector3Int start, int direction) {
 		var slot = this.GetSlot(start);
+		if (slot == null) {
+			Debug.LogWarning("Slot is null: " + start);
+			return;
+		}
+		if (slot.Modules == null) {
+			Debug.LogWarning("slot.Modules is null. " + start);
+			return;
+		}
 		var toRemove = slot.Modules.Where(module => !module.GetFace(direction).Walkable);
 		slot.RemoveModules(ModuleSet.FromEnumerable(toRemove), updateHistory: false);
 
@@ -82,12 +90,29 @@ public abstract class AbstractMap {
 		this.EnforceWalkway(destination, (direction + 3) % 6);
 	}
 
+	public void UpdateWalkways(Vector3Int position) {
+		if (position.y != 2) {
+			return;
+		}
+		if (position.z % 5 == 0) {
+			this.EnforceWalkway(position, 0);
+			this.EnforceWalkway(position, 3);
+		}
+		if (position.x % 5 == 0) {
+			this.EnforceWalkway(position, 2);
+			this.EnforceWalkway(position, 5);
+		}
+	}
+
 	public void Collapse(IEnumerable<Vector3Int> targets, bool showProgress = false) {
 #if UNITY_EDITOR
 		try {
 #endif
 			this.RemovalQueue.Clear();
 			this.workArea = new HashSet<Slot>(targets.Select(target => this.GetSlot(target)).Where(slot => slot != null && !slot.Collapsed));
+			foreach (var slot in this.workArea) {
+				this.UpdateWalkways(slot.Position);
+			}
 
 			while (this.workArea.Any()) {
 				float minEntropy = float.PositiveInfinity;
