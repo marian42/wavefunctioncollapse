@@ -41,7 +41,7 @@ public class Room {
 		Gizmos.color = this.Color;
 
 		foreach (var slot in this.Slots) {
-			Gizmos.DrawWireCube(map.GetWorldspacePosition(slot.Position), Vector3.one * 2f);
+			Gizmos.DrawWireCube(map.GetWorldspacePosition(slot.Position), Vector3.one * AbstractMap.BLOCK_SIZE);
 		}
 	}
 #endif

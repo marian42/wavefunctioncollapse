@@ -115,7 +115,7 @@ public class ModulePrototype : MonoBehaviour {
 				var hint = ModulePrototype.editorData.GetConnectorHint(i);
 				if (hint.Mesh != null) {
 					Gizmos.DrawMesh(hint.Mesh,
-						position + rotation * Orientations.Direction[i].ToVector3() * 2f,
+						position + rotation * Orientations.Direction[i].ToVector3() * AbstractMap.BLOCK_SIZE,
 						rotation * Quaternion.Euler(Vector3.up * 90f * hint.Rotation));
 				}
 			}
@@ -123,13 +123,13 @@ public class ModulePrototype : MonoBehaviour {
 		for (int i = 0; i < 6; i++) {	
 			if (modulePrototype.Faces[i].Walkable) {
 				Gizmos.color = Color.red;
-				Gizmos.DrawLine(position + Vector3.down * 0.1f, position + rotation * Orientations.Rotations[i] * Vector3.forward + Vector3.down * 0.1f);
+				Gizmos.DrawLine(position + Vector3.down * 0.1f, position + rotation * Orientations.Rotations[i] * Vector3.forward * AbstractMap.BLOCK_SIZE * 0.5f + Vector3.down * 0.1f);
 			}
 			if (modulePrototype.Faces[i].IsOcclusionPortal) {
 				Gizmos.color = Color.blue;
 
 				var dir = rotation * Orientations.Rotations[i] * Vector3.forward;
-				Gizmos.DrawWireCube(position + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z))) * 2f);
+				Gizmos.DrawWireCube(position + dir, (Vector3.one - new Vector3(Mathf.Abs(dir.x), Mathf.Abs(dir.y), Mathf.Abs(dir.z))) * AbstractMap.BLOCK_SIZE);
 			}			
 		}
 
