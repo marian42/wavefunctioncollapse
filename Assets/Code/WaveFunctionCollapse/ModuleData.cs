@@ -123,10 +123,12 @@ public class ModuleData : ScriptableObject, ISerializationCallbackReceiver {
 	}
 
 	public void SavePrototypes() {
+#if UNITY_EDITOR
 		EditorUtility.SetDirty(this.Prototypes);
 		AssetDatabase.SaveAssets();
 		foreach (var module in this.Modules) {
 			module.Prototype = module.Prefab.GetComponent<ModulePrototype>();
 		}
+#endif
 	}
 }
