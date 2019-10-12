@@ -18,7 +18,7 @@ Flight mode: Use M to toggle between flight mode and normal mode. In flight mode
 
 ## Opening the project in Unity
 
-If you want to work on this project using the Unity Editor, you need Blender installed on your computer.
+If you want to work on this project using the Unity Editor, you need Blender 2.79 installed on your computer.
 
 ## Editing the module set
 
