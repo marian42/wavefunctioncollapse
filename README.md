@@ -16,10 +16,6 @@ XBOX Controls: Left Stick for walking, right stick for looking around, A to jump
 
 Flight mode: Use M to toggle between flight mode and normal mode. In flight mode, you fly across the world, without any controls.
 
-## Opening the project in Unity
-
-If you want to work on this project using the Unity Editor, you need Blender 2.79 installed on your computer.
-
 ## Editing the module set
 
 By changing the module set, you can make some changes to the world generation without writing code.
