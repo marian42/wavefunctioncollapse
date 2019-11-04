@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Tree))]
+[CustomEditor(typeof(TreeGenerator))]
 public class TreeEditor : Editor {
 	public override void OnInspectorGUI() {
 		DrawDefaultInspector();
 
-		Tree tree = (Tree)target;
+		TreeGenerator tree = (TreeGenerator)target;
 
 		if (GUILayout.Button("Build")) {
 			tree.Build();

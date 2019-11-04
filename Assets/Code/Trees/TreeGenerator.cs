@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
-public class Tree : MonoBehaviour {
+public class TreeGenerator : MonoBehaviour {
 
 	[Range(0.0f, 0.3f)]
 	public float StemSize = 0.3f;
@@ -42,7 +42,7 @@ public class Tree : MonoBehaviour {
 	public class Node {
 		public readonly Vector3 Position;
 		public readonly Vector3 Direction;
-		public readonly Tree Tree;
+		public readonly TreeGenerator Tree;
 
 		public readonly int Depth;
 
@@ -58,7 +58,7 @@ public class Tree : MonoBehaviour {
 
 		public readonly Node Parent;
 
-		public Node(Vector3 position, Tree tree) {
+		public Node(Vector3 position, TreeGenerator tree) {
 			this.Position = position;
 			this.Direction = Vector3.up;
 			this.Depth = 0;
@@ -94,9 +94,9 @@ public class Tree : MonoBehaviour {
 		}
 
 		public void Draw() {
-			Tree.style.normal.textColor = Color.Lerp(Color.red, Color.black, (this.Energy - this.Tree.MinEnergy) / (this.Tree.MaxEnergy - this.Tree.MinEnergy));
+			TreeGenerator.style.normal.textColor = Color.Lerp(Color.red, Color.black, (this.Energy - this.Tree.MinEnergy) / (this.Tree.MaxEnergy - this.Tree.MinEnergy));
 			if (this.Children.Length < 2) {
-				Handles.Label(this.Position, this.Energy.ToString("0.00"), Tree.style);			
+				Handles.Label(this.Position, this.Energy.ToString("0.00"), TreeGenerator.style);			
 			}
 			//Gizmos.DrawWireSphere(this.Position, 0.1f);
 			foreach (var child in this.Children) {
@@ -169,7 +169,7 @@ public class Tree : MonoBehaviour {
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
-	static void DrawGizmo(Tree tree, GizmoType gizmoType) {		
+	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {		
 		Gizmos.color = Color.green;
 		if (tree.Root != null && false) {
 			tree.Root.Draw();
@@ -201,8 +201,8 @@ public class Tree : MonoBehaviour {
 	private static GUIStyle style;
 	
 	public void Reset() {
-		Tree.style = new GUIStyle();
-		Tree.style.normal.textColor = Color.red;
+		TreeGenerator.style = new GUIStyle();
+		TreeGenerator.style.normal.textColor = Color.red;
 		this.Age = 0;
 		this.transform.DeleteChildren();
 		this.Root = new Node(this.transform.position, this);
