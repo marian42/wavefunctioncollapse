@@ -93,6 +93,28 @@ public class ModulePrototype : MonoBehaviour {
 		}
 		return null;
 	}
+
+	public bool Walkable {
+		get {
+			return this.Left.Walkable
+				|| this.Down.Walkable
+				|| this.Back.Walkable
+				|| this.Right.Walkable
+				|| this.Up.Walkable
+				|| this.Forward.Walkable;
+		}
+	}
+
+	public bool FlatSurface {
+		get {
+			return (this.Left.Walkable
+				|| this.Back.Walkable
+				|| this.Right.Walkable
+				|| this.Forward.Walkable)
+				&& !this.Up.Walkable
+				&& !this.Down.Walkable;
+		}
+	}
 	
 	
 #if UNITY_EDITOR

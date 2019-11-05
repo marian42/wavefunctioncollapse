@@ -169,7 +169,8 @@ public class TreeGenerator : MonoBehaviour {
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
-	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {		
+	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {
+		return;
 		Gizmos.color = Color.green;
 		if (tree.Root != null && false) {
 			tree.Root.Draw();
