@@ -73,5 +73,5 @@ public class Module {
 			this.Position = position;
 			this.ModuleSet = moduleSet;
 		}
-	}	
+	}
 }

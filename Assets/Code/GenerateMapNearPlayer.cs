@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Concurrent;
 
 [RequireComponent(typeof(MapBehaviour))]
 public class GenerateMapNearPlayer : MonoBehaviour {
@@ -24,7 +25,11 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 
 	private Thread thread;
 
+	private ConcurrentQueue<Vector3Int> completedChunks;
+	private List<IMapGenerationCallbackReceiver> mapGenerationCallbackReceivers;
+
 	void Start() {
+		this.completedChunks = new ConcurrentQueue<Vector3Int>();
 		this.generatedChunks = new HashSet<Vector3Int>();
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
 		this.mapBehaviour.Initialize();
@@ -80,6 +85,7 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		this.map.RangeLimit = this.ChunkSize + 20;
 		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.generatedChunks.Add(chunkAddress);
+		this.completedChunks.Enqueue(chunkAddress);
 	}
 
 	private void generatorThread() {
@@ -111,5 +117,25 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 	void Update () {
 		this.targetPosition = this.Target.position;
 		this.mapPosition = this.mapBehaviour.transform.position;
+
+		if (this.completedChunks.Any()) {
+			Vector3Int completedChunk;
+			if (this.completedChunks.TryDequeue(out completedChunk)) {
+				foreach (var subscriber in this.mapGenerationCallbackReceivers) {
+					subscriber.OnGenerateChunk(completedChunk, this);
+				}
+			}
+		}
+	}
+
+	public void RegisterMapGenerationCallbackReceiver(IMapGenerationCallbackReceiver receiver) {
+		if (this.mapGenerationCallbackReceivers == null) {
+			this.mapGenerationCallbackReceivers = new List<IMapGenerationCallbackReceiver>();
+		}
+		this.mapGenerationCallbackReceivers.Add(receiver);
+	}
+
+	public void UnregisterMapGenerationCallbackReceiver(IMapGenerationCallbackReceiver receiver) {
+		this.mapGenerationCallbackReceivers.Remove(receiver);
 	}
 }
