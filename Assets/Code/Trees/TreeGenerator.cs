@@ -154,6 +154,7 @@ public class TreeGenerator : MonoBehaviour {
 
 		var vertices = new List<Vector3>();
 		var normals = new List<Vector3>();
+		var uvs = new List<Vector2>();
 		var triangles = new List<int>();
 		var indices = new Dictionary<Node, int>();
 
@@ -163,10 +164,11 @@ public class TreeGenerator : MonoBehaviour {
 			var direction = node.Children.Any() ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
 			var tangent = Vector3.Cross(Vector3.forward, direction);
 			for (int i = 0; i < subdivisions; i++) {
-				var normal = Quaternion.AngleAxis(360f * (float)i / subdivisions, direction) * tangent;
+				var normal = Quaternion.AngleAxis(360f * (float)i / (subdivisions - 1), direction) * tangent;
 				normal.Normalize();
 				normals.Add(normal);
 				vertices.Add(node.Position + normal * radius - this.transform.position);
+				uvs.Add(new Vector2((float)i / (subdivisions - 1) * 6f, (node.Depth % 2) * 3f));
 			}
 		}
 		
@@ -176,16 +178,16 @@ public class TreeGenerator : MonoBehaviour {
 			foreach (var child in node.Children) {
 				int childIndex = indices[child];
 
-				for (int i = 0; i < subdivisions; i++) {
+				for (int i = 0; i < subdivisions - 1; i++) {
 					triangles.Add(nodeIndex + i);
-					triangles.Add(nodeIndex + (i + 1) % subdivisions);
+					triangles.Add(nodeIndex + i + 1);
 					triangles.Add(childIndex + i);
 				}
 
 				if (child.Children.Length != 0) {
-					for (int i = 0; i < subdivisions; i++) {
-						triangles.Add(nodeIndex + (i + 1) % subdivisions);
-						triangles.Add(childIndex + (i + 1) % subdivisions);
+					for (int i = 0; i < subdivisions - 1; i++) {
+						triangles.Add(nodeIndex + i + 1);
+						triangles.Add(childIndex + i + 1);
 						triangles.Add(childIndex + i);
 					}
 				}
@@ -195,6 +197,7 @@ public class TreeGenerator : MonoBehaviour {
 		mesh.vertices = vertices.ToArray();
 		mesh.normals = normals.ToArray();
 		mesh.triangles = triangles.ToArray();
+		mesh.uv = uvs.ToArray();
 
 		return mesh;
 	}
