@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -98,7 +98,7 @@ public class TreeGenerator : MonoBehaviour {
 				node.Grow();
 				batchSize--;
 			}
-			if (node.Children.Length == 1) {
+			if (node.Children.Length == 1 && node.Depth > 1) {
 				node.Branch();
 				batchSize--;
 			}
