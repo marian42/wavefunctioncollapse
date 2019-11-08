@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -96,10 +96,6 @@ public class TreeGenerator : MonoBehaviour {
 	public int Age = 0;
 
 	public void Grow(int batchSize) {
-		if (this.Root == null) {
-			this.Reset();
-		}
-
 		var nodes = this.Root.GetTree().ToArray();
 		nodes = nodes.OrderByDescending(n => n.Energy).ToArray();
 
@@ -151,10 +147,16 @@ public class TreeGenerator : MonoBehaviour {
 	public int BatchSize = 5;
 
 	public void Build() {
+		var iterator = this.BuildCoroutine();
+		while (iterator.MoveNext());
+	}
+
+	public IEnumerator BuildCoroutine() {
 		this.Reset();
 
 		for (int i = 0; i < this.Iterations / this.BatchSize; i++) {
 			this.Grow(this.BatchSize);
+			yield return null;
 		}
 
 		this.Prune(0.2f);
