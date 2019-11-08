@@ -167,15 +167,27 @@ public class TreeGenerator : MonoBehaviour {
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
-		var vertices = new List<Vector3>();
-		var normals = new List<Vector3>();
-		var uvs = new List<Vector2>();
-		var treeTriangles = new List<int>();
+		const int QUADS_PER_LEAF = 16;
+		var nodes = this.Root.GetTree().ToArray();
+		var leafNodes = nodes.Where(node => node.Children.Length == 0).ToArray();
+		int edgeCount = nodes.Sum(node => node.Children.Length);
+		int vertexCount = nodes.Length * subdivisions;
+
+		var treeTriangles = new int[(edgeCount * 6 - leafNodes.Length * 3) * (subdivisions - 1)];
+		int[] leafTriangles = null;
+		if (this.GenerateLeaves) {
+			vertexCount += leafNodes.Length * QUADS_PER_LEAF * 4;
+			leafTriangles = new int[leafNodes.Length * QUADS_PER_LEAF * 6];
+		}
+		var vertices = new Vector3[vertexCount];
+		var normals = new Vector3[vertexCount];
+		var uvs = new Vector2[vertexCount];
 		var indices = new Dictionary<Node, int>();
 
-		foreach (var node in this.Root.GetTree()) {
+		int vertexIndex = 0;
+		foreach (var node in nodes) {
 			float radius = node.Children.Length == 0 ? 0 : map(0, 1, this.StemSize, this.BranchSize, Mathf.Pow(map(1, this.Root.SubtreeSize, 1, 0, node.SubtreeSize), this.SizeFalloff));
-			indices[node] = vertices.Count;
+			indices[node] = vertexIndex;
 			var direction = (node.Children.Any() && node.Parent != null) ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
 			if (node.Parent == null) {
 				node.MeshOrientation = Vector3.Cross(Vector3.forward, direction);
@@ -186,81 +198,81 @@ public class TreeGenerator : MonoBehaviour {
 				float progress = (float)i / (subdivisions - 1);
 				var normal = Quaternion.AngleAxis(360f * progress, direction) * node.MeshOrientation;
 				normal.Normalize();
-				normals.Add(normal);
+				normals[vertexIndex] = normal;
 				float offset = 0;
 				if (node.Depth < 4) {
 					offset = Mathf.Pow(Mathf.Abs(Mathf.Sin(progress * 2f * Mathf.PI * 5f)), 0.5f) * 0.5f * (3 - node.Depth) / 3f;
 				}
-				vertices.Add(node.Position + normal * radius * (1f + offset));
-				uvs.Add(new Vector2(progress * 6f, (node.Depth % 2) * 3f));
+				vertices[vertexIndex] = node.Position + normal * radius * (1f + offset);
+				uvs[vertexIndex] = new Vector2(progress * 6f, (node.Depth % 2) * 3f);
+				vertexIndex++;
 			}
 		}
-		
-		foreach (var node in this.Root.GetTree()) {
+
+		int triangleIndex = 0;
+		foreach (var node in nodes) {
 			int nodeIndex = indices[node];
 
 			foreach (var child in node.Children) {
 				int childIndex = indices[child];
 
 				for (int i = 0; i < subdivisions - 1; i++) {
-					treeTriangles.Add(nodeIndex + i);
-					treeTriangles.Add(nodeIndex + i + 1);
-					treeTriangles.Add(childIndex + i);
+					treeTriangles[triangleIndex++] = nodeIndex + i;
+					treeTriangles[triangleIndex++] = nodeIndex + i + 1;
+					treeTriangles[triangleIndex++] = childIndex + i;
 				}
 
 				if (child.Children.Length != 0) {
 					for (int i = 0; i < subdivisions - 1; i++) {
-						treeTriangles.Add(nodeIndex + i + 1);
-						treeTriangles.Add(childIndex + i + 1);
-						treeTriangles.Add(childIndex + i);
+						treeTriangles[triangleIndex++] = nodeIndex + i + 1;
+						treeTriangles[triangleIndex++] = childIndex + i + 1;
+						treeTriangles[triangleIndex++] = childIndex + i;
 					}
 				}
 			}
 		}
-		
-		var leafTriangles = new List<int>();
+		triangleIndex = 0;
 
 		if (this.GenerateLeaves) {
-			foreach (var node in this.Root.GetTree()) {
-				if (node.Children.Length != 0) {
-					continue;
-				}
-
-				for (int i = 0; i < 16; i++) {
-					int index = vertices.Count;
-
+			foreach (var node in leafNodes) {
+				for (int i = 0; i < QUADS_PER_LEAF; i++) {
 					var normal = Random.onUnitSphere;
 					var tangent1 = Vector3.Cross(Random.onUnitSphere, normal);
 					var tangent2 = Vector3.Cross(normal, tangent1);
 
-					vertices.Add(node.Position + tangent1 * this.LeafRadius);
-					uvs.Add(new Vector2(0f, 1f));
-					vertices.Add(node.Position + tangent2 * this.LeafRadius);
-					uvs.Add(new Vector2(1f, 1f));
-					vertices.Add(node.Position - tangent1 * this.LeafRadius);
-					uvs.Add(new Vector2(1f, 0f));
-					vertices.Add(node.Position - tangent2 * this.LeafRadius);
-					uvs.Add(new Vector2(0f, 0f));
-					normals.Add(normal);
-					normals.Add(normal);
-					normals.Add(normal);
-					normals.Add(normal);
-					leafTriangles.AddRange(new int[] { index + 0, index + 1, index + 2, index + 2, index + 3, index + 0 });
+					vertices[vertexIndex + 0] = node.Position + tangent1 * this.LeafRadius;
+					vertices[vertexIndex + 1] = node.Position + tangent2 * this.LeafRadius;
+					vertices[vertexIndex + 2] = node.Position - tangent1 * this.LeafRadius;
+					vertices[vertexIndex + 3] = node.Position - tangent2 * this.LeafRadius;
+					normals[vertexIndex + 0] = normal;
+					normals[vertexIndex + 1] = normal;
+					normals[vertexIndex + 2] = normal;
+					normals[vertexIndex + 3] = normal;
+					uvs[vertexIndex + 0] = new Vector2(0f, 1f);
+					uvs[vertexIndex + 1] = new Vector2(1f, 1f);
+					uvs[vertexIndex + 2] = new Vector2(1f, 0f);
+					uvs[vertexIndex + 3] = new Vector2(0f, 0f);
+					leafTriangles[triangleIndex++] = vertexIndex + 0;
+					leafTriangles[triangleIndex++] = vertexIndex + 1;
+					leafTriangles[triangleIndex++] = vertexIndex + 2;
+					leafTriangles[triangleIndex++] = vertexIndex + 2;
+					leafTriangles[triangleIndex++] = vertexIndex + 3;
+					leafTriangles[triangleIndex++] = vertexIndex + 0;
+					vertexIndex += 4;
 				}
 			}
 		}
 
-		Debug.Log("Generated tree. " + this.RayCastCount + " ray casts, " + treeTriangles.Count + " tree triangles, " + leafTriangles.Count + " leaf triangles.");
+		Debug.Log("Generated tree. " + this.RayCastCount + " ray casts, " + treeTriangles.Length + " tree triangles, " + leafTriangles.Length + " leaf triangles.");
 		
-
 		var mesh = new Mesh();
 		mesh.subMeshCount = 2;
-		mesh.vertices = vertices.ToArray();
-		mesh.normals = normals.ToArray();
-		mesh.uv = uvs.ToArray();
-		mesh.SetTriangles(treeTriangles.ToArray(), 0);
+		mesh.vertices = vertices;
+		mesh.normals = normals;
+		mesh.uv = uvs;
+		mesh.SetTriangles(treeTriangles, 0);
 		if (this.GenerateLeaves) {
-			mesh.SetTriangles(leafTriangles.ToArray(), 1);
+			mesh.SetTriangles(leafTriangles, 1);
 		}
 		return mesh;
 	}
