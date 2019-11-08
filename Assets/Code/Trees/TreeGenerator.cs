@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -166,10 +166,14 @@ public class TreeGenerator : MonoBehaviour {
 			float radius = node.Children.Length == 0 ? 0 : this.StemSize * Mathf.Pow((node.MaxDistanceToLeaf + 6) / (float)(this.Root.MaxDistanceToLeaf + 6), this.SizeFalloff);
 			indices[node] = vertices.Count;
 			var direction = node.Children.Any() ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
-			var tangent = Vector3.Cross(Vector3.forward, direction);
+			if (node.Parent == null) {
+				node.MeshOrientation = Vector3.Cross(Vector3.forward, direction);
+			} else {
+				node.MeshOrientation = (node.Parent.MeshOrientation - direction * Vector3.Dot(direction, node.Parent.MeshOrientation)).normalized;
+			}
 			for (int i = 0; i < subdivisions; i++) {
 				float progress = (float)i / (subdivisions - 1);
-				var normal = Quaternion.AngleAxis(360f * progress, direction) * tangent;
+				var normal = Quaternion.AngleAxis(360f * progress, direction) * node.MeshOrientation;
 				normal.Normalize();
 				normals.Add(normal);
 				float offset = 0;

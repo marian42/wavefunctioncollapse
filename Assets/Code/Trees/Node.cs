@@ -23,6 +23,8 @@ public class Node {
 
 	public readonly Node Parent;
 
+	public Vector3 MeshOrientation;
+
 	public int MaxDistanceToLeaf {
 		get;
 		private set;
@@ -76,7 +78,7 @@ public class Node {
 	}
 
 	public IEnumerable<Node> GetTree() {
-		return this.Children.SelectMany(node => node.GetTree()).Concat(new Node[] { this });
+		return new Node[] { this }.Concat(this.Children.SelectMany(node => node.GetTree()));
 	}
 	
 	private float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
