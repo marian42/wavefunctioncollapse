@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -53,9 +53,8 @@ public class TreeGenerator : MonoBehaviour {
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {
-		return;
 		Gizmos.color = Color.green;
-		if (tree.Root != null && false) {
+		if (tree.Root != null) {
 			tree.Root.Draw();
 		}
 	}

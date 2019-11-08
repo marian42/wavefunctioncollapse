@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -66,13 +66,14 @@ public class Node {
 	}
 
 	public void Draw() {
+		var worldPosition = this.Position + this.Tree.transform.position;
 		TreeGenerator.GUIStyle.normal.textColor = Color.Lerp(Color.red, Color.black, (this.Energy - this.Tree.MinEnergy) / (this.Tree.MaxEnergy - this.Tree.MinEnergy));
 		if (this.Children.Length < 2) {
-			Handles.Label(this.Position, this.Energy.ToString("0.00"), TreeGenerator.GUIStyle);
+			Handles.Label(worldPosition, this.Energy.ToString("0.00"), TreeGenerator.GUIStyle);
 		}
-		//Gizmos.DrawWireSphere(this.Position, 0.1f);
+		Gizmos.DrawWireSphere(worldPosition, 0.1f);
 		foreach (var child in this.Children) {
-			Gizmos.DrawLine(this.Position, child.Position);
+			Gizmos.DrawLine(worldPosition, child.Position + this.Tree.transform.position);
 			child.Draw();
 		}
 	}
