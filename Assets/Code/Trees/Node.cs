@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -25,7 +25,7 @@ public class Node {
 
 	public Vector3 MeshOrientation;
 
-	public int MaxDistanceToLeaf {
+	public int SubtreeSize {
 		get;
 		private set;
 	}
@@ -83,6 +83,7 @@ public class Node {
 	}
 	
 	private float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
+		this.Tree.RayCastCount++;
 		var ray = new Ray(this.Tree.transform.position + position + direction.normalized * skip, direction);
 		float result = float.PositiveInfinity;
 		RaycastHit hit;
@@ -144,14 +145,14 @@ public class Node {
 		this.Energy = result;
 	}
 
-	public void CalculateDistanceToLeaf() {
+	public void CalculateSubtreeSize() {
 		if (this.Children.Length == 0) {
-			this.MaxDistanceToLeaf = 1;
+			this.SubtreeSize = 1;
 		} else {
 			foreach (var child in this.Children) {
-				child.CalculateDistanceToLeaf();
+				child.CalculateSubtreeSize();
 			}
-			this.MaxDistanceToLeaf = this.Children.Max(child => child.MaxDistanceToLeaf) + 1;
+			this.SubtreeSize = this.Children.Sum(child => child.SubtreeSize) + 1;
 		}
 	}
 }

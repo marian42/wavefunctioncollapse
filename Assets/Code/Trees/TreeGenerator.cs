@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -10,6 +10,9 @@ public class TreeGenerator : MonoBehaviour {
 
 	[Range(0.0f, 0.6f)]
 	public float StemSize = 0.3f;
+
+	[Range(0.0f, 0.1f)]
+	public float BranchSize = 0.1f;
 
 	[Range(0.1f, 4f)]
 	public float SizeFalloff = 0.9f;
@@ -49,6 +52,13 @@ public class TreeGenerator : MonoBehaviour {
 	[Range(0.2f, 1f)]
 	public float LeafRadius = 0.3f;
 
+	[HideInInspector]
+	public int RayCastCount;
+
+	private static float map(float inLower, float inUpper, float outLower, float outUpper, float value) {
+		return outLower + (value - inLower) * (outUpper - outLower) / (inUpper - inLower);
+	}
+
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
@@ -79,6 +89,7 @@ public class TreeGenerator : MonoBehaviour {
 		this.Age = 0;
 		this.transform.DeleteChildren();
 		this.Root = new Node(Vector3.zero, this);
+		this.RayCastCount = 0;
 		this.calculateEnergy();
 	}
 
@@ -149,7 +160,7 @@ public class TreeGenerator : MonoBehaviour {
 
 		this.Prune(0.2f);
 
-		this.Root.CalculateDistanceToLeaf();
+		this.Root.CalculateSubtreeSize();
 
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
 	}
@@ -162,9 +173,9 @@ public class TreeGenerator : MonoBehaviour {
 		var indices = new Dictionary<Node, int>();
 
 		foreach (var node in this.Root.GetTree()) {
-			float radius = node.Children.Length == 0 ? 0 : this.StemSize * Mathf.Pow((node.MaxDistanceToLeaf + 6) / (float)(this.Root.MaxDistanceToLeaf + 6), this.SizeFalloff);
+			float radius = node.Children.Length == 0 ? 0 : map(0, 1, this.StemSize, this.BranchSize, Mathf.Pow(map(1, this.Root.SubtreeSize, 1, 0, node.SubtreeSize), this.SizeFalloff));
 			indices[node] = vertices.Count;
-			var direction = node.Children.Any() ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
+			var direction = (node.Children.Any() && node.Parent != null) ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
 			if (node.Parent == null) {
 				node.MeshOrientation = Vector3.Cross(Vector3.forward, direction);
 			} else {
@@ -237,6 +248,8 @@ public class TreeGenerator : MonoBehaviour {
 				}
 			}
 		}
+
+		Debug.Log("Generated tree. " + this.RayCastCount + " ray casts, " + treeTriangles.Count + " tree triangles, " + leafTriangles.Count + " leaf triangles.");
 		
 
 		var mesh = new Mesh();
