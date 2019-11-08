@@ -1,8 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using System;
 
 public class Node {
 	public readonly Vector3 Position;
@@ -85,12 +86,12 @@ public class Node {
 	private float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
 		this.Tree.RayCastCount++;
 		var ray = new Ray(this.Tree.transform.position + position + direction.normalized * skip, direction);
-		float result = float.PositiveInfinity;
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit)) {
-			result = hit.distance;
+			return hit.distance + skip;
+		} else {
+			return System.Single.PositiveInfinity;
 		}
-		return result + skip;
 	}
 
 
@@ -100,17 +101,30 @@ public class Node {
 		}
 
 		float length = this.Tree.BranchLength * Mathf.Pow(this.Tree.BranchLengthFalloff, this.Depth);
-
 		var childDir = this.Children[0].Direction;
+		var direction = this.getGrowthDirection(() => childDir * Mathf.Cos(this.Tree.BranchAngle * Mathf.Deg2Rad) + Vector3.Cross(childDir, UnityEngine.Random.onUnitSphere) * Mathf.Sign(this.Tree.BranchAngle * Mathf.Rad2Deg), length);
 
-		var directions = Enumerable.Range(0, 20).Select(_ => childDir * Mathf.Cos(this.Tree.BranchAngle * Mathf.Deg2Rad) + Vector3.Cross(childDir, Random.onUnitSphere) * Mathf.Sign(this.Tree.BranchAngle * Mathf.Rad2Deg)).ToArray();
-		var distances = directions.Select(d => this.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
-		int index = Enumerable.Range(0, 20).GetBest(i => distances[i]);
-		if (distances[index] < length) {
-			return;
+		if (!Mathf.Approximately(direction.magnitude, 0)) {
+			new Node(this.Position + direction * length, this);
 		}
+	}
 
-		var child = new Node(this.Position + directions[index] * length, this);
+	private Vector3 getGrowthDirection(Func<Vector3> vectorGenerator, float minDistance) {
+		Vector3 result = Vector3.zero;
+		float longestDistance = minDistance;
+
+		for (int i = 0; i < 20; i++) {
+			var direction = vectorGenerator.Invoke().normalized;
+			float range = this.raycast(this.Position, direction, this.Tree.LeafColliderSize * 1.1f);
+			if (System.Single.IsPositiveInfinity(range)) {
+				return direction;
+			}
+			if (range > longestDistance) {
+				result = direction;
+				longestDistance = range;
+			}
+		}
+		return result;
 	}
 
 	public void Grow() {
@@ -119,15 +133,11 @@ public class Node {
 		}
 
 		float length = this.Tree.BranchLength * Mathf.Pow(this.Tree.BranchLengthFalloff, this.Depth);
-
-		var directions = Enumerable.Range(0, 20).Select(_ => (this.Direction + this.Tree.Distort * Random.onUnitSphere).normalized).ToArray();
-		var distances = directions.Select(d => this.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
-		int index = Enumerable.Range(0, 20).GetBest(i => distances[i]);
-		if (distances[index] < length) {
-			return;
+		var direction = this.getGrowthDirection(() => this.Direction + this.Tree.Distort * UnityEngine.Random.onUnitSphere, length);
+				
+		if (!Mathf.Approximately(direction.magnitude, 0)) {
+			new Node(this.Position + direction * length, this);
 		}
-
-		var child = new Node(this.Position + directions[index] * length, this);
 	}
 
 	public void CalculateEnergy() {
