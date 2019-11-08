@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,10 +8,10 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 public class TreeGenerator : MonoBehaviour {
 
-	[Range(0.0f, 0.3f)]
+	[Range(0.0f, 0.6f)]
 	public float StemSize = 0.3f;
 
-	[Range(0.8f, 1f)]
+	[Range(0.1f, 4f)]
 	public float SizeFalloff = 0.9f;
 
 	[Range(0f, 0.5f)]
@@ -145,6 +145,8 @@ public class TreeGenerator : MonoBehaviour {
 
 		this.Prune(0.2f);
 
+		this.Root.CalculateDistanceToLeaf();
+
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
 		this.CreateLeaves();
 	}
@@ -159,16 +161,21 @@ public class TreeGenerator : MonoBehaviour {
 		var indices = new Dictionary<Node, int>();
 
 		foreach (var node in this.Root.GetTree()) {
-			float radius = node.Children.Any() ? this.StemSize * Mathf.Pow(this.SizeFalloff, node.Depth) : 0f;
+			float radius = node.Children.Length == 0 ? 0 : this.StemSize * Mathf.Pow((node.MaxDistanceToLeaf + 6) / (float)(this.Root.MaxDistanceToLeaf + 6), this.SizeFalloff);
 			indices[node] = vertices.Count;
 			var direction = node.Children.Any() ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
 			var tangent = Vector3.Cross(Vector3.forward, direction);
 			for (int i = 0; i < subdivisions; i++) {
-				var normal = Quaternion.AngleAxis(360f * (float)i / (subdivisions - 1), direction) * tangent;
+				float progress = (float)i / (subdivisions - 1);
+				var normal = Quaternion.AngleAxis(360f * progress, direction) * tangent;
 				normal.Normalize();
 				normals.Add(normal);
-				vertices.Add(node.Position + normal * radius - this.transform.position);
-				uvs.Add(new Vector2((float)i / (subdivisions - 1) * 6f, (node.Depth % 2) * 3f));
+				float offset = 0;
+				if (node.Depth < 4) {
+					offset = Mathf.Pow(Mathf.Abs(Mathf.Sin(progress * 2f * Mathf.PI * 5f)), 0.5f) * 0.5f * (3 - node.Depth) / 3f;
+				}
+				vertices.Add(node.Position + normal * radius * (1f + offset) - this.transform.position);
+				uvs.Add(new Vector2(progress * 6f, (node.Depth % 2) * 3f));
 			}
 		}
 		

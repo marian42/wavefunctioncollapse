@@ -23,6 +23,11 @@ public class Node {
 
 	public readonly Node Parent;
 
+	public int MaxDistanceToLeaf {
+		get;
+		private set;
+	}
+
 	public Node(Vector3 position, TreeGenerator tree) {
 		this.Position = position;
 		this.Direction = Vector3.up;
@@ -134,5 +139,16 @@ public class Node {
 
 		result += 1f - Mathf.Exp(-Node.raycast(this.Position, Vector3.up, this.Tree.LeafColliderSize * 1.1f));
 		this.Energy = result;
+	}
+
+	public void CalculateDistanceToLeaf() {
+		if (this.Children.Length == 0) {
+			this.MaxDistanceToLeaf = 1;
+		} else {
+			foreach (var child in this.Children) {
+				child.CalculateDistanceToLeaf();
+			}
+			this.MaxDistanceToLeaf = this.Children.Max(child => child.MaxDistanceToLeaf) + 1;
+		}
 	}
 }
