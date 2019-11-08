@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
 public class TreeGenerator : MonoBehaviour {
+	private const int QUADS_PER_LEAF = 16;
 
 	[Range(0.0f, 0.6f)]
 	public float StemSize = 0.3f;
@@ -167,7 +168,6 @@ public class TreeGenerator : MonoBehaviour {
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
-		const int QUADS_PER_LEAF = 16;
 		var nodes = this.Root.GetTree().ToArray();
 		var leafNodes = nodes.Where(node => node.Children.Length == 0).ToArray();
 		int edgeCount = nodes.Sum(node => node.Children.Length);
@@ -234,11 +234,28 @@ public class TreeGenerator : MonoBehaviour {
 		triangleIndex = 0;
 
 		if (this.GenerateLeaves) {
+			var leafDirections = new Vector3[QUADS_PER_LEAF];
+			var tangents1 = new Vector3[QUADS_PER_LEAF];
+			var tangents2 = new Vector3[QUADS_PER_LEAF];
+			float increment = Mathf.PI * (3f - Mathf.Sqrt(5f));
+
+			for (int i = 0; i < QUADS_PER_LEAF; i++) {
+				float y = ((i * 2f / QUADS_PER_LEAF) - 1) + (1f / QUADS_PER_LEAF);
+				float r = Mathf.Sqrt(1 - Mathf.Pow(y, 2f));
+				float phi = (i + 1f) * increment;
+				leafDirections[i] = new Vector3(Mathf.Cos(phi) * r, y, Mathf.Sin(phi) * r);
+			}
+			for (int i = 0; i < QUADS_PER_LEAF; i++) {
+				tangents1[i] = Vector3.Cross(leafDirections[i], leafDirections[(i + 1) % QUADS_PER_LEAF]);
+				tangents2[i] = Vector3.Cross(leafDirections[i], tangents1[i]);
+			}
+
 			foreach (var node in leafNodes) {
+				var orientation = Quaternion.LookRotation(Random.onUnitSphere, Random.onUnitSphere);
 				for (int i = 0; i < QUADS_PER_LEAF; i++) {
-					var normal = Random.onUnitSphere;
-					var tangent1 = Vector3.Cross(Random.onUnitSphere, normal);
-					var tangent2 = Vector3.Cross(normal, tangent1);
+					var normal = orientation * leafDirections[i];
+					var tangent1 = orientation * tangents1[i];
+					var tangent2 = orientation * tangents2[i];
 
 					vertices[vertexIndex + 0] = node.Position + tangent1 * this.LeafRadius;
 					vertices[vertexIndex + 1] = node.Position + tangent2 * this.LeafRadius;
