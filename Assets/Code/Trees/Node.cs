@@ -80,7 +80,28 @@ public class Node {
 	}
 
 	public IEnumerable<Node> GetTree() {
-		return new Node[] { this }.Concat(this.Children.SelectMany(node => node.GetTree()));
+		yield return this;
+		Node currentNode = this;
+		var positions = new Stack<int>();
+		int currentPosition = 0;
+
+		while (true) {
+			if (currentPosition < currentNode.Children.Length) {
+				var child = currentNode.Children[currentPosition];
+				currentPosition++;
+				yield return child;
+				if (child.Children.Length > 0) {
+					currentNode = child;
+					positions.Push(currentPosition);
+					currentPosition = 0;
+				}
+			} else if (currentNode.Parent != null) {
+				currentPosition = positions.Pop();
+				currentNode = currentNode.Parent;
+			} else {
+				yield break;
+			}
+		}
 	}
 	
 	private float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
