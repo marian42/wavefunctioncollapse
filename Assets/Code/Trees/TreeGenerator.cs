@@ -46,6 +46,10 @@ public class TreeGenerator : MonoBehaviour {
 
 	public bool GenerateLeaves = true;
 
+	[Range(0.2f, 1f)]
+	public float LeafRadius = 0.3f;
+
+
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {
@@ -75,7 +79,7 @@ public class TreeGenerator : MonoBehaviour {
 		TreeGenerator.GUIStyle.normal.textColor = Color.red;
 		this.Age = 0;
 		this.transform.DeleteChildren();
-		this.Root = new Node(this.transform.position, this);
+		this.Root = new Node(Vector3.zero, this);
 		this.calculateEnergy();
 	}
 
@@ -149,18 +153,13 @@ public class TreeGenerator : MonoBehaviour {
 		this.Root.CalculateDistanceToLeaf();
 
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
-		if (this.GenerateLeaves) {
-			this.CreateLeaves();
-		}
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
-		var mesh = new Mesh();
-
 		var vertices = new List<Vector3>();
 		var normals = new List<Vector3>();
 		var uvs = new List<Vector2>();
-		var triangles = new List<int>();
+		var treeTriangles = new List<int>();
 		var indices = new Dictionary<Node, int>();
 
 		foreach (var node in this.Root.GetTree()) {
@@ -177,7 +176,7 @@ public class TreeGenerator : MonoBehaviour {
 				if (node.Depth < 4) {
 					offset = Mathf.Pow(Mathf.Abs(Mathf.Sin(progress * 2f * Mathf.PI * 5f)), 0.5f) * 0.5f * (3 - node.Depth) / 3f;
 				}
-				vertices.Add(node.Position + normal * radius * (1f + offset) - this.transform.position);
+				vertices.Add(node.Position + normal * radius * (1f + offset));
 				uvs.Add(new Vector2(progress * 6f, (node.Depth % 2) * 3f));
 			}
 		}
@@ -189,77 +188,63 @@ public class TreeGenerator : MonoBehaviour {
 				int childIndex = indices[child];
 
 				for (int i = 0; i < subdivisions - 1; i++) {
-					triangles.Add(nodeIndex + i);
-					triangles.Add(nodeIndex + i + 1);
-					triangles.Add(childIndex + i);
+					treeTriangles.Add(nodeIndex + i);
+					treeTriangles.Add(nodeIndex + i + 1);
+					treeTriangles.Add(childIndex + i);
 				}
 
 				if (child.Children.Length != 0) {
 					for (int i = 0; i < subdivisions - 1; i++) {
-						triangles.Add(nodeIndex + i + 1);
-						triangles.Add(childIndex + i + 1);
-						triangles.Add(childIndex + i);
+						treeTriangles.Add(nodeIndex + i + 1);
+						treeTriangles.Add(childIndex + i + 1);
+						treeTriangles.Add(childIndex + i);
 					}
 				}
 			}
 		}
+		
+		var leafTriangles = new List<int>();
 
-		mesh.vertices = vertices.ToArray();
-		mesh.normals = normals.ToArray();
-		mesh.triangles = triangles.ToArray();
-		mesh.uv = uvs.ToArray();
+		if (this.GenerateLeaves) {
+			foreach (var node in this.Root.GetTree()) {
+				if (node.Children.Length != 0) {
+					continue;
+				}
 
-		return mesh;
-	}
+				for (int i = 0; i < 16; i++) {
+					int index = vertices.Count;
 
-	[Range(0.2f, 1f)]
-	public float LeafRadius = 0.3f;
+					var normal = Random.onUnitSphere;
+					var tangent1 = Vector3.Cross(Random.onUnitSphere, normal);
+					var tangent2 = Vector3.Cross(normal, tangent1);
 
-	public void CreateLeaves() {
-		var mesh = new Mesh();
-
-		var vertices = new List<Vector3>();
-		var normals = new List<Vector3>();
-		var triangles = new List<int>();
-		var uvs = new List<Vector2>();
-
-		foreach (var node in this.Root.GetTree()) {
-			if (node.Children.Length != 0) {
-				continue;
-			}
-
-			for (int i = 0; i < 16; i++) {
-				int index = vertices.Count;
-
-				var normal = Random.onUnitSphere;
-				var tangent1 = Vector3.Cross(Random.onUnitSphere, normal).normalized;
-				var tangent2 = Vector3.Cross(normal, tangent1).normalized;
-
-				vertices.Add(node.Position + tangent1 * this.LeafRadius);
-				uvs.Add(new Vector2(0f, 1f));
-				vertices.Add(node.Position + tangent2 * this.LeafRadius);
-				uvs.Add(new Vector2(1f, 1f));
-				vertices.Add(node.Position - tangent1 * this.LeafRadius);
-				uvs.Add(new Vector2(1f, 0f));
-				vertices.Add(node.Position - tangent2 * this.LeafRadius);
-				uvs.Add(new Vector2(0f, 0f));
-				normals.Add(normal);
-				normals.Add(normal);
-				normals.Add(normal);
-				normals.Add(normal);
-				triangles.AddRange(new int[] { index + 0, index + 1, index + 2, index + 2, index + 3, index + 0 });
+					vertices.Add(node.Position + tangent1 * this.LeafRadius);
+					uvs.Add(new Vector2(0f, 1f));
+					vertices.Add(node.Position + tangent2 * this.LeafRadius);
+					uvs.Add(new Vector2(1f, 1f));
+					vertices.Add(node.Position - tangent1 * this.LeafRadius);
+					uvs.Add(new Vector2(1f, 0f));
+					vertices.Add(node.Position - tangent2 * this.LeafRadius);
+					uvs.Add(new Vector2(0f, 0f));
+					normals.Add(normal);
+					normals.Add(normal);
+					normals.Add(normal);
+					normals.Add(normal);
+					leafTriangles.AddRange(new int[] { index + 0, index + 1, index + 2, index + 2, index + 3, index + 0 });
+				}
 			}
 		}
+		
 
+		var mesh = new Mesh();
+		mesh.subMeshCount = 2;
 		mesh.vertices = vertices.ToArray();
 		mesh.normals = normals.ToArray();
-		mesh.triangles = triangles.ToArray();
 		mesh.uv = uvs.ToArray();
-
-		var gameObject = new GameObject();
-		gameObject.transform.parent = this.transform;
-		gameObject.transform.position = Vector3.zero;
-		gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
-		gameObject.AddComponent<MeshRenderer>().sharedMaterial = this.LeafMaterial;
+		mesh.SetTriangles(treeTriangles.ToArray(), 0);
+		if (this.GenerateLeaves) {
+			mesh.SetTriangles(leafTriangles.ToArray(), 1);
+		}
+		return mesh;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -79,8 +79,8 @@ public class Node {
 		return this.Children.SelectMany(node => node.GetTree()).Concat(new Node[] { this });
 	}
 	
-	private static float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
-		var ray = new Ray(position + direction.normalized * skip, direction);
+	private float raycast(Vector3 position, Vector3 direction, float skip = 0f) {
+		var ray = new Ray(this.Tree.transform.position + position + direction.normalized * skip, direction);
 		float result = float.PositiveInfinity;
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit)) {
@@ -100,7 +100,7 @@ public class Node {
 		var childDir = this.Children[0].Direction;
 
 		var directions = Enumerable.Range(0, 20).Select(_ => childDir * Mathf.Cos(this.Tree.BranchAngle * Mathf.Deg2Rad) + Vector3.Cross(childDir, Random.onUnitSphere) * Mathf.Sign(this.Tree.BranchAngle * Mathf.Rad2Deg)).ToArray();
-		var distances = directions.Select(d => Node.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
+		var distances = directions.Select(d => this.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
 		int index = Enumerable.Range(0, 20).GetBest(i => distances[i]);
 		if (distances[index] < length) {
 			return;
@@ -117,7 +117,7 @@ public class Node {
 		float length = this.Tree.BranchLength * Mathf.Pow(this.Tree.BranchLengthFalloff, this.Depth);
 
 		var directions = Enumerable.Range(0, 20).Select(_ => (this.Direction + this.Tree.Distort * Random.onUnitSphere).normalized).ToArray();
-		var distances = directions.Select(d => Node.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
+		var distances = directions.Select(d => this.raycast(this.Position, d, this.Tree.LeafColliderSize * 1.1f)).ToArray();
 		int index = Enumerable.Range(0, 20).GetBest(i => distances[i]);
 		if (distances[index] < length) {
 			return;
@@ -137,7 +137,7 @@ public class Node {
 		result -= this.Tree.DepthPenalty * this.Depth;
 		result /= 10f;
 
-		result += 1f - Mathf.Exp(-Node.raycast(this.Position, Vector3.up, this.Tree.LeafColliderSize * 1.1f));
+		result += 1f - Mathf.Exp(-this.raycast(this.Position, Vector3.up, this.Tree.LeafColliderSize * 1.1f));
 		this.Energy = result;
 	}
 
