@@ -44,6 +44,7 @@ public class TreeGenerator : MonoBehaviour {
 	public float MinEnergy;
 	public float MaxEnergy;
 
+	public bool GenerateLeaves = true;
 
 #if UNITY_EDITOR
 	[DrawGizmo(GizmoType.Selected)]
@@ -148,7 +149,9 @@ public class TreeGenerator : MonoBehaviour {
 		this.Root.CalculateDistanceToLeaf();
 
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
-		this.CreateLeaves();
+		if (this.GenerateLeaves) {
+			this.CreateLeaves();
+		}
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
