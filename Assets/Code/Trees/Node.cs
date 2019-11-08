@@ -8,7 +8,7 @@ public class Node {
 	public readonly Vector3 Position;
 	public readonly Vector3 Direction;
 	public readonly TreeGenerator Tree;
-
+	
 	public readonly int Depth;
 
 	public float Light;
@@ -51,7 +51,7 @@ public class Node {
 	public void CrateLeafCollider() {
 		var go = new GameObject();
 		go.transform.parent = this.Tree.transform;
-		go.transform.position = this.Position;
+		go.transform.localPosition = this.Position;
 		this.LeafCollider = go.AddComponent<SphereCollider>();
 		this.LeafCollider.radius = this.Tree.LeafColliderSize;
 	}
