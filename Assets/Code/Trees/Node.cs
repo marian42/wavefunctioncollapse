@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -95,7 +95,7 @@ public class Node {
 
 
 	public void Branch() {
-		if (this.Children.Count() != 1) {
+		if (this.Children.Count() == 0) {
 			return;
 		}
 
