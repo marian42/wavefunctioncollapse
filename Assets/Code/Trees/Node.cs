@@ -163,12 +163,6 @@ public class Node {
 
 	public void CalculateEnergy() {
 		float result = 0f;
-		/*for (int i = 0; i < 5; i++) {
-			var dir = Random.onUnitSphere;
-			dir.y = Mathf.Abs(dir.y);
-			float dist = this.Tree.raycast(this.Position, dir, this.Tree.LeafColliderSize * 1.1f);
-			result += 1f - Mathf.Exp(-dist);
-		}*/
 		result -= this.Tree.DepthPenalty * this.Depth;
 		result /= 10f;
 
