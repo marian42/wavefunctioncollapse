@@ -131,7 +131,9 @@ public class TreeGenerator : MonoBehaviour {
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
 		this.createBranchColliders();
 		this.LeafColliders.layer = 9;
-		this.generateColor();
+		if (this.GenerateLeaves) {
+			this.generateColor();
+		}
 	}
 
 	private float getBranchRadius(Node node) {

@@ -58,24 +58,10 @@ MonoBehaviour:
   LeafQuadRadius: 0.69
   RayCastCount: 14701
   MaxChildrenPerNode: 3
-  MeshSubdivisions: 20
+  MeshSubdivisions: 30
   BatchSize: 10
   LeafColliders: {fileID: 0}
-  ColorSchemes:
-  - HueMin: 0.28
-    HueMax: 0.308
-    SaturationMin: 0.7
-    SaturationMax: 0.76
-    ValueMin: 0.41
-    ValueMax: 0.57
-    Probability: 1
-  - HueMin: 0.04
-    HueMax: 0.11
-    SaturationMin: 0.7
-    SaturationMax: 0.76
-    ValueMin: 0.41
-    ValueMax: 0.57
-    Probability: 1
+  ColorSchemes: []
 --- !u!33 &33762783443239292
 MeshFilter:
   m_ObjectHideFlags: 0
