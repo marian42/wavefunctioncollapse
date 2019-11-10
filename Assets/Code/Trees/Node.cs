@@ -67,6 +67,7 @@ public class Node {
 	}
 
 	public void Draw() {
+#if UNITY_EDITOR
 		var worldPosition = this.Position + this.Tree.transform.position;
 		TreeGenerator.GUIStyle.normal.textColor = Color.Lerp(Color.red, Color.black, (this.Energy - this.Tree.MinEnergy) / (this.Tree.MaxEnergy - this.Tree.MinEnergy));
 		if (this.Children.Length < 2) {
@@ -77,6 +78,7 @@ public class Node {
 			Gizmos.DrawLine(worldPosition, child.Position + this.Tree.transform.position);
 			child.Draw();
 		}
+#endif
 	}
 
 	public IEnumerable<Node> GetTree() {
