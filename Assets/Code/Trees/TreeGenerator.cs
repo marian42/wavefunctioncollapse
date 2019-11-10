@@ -76,6 +76,7 @@ public class TreeGenerator : MonoBehaviour {
 		this.calculateEnergy();
 
 		this.LeafColliders = new GameObject();
+		this.LeafColliders.name = "Leaf Colliders";
 		this.LeafColliders.transform.SetParent(this.transform);
 		this.LeafColliders.transform.localPosition = Vector3.zero;
 	}
@@ -126,6 +127,12 @@ public class TreeGenerator : MonoBehaviour {
 
 		this.Prune(0.2f);
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
+		this.createBranchColliders();
+		this.LeafColliders.layer = 9;
+	}
+
+	private float getBranchRadius(Node node) {
+		return node.Children.Length == 0 ? 0 : map(0, 1, this.StemSize, this.BranchSize, Mathf.Pow(map(1, this.Root.SubtreeSize, 1, 0, node.SubtreeSize), this.SizeFalloff));
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
@@ -152,7 +159,6 @@ public class TreeGenerator : MonoBehaviour {
 
 		int vertexIndex = 0;
 		foreach (var node in nodes) {
-			float radius = node.Children.Length == 0 ? 0 : map(0, 1, this.StemSize, this.BranchSize, Mathf.Pow(map(1, this.Root.SubtreeSize, 1, 0, node.SubtreeSize), this.SizeFalloff));
 			indices[node] = vertexIndex;
 			var direction = (node.Children.Any() && node.Parent != null) ? node.Children.Aggregate<Node, Vector3>(Vector3.zero, (v, n) => v + n.Direction).normalized : node.Direction;
 			if (node.Parent == null) {
@@ -169,7 +175,7 @@ public class TreeGenerator : MonoBehaviour {
 				if (node.Depth < 4) {
 					offset = Mathf.Pow(Mathf.Abs(Mathf.Sin(progress * 2f * Mathf.PI * 5f)), 0.5f) * 0.5f * (3 - node.Depth) / 3f;
 				}
-				vertices[vertexIndex] = node.Position + normal * radius * (1f + offset);
+				vertices[vertexIndex] = node.Position + normal * this.getBranchRadius(node) * (1f + offset);
 				uvs[vertexIndex] = new Vector2(progress * 6f, (node.Depth % 2) * 3f);
 				vertexIndex++;
 			}
@@ -258,5 +264,28 @@ public class TreeGenerator : MonoBehaviour {
 			mesh.SetTriangles(leafTriangles, 1);
 		}
 		return mesh;
+	}
+
+	private void createBranchColliders() {
+		foreach (var node in this.Root.GetTree()) {
+			if (node.Parent == null || node.Depth > 6) {
+				continue;
+			}
+			var position1 = node.Parent.Position;
+			var position2 = node.Position;
+
+			var container = new GameObject();
+			container.name = "Branch Collider";
+			container.transform.SetParent(this.transform);
+			container.transform.localPosition = (position1 + position2) * 0.5f;
+			container.transform.localRotation = Quaternion.LookRotation(position2 - position1);
+
+			var collider = container.AddComponent<CapsuleCollider>();
+			float radius = this.getBranchRadius(node.Parent);
+			collider.radius = radius;
+			collider.height = (position2 - position1).magnitude + radius * 2f;
+			collider.direction = 2;
+		}
+
 	}
 }
