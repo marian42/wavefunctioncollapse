@@ -11,6 +11,18 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 
 	public GameObject TreePrefab;
 
+	private HashSet<int> modulesThatGrowTrees = null;
+
+	private void prepareModulesThatGrowTrees() {
+		this.modulesThatGrowTrees = new HashSet<int>();
+
+		foreach (var module in this.mapBehaviour.ModuleData.Modules) {
+			if (module.Prototype.GetComponent<TreeGrowingPrototype>() != null) {
+				this.modulesThatGrowTrees.Add(module.Index);
+			}
+		}
+	}
+
 	public void OnEnable() {
 		this.GetComponent<GenerateMapNearPlayer>().RegisterMapGenerationCallbackReceiver(this);
 		this.mapBehaviour = this.GetComponent<MapBehaviour>();
@@ -30,17 +42,16 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 	}
 
 	public void OnGenerateChunk(Vector3Int chunkAddress, GenerateMapNearPlayer source) {
+		if (this.modulesThatGrowTrees == null) {
+			this.prepareModulesThatGrowTrees();
+		}
 		var candidates = new List<Slot>();
 		int startingHeight = Math.Min(this.mapBehaviour.MapHeight - 1, this.MaxHeight - 1);
 		for (int x = source.ChunkSize * chunkAddress.x; x < source.ChunkSize * (chunkAddress.x + 1); x++ ) {
 			for (int z = source.ChunkSize * chunkAddress.z; z < source.ChunkSize * (chunkAddress.z + 1); z++) {
 				for (int y = startingHeight; y >= 0; y--) {
 					var slot = this.mapBehaviour.Map.GetSlot(new Vector3Int(x, y, z));
-					if (!slot.Collapsed || !slot.Module.Prototype.FlatSurface) {
-						continue;
-					} else if (slot.Module.Prototype.IsInterior) {
-						break;
-					} else {
+					if (slot.Collapsed && this.modulesThatGrowTrees.Contains(slot.Module.Index)) {
 						candidates.Add(slot);
 						break;
 					}
@@ -50,7 +61,7 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		if (!candidates.Any()) {
 			return;
 		}
-		foreach (var candindate in candidates) {
+		foreach (var candindate in candidates.OrderBy(slot => slot.Position.y)) {
 			var groundPosition = projectToGround(this.mapBehaviour.GetWorldspacePosition(candindate.Position));
 			if (this.mapBehaviour.GetMapPosition(groundPosition) != candindate.Position) {
 				continue;
