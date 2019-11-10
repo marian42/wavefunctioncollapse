@@ -32,15 +32,6 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		this.GetComponent<GenerateMapNearPlayer>().UnregisterMapGenerationCallbackReceiver(this);
 	}
 
-	private static Vector3 projectToGround(Vector3 position) {
-		position.y = 100;
-		RaycastHit hitInfo;
-		if (Physics.Raycast(new Ray(position, Vector3.down), out hitInfo)) {
-			return hitInfo.point;
-		}
-		return position;
-	}
-
 	public void OnGenerateChunk(Vector3Int chunkAddress, GenerateMapNearPlayer source) {
 		if (this.modulesThatGrowTrees == null) {
 			this.prepareModulesThatGrowTrees();
@@ -61,14 +52,9 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		if (!candidates.Any()) {
 			return;
 		}
-		foreach (var candindate in candidates.OrderBy(slot => slot.Position.y)) {
-			var groundPosition = projectToGround(this.mapBehaviour.GetWorldspacePosition(candindate.Position));
-			if (this.mapBehaviour.GetMapPosition(groundPosition) != candindate.Position) {
-				continue;
-			}
-			this.PlantTree(groundPosition);
-			break;
-		}
+		var candidate = candidates.GetBest(slot => -slot.Position.y);
+		var groundPosition = this.mapBehaviour.GetWorldspacePosition(candidate.Position) + Vector3.down * 0.6f;
+		this.PlantTree(groundPosition);
 	}
 
 	public void PlantTree(Vector3 position) {

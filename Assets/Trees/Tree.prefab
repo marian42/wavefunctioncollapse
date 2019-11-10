@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060604120626308}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.437517, y: 4.4, z: 4.801161}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -45,23 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed962b6928e1f5240a0e21c015e44b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StemSize: 0.141
-  SizeFalloff: 0.8
-  Distort: 0.129
+  StemSize: 0.126
+  BranchSize: 0.0264
+  SizeFalloff: 2.19
+  Distort: 0.393
   BranchLength: 0.98
   LeafColliderSize: 0.438
   BranchAngle: 66.6
   BranchLengthFalloff: 0.9307
-  DepthPenalty: 0.00336
-  Iterations: 457
-  Material: {fileID: 2100000, guid: 9d8ca0204c0c4184e811b0c825abb86d, type: 2}
+  DepthPenalty: 0.01
+  Iterations: 620
+  Material: {fileID: 0}
   LeafMaterial: {fileID: 2100000, guid: 05c05be9e686fdf4faa8548f2d7e1ddc, type: 2}
-  MinEnergy: 0.3799108
-  MaxEnergy: 0.99664
-  Age: 57
-  MeshSubdivisions: 10
-  BatchSize: 8
-  LeafRadius: 0.585
+  MinEnergy: 0.03489156
+  MaxEnergy: 0.992
+  GenerateLeaves: 0
+  LeafRadius: 0.689
+  RayCastCount: 8034
+  Age: 31
+  MeshSubdivisions: 20
+  BatchSize: 20
 --- !u!33 &33762783443239292
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -87,7 +90,8 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9d8ca0204c0c4184e811b0c825abb86d, type: 2}
+  - {fileID: 2100000, guid: c95e07f8057d3b04db7c666c7d5f64d6, type: 2}
+  - {fileID: 2100000, guid: 05c05be9e686fdf4faa8548f2d7e1ddc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

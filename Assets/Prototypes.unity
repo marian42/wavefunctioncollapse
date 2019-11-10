@@ -223,10 +223,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prototypes
       objectReference: {fileID: 0}
-    - target: {fileID: 1831165061983658, guid: 527d902e7bb47ad45bcfc70bbe510f71, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 4351978893227840, guid: 527d902e7bb47ad45bcfc70bbe510f71, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

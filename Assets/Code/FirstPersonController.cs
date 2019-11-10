@@ -22,6 +22,8 @@ public class FirstPersonController : MonoBehaviour {
 	private float timeInAir = 0f;
 	private bool jumpLocked = false;
 
+	public LayerMask CollisionLayers;
+
 	void Start () {
 		this.characterController = this.GetComponent<CharacterController>();
 		this.cameraTransform = this.GetComponentInChildren<Camera>().transform;
@@ -85,6 +87,6 @@ public class FirstPersonController : MonoBehaviour {
 
 	private bool onGround() {
 		var ray = new Ray(this.transform.position, Vector3.down);
-		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 - this.characterController.radius + 0.1f);
+		return Physics.SphereCast(ray, this.characterController.radius, this.characterController.height / 2 - this.characterController.radius + 0.1f, this.CollisionLayers);
 	}
 }
