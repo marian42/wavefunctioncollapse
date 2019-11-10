@@ -382,6 +382,9 @@ MonoBehaviour:
   LookSensitivity: 80
   JumpStrength: 4
   TreePrefab: {fileID: 1060604120626308, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+  CollisionLayers:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!143 &784786033
 CharacterController:
   m_ObjectHideFlags: 0
