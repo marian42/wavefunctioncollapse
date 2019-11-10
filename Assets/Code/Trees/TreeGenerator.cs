@@ -33,87 +33,66 @@ public class TreeGenerator : MonoBehaviour {
 	[Range(0.9f, 1f)]
 	public float BranchLengthFalloff = 0.9f;
 
-	[Range(0.0f, 0.01f)]
-	public float DepthPenalty = 0.0f;
-
 	[Range(10, 1000)]
 	public int Iterations = 100;
 
-	public Material Material;
-
-	public Material LeafMaterial;
-
 	public Node Root;
-
-	public float MinEnergy;
-	public float MaxEnergy;
 
 	public bool GenerateLeaves = true;
 
 	[Range(0.2f, 1f)]
-	public float LeafRadius = 0.3f;
+	public float LeafQuadRadius = 0.3f;
 
 	[HideInInspector]
 	public int RayCastCount;
 
+	public int MaxChildrenPerNode = 3;
+
+	public int MeshSubdivisions = 5;
+
+	[Range(1, 20)]
+	public int BatchSize = 5;
+
+	[HideInInspector]
+	public GameObject LeafColliders;
+
 	private static float map(float inLower, float inUpper, float outLower, float outUpper, float value) {
 		return outLower + (value - inLower) * (outUpper - outLower) / (inUpper - inLower);
 	}
-
-
-#if UNITY_EDITOR
-	[DrawGizmo(GizmoType.Selected)]
-	static void DrawGizmo(TreeGenerator tree, GizmoType gizmoType) {
-		Gizmos.color = Color.green;
-		if (tree.Root != null) {
-			tree.Root.Draw();
-		}
-	}
-#endif
-
+	
 	private void calculateEnergy() {
 		foreach (var node in this.Root.GetTree()) {
-			if (node.Children.Length == 2) {
+			if (node.Children.Length >= MaxChildrenPerNode) {
 				continue;
 			}
 			node.CalculateEnergy();
 		}
-		this.MinEnergy = this.Root.GetTree().Where(n => n.Children.Length < 2).Select(n => n.Energy).Min();
-		this.MaxEnergy = this.Root.GetTree().Where(n => n.Children.Length < 2).Select(n => n.Energy).Max();
 	}
-
-	public static GUIStyle GUIStyle;
 	
 	public void Reset() {
-		TreeGenerator.GUIStyle = new GUIStyle();
-		TreeGenerator.GUIStyle.normal.textColor = Color.red;
-		this.Age = 0;
 		this.transform.DeleteChildren();
 		this.Root = new Node(Vector3.zero, this);
 		this.RayCastCount = 0;
 		this.calculateEnergy();
+
+		this.LeafColliders = new GameObject();
+		this.LeafColliders.transform.SetParent(this.transform);
+		this.LeafColliders.transform.localPosition = Vector3.zero;
 	}
 
-	public int Age = 0;
-
 	public void Grow(int batchSize) {
-		var nodes = this.Root.GetTree().ToArray();
-		nodes = nodes.OrderByDescending(n => n.Energy).ToArray();
+		var nodes = this.Root.GetTree().OrderByDescending(n => n.Energy).ToArray();
 
-		foreach (var node in nodes) {
-			node.Age++;
-		}
-		this.Age++;
-
+		int remainingOperations = batchSize;
 		foreach (var node in nodes) {
 			if (node.Children.Length == 0) {
 				node.Grow();
-				batchSize--;
-			} else if (node.Children.Length < 3 && node.Depth > 1) {
+				remainingOperations--;
+			} else if (node.Children.Length < this.MaxChildrenPerNode && node.Depth > 1) {
 				node.Branch();
-				batchSize--;
+				remainingOperations--;
 			}
-			if (batchSize < 0) {
+			if (remainingOperations == 0) {
 				break;
 			}
 		}
@@ -122,30 +101,16 @@ public class TreeGenerator : MonoBehaviour {
 	}
 
 	public void Prune(float amount) {
-		var nodes = this.Root.GetTree().Where(n => n.Children.Length == 0).ToArray();
-		nodes = nodes.OrderByDescending(n => n.Energy).ToArray();
+		var nodes = this.Root.GetTree().Where(n => n.Children.Length == 0).OrderByDescending(n => n.Energy).ToArray();
 
 		for (int i = 0; i < nodes.Length * amount; i++) {
 			if (nodes[i].Parent == null) {
 				continue;
 			}
+			nodes[i].RemoveLeafCollider();
 			nodes[i].Parent.Children = nodes[i].Parent.Children.Where(n => n != nodes[i]).ToArray();
 		}		
 	}
-
-	private void createBranch(Vector3 from, Vector3 to, float radius) {
-		var gameObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-		gameObject.transform.parent = this.transform;
-		gameObject.transform.position = 0.5f * (from + to);
-		gameObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, (to - from));
-		gameObject.transform.localScale = new Vector3(radius, Vector3.Distance(from, to) / 2f, radius);
-		gameObject.GetComponent<MeshRenderer>().sharedMaterial = this.Material;
-	}
-
-	public int MeshSubdivisions = 5;
-
-	[Range(1, 20)]
-	public int BatchSize = 5;
 
 	public void Build() {
 		var iterator = this.BuildCoroutine();
@@ -160,13 +125,11 @@ public class TreeGenerator : MonoBehaviour {
 		}
 
 		this.Prune(0.2f);
-
-		this.Root.CalculateSubtreeSize();
-
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
 	}
 
 	public Mesh CreateMesh(int subdivisions) {
+		this.Root.CalculateSubtreeSize();
 		var nodes = this.Root.GetTree().ToArray();
 		var leafNodes = nodes.Where(node => node.Children.Length == 0).ToArray();
 		int edgeCount = nodes.Sum(node => node.Children.Length);
@@ -260,10 +223,10 @@ public class TreeGenerator : MonoBehaviour {
 					var tangent1 = orientation * tangents1[i];
 					var tangent2 = orientation * tangents2[i];
 
-					vertices[vertexIndex + 0] = node.Position + tangent1 * this.LeafRadius;
-					vertices[vertexIndex + 1] = node.Position + tangent2 * this.LeafRadius;
-					vertices[vertexIndex + 2] = node.Position - tangent1 * this.LeafRadius;
-					vertices[vertexIndex + 3] = node.Position - tangent2 * this.LeafRadius;
+					vertices[vertexIndex + 0] = node.Position + tangent1 * this.LeafQuadRadius;
+					vertices[vertexIndex + 1] = node.Position + tangent2 * this.LeafQuadRadius;
+					vertices[vertexIndex + 2] = node.Position - tangent1 * this.LeafQuadRadius;
+					vertices[vertexIndex + 3] = node.Position - tangent2 * this.LeafQuadRadius;
 					normals[vertexIndex + 0] = normal;
 					normals[vertexIndex + 1] = normal;
 					normals[vertexIndex + 2] = normal;

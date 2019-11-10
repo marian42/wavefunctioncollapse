@@ -9,21 +9,14 @@ public class Node {
 	public readonly Vector3 Position;
 	public readonly Vector3 Direction;
 	public readonly TreeGenerator Tree;
-	
+
 	public readonly int Depth;
-
-	public float Light;
-
+	public float Energy;
+	
+	public readonly Node Parent;
 	public Node[] Children;
 
 	public SphereCollider LeafCollider;
-
-	public float Energy;
-
-	public int Age = 0;
-
-	public readonly Node Parent;
-
 	public Vector3 MeshOrientation;
 
 	public int SubtreeSize {
@@ -46,16 +39,13 @@ public class Node {
 		this.Children = new Node[] { };
 		parent.Children = parent.Children.Concat(new Node[] { this }).ToArray();
 		this.Tree = parent.Tree;
-		//parent.RemoveLeafCollider();
 		this.CrateLeafCollider();
 		this.Parent = parent;
 	}
 
 	public void CrateLeafCollider() {
-		var go = new GameObject();
-		go.transform.parent = this.Tree.transform;
-		go.transform.localPosition = this.Position;
-		this.LeafCollider = go.AddComponent<SphereCollider>();
+		this.LeafCollider = this.Tree.LeafColliders.AddComponent<SphereCollider>();
+		this.LeafCollider.center = this.Position;
 		this.LeafCollider.radius = this.Tree.LeafColliderSize;
 	}
 
@@ -63,24 +53,9 @@ public class Node {
 		if (this.LeafCollider == null) {
 			return;
 		}
-		GameObject.DestroyImmediate(this.LeafCollider.gameObject);
+		GameObject.DestroyImmediate(this.LeafCollider);
 	}
-
-	public void Draw() {
-#if UNITY_EDITOR
-		var worldPosition = this.Position + this.Tree.transform.position;
-		TreeGenerator.GUIStyle.normal.textColor = Color.Lerp(Color.red, Color.black, (this.Energy - this.Tree.MinEnergy) / (this.Tree.MaxEnergy - this.Tree.MinEnergy));
-		if (this.Children.Length < 2) {
-			Handles.Label(worldPosition, this.Energy.ToString("0.00"), TreeGenerator.GUIStyle);
-		}
-		Gizmos.DrawWireSphere(worldPosition, 0.1f);
-		foreach (var child in this.Children) {
-			Gizmos.DrawLine(worldPosition, child.Position + this.Tree.transform.position);
-			child.Draw();
-		}
-#endif
-	}
-
+	
 	public IEnumerable<Node> GetTree() {
 		yield return this;
 		Node currentNode = this;
@@ -164,12 +139,7 @@ public class Node {
 	}
 
 	public void CalculateEnergy() {
-		float result = 0f;
-		result -= this.Tree.DepthPenalty * this.Depth;
-		result /= 10f;
-
-		result += 1f - Mathf.Exp(-this.raycast(this.Position, Vector3.up, this.Tree.LeafColliderSize * 1.1f));
-		this.Energy = result;
+		this.Energy = 1f -0.001f * this.Depth - Mathf.Exp(-this.raycast(this.Position, Vector3.up, this.Tree.LeafColliderSize * 1.1f));
 	}
 
 	public void CalculateSubtreeSize() {

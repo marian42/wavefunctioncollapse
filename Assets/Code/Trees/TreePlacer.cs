@@ -82,6 +82,8 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		treeGameObject.transform.SetParent(this.mapBehaviour.Map.GetSlot(slotPosition).GameObject.transform);
 		treeGameObject.transform.position = position;
 		var treeGenerator = treeGameObject.GetComponent<TreeGenerator>();
-		treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
+		if (treeGameObject.activeInHierarchy) {
+			treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
+		}
 	}
 }
