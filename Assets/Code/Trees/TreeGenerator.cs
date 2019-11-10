@@ -154,7 +154,6 @@ public class TreeGenerator : MonoBehaviour {
 
 	public IEnumerator BuildCoroutine() {
 		this.Reset();
-
 		for (int i = 0; i < this.Iterations / this.BatchSize; i++) {
 			this.Grow(this.BatchSize);
 			yield return null;
@@ -172,6 +171,10 @@ public class TreeGenerator : MonoBehaviour {
 		var leafNodes = nodes.Where(node => node.Children.Length == 0).ToArray();
 		int edgeCount = nodes.Sum(node => node.Children.Length);
 		int vertexCount = nodes.Length * subdivisions;
+
+		if (edgeCount == 0) {
+			return null;
+		}
 
 		var treeTriangles = new int[(edgeCount * 6 - leafNodes.Length * 3) * (subdivisions - 1)];
 		int[] leafTriangles = null;

@@ -138,7 +138,7 @@ public class Node {
 
 		for (int i = 0; i < 20; i++) {
 			var direction = vectorGenerator.Invoke().normalized;
-			float range = this.raycast(this.Position, direction, this.Tree.LeafColliderSize * 1.1f);
+			float range = this.raycast(this.Position, direction, 0.01f);
 			if (System.Single.IsPositiveInfinity(range)) {
 				return direction;
 			}

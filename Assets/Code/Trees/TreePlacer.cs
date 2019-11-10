@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +21,20 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 				this.modulesThatGrowTrees.Add(module.Index);
 			}
 		}
+	}
+
+	private bool checkIfNearbySlotsAreBuilt(Vector3Int slotPosition, int range) {
+		for (int x = slotPosition.x - range; x <= slotPosition.x + range; x++) {
+			for (int y = slotPosition.y; y < this.mapBehaviour.MapHeight; y++) {
+				for (int z = slotPosition.z - range; z <= slotPosition.z + range; z++) {
+					var slot = this.mapBehaviour.Map.GetSlot(new Vector3Int(x, y, z));
+					if (!slot.ConstructionComplete) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	public void OnEnable() {
@@ -54,13 +68,19 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		}
 		var candidate = candidates.GetBest(slot => -slot.Position.y);
 		var groundPosition = this.mapBehaviour.GetWorldspacePosition(candidate.Position) + Vector3.down * 0.6f;
+		this.StartCoroutine(this.PlantTree(groundPosition));
 		this.PlantTree(groundPosition);
 	}
 
-	public void PlantTree(Vector3 position) {
+	private IEnumerator PlantTree(Vector3 position) {
+		var slotPosition = this.mapBehaviour.GetMapPosition(position);
+		while (!this.checkIfNearbySlotsAreBuilt(slotPosition, 2)) {
+			yield return null;
+		}
+
 		var treeGameObject = GameObject.Instantiate(this.TreePrefab);
 		treeGameObject.transform.position = position;
 		var treeGenerator = treeGameObject.GetComponent<TreeGenerator>();
-		treeGenerator.StartCoroutine("BuildCoroutine");
+		treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
 	}
 }

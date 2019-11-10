@@ -25,6 +25,12 @@ public class Slot {
 		}
 	}
 
+	public bool ConstructionComplete {
+		get {
+			return this.GameObject != null || (this.Collapsed && !this.Module.Prototype.Spawn);
+		}
+	}
+
 	public Slot(Vector3Int position, AbstractMap map) {
 		this.Position = position;
 		this.map = map;
