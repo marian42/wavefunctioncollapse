@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,6 +79,7 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		}
 
 		var treeGameObject = GameObject.Instantiate(this.TreePrefab);
+		treeGameObject.transform.SetParent(this.mapBehaviour.Map.GetSlot(slotPosition).GameObject.transform);
 		treeGameObject.transform.position = position;
 		var treeGenerator = treeGameObject.GetComponent<TreeGenerator>();
 		treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
