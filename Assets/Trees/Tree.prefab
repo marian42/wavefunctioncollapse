@@ -50,16 +50,32 @@ MonoBehaviour:
   SizeFalloff: 2.19
   Distort: 0.393
   BranchLength: 0.98
-  LeafColliderSize: 0.5
+  LeafColliderSize: 0.4
   BranchAngle: 66.6
-  BranchLengthFalloff: 0.9638
+  BranchLengthFalloff: 0.948
   Iterations: 600
   GenerateLeaves: 1
   LeafQuadRadius: 0.69
-  RayCastCount: 14055
+  RayCastCount: 14701
   MaxChildrenPerNode: 3
   MeshSubdivisions: 20
   BatchSize: 10
+  LeafColliders: {fileID: 0}
+  ColorSchemes:
+  - HueMin: 0.28
+    HueMax: 0.308
+    SaturationMin: 0.7
+    SaturationMax: 0.76
+    ValueMin: 0.41
+    ValueMax: 0.57
+    Probability: 1
+  - HueMin: 0.04
+    HueMax: 0.11
+    SaturationMin: 0.7
+    SaturationMax: 0.76
+    ValueMin: 0.41
+    ValueMax: 0.57
+    Probability: 1
 --- !u!33 &33762783443239292
 MeshFilter:
   m_ObjectHideFlags: 0

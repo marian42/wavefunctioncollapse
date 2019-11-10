@@ -56,6 +56,8 @@ public class TreeGenerator : MonoBehaviour {
 	[HideInInspector]
 	public GameObject LeafColliders;
 
+	public ColorGenerator[] ColorSchemes;
+
 	private static float map(float inLower, float inUpper, float outLower, float outUpper, float value) {
 		return outLower + (value - inLower) * (outUpper - outLower) / (inUpper - inLower);
 	}
@@ -129,6 +131,7 @@ public class TreeGenerator : MonoBehaviour {
 		this.GetComponent<MeshFilter>().sharedMesh = this.CreateMesh(this.MeshSubdivisions);
 		this.createBranchColliders();
 		this.LeafColliders.layer = 9;
+		this.generateColor();
 	}
 
 	private float getBranchRadius(Node node) {
@@ -286,6 +289,18 @@ public class TreeGenerator : MonoBehaviour {
 			collider.height = (position2 - position1).magnitude + radius * 2f;
 			collider.direction = 2;
 		}
+	}
 
+	private void generateColor() {
+		float totalProbability = this.ColorSchemes.Sum(s => s.Probability);
+		float roll = Random.Range(0f, totalProbability);
+		foreach (var item in this.ColorSchemes) {
+			if (item.Probability > roll) {
+				this.GetComponent<MeshRenderer>().materials[1].color = item.GetColor();
+				return;
+			} else {
+				roll -= item.Probability;
+			}
+		}
 	}
 }
