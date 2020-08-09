@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6083488556257978616
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1060604120626308, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_Name
+      value: Tree Spring
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.437517
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.801161
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388771129044542, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: RayCastCount
+      value: 14726
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: LeafColliders
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].HueMin
+      value: 0.917
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].HueMax
+      value: 0.902
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].SaturationMin
+      value: 0.564
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].SaturationMax
+      value: 0.698
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].ValueMin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].ValueMax
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].HueMin
+      value: 0.917
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].HueMax
+      value: 0.902
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].SaturationMin
+      value: 0.136
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].SaturationMax
+      value: 0.324
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].ValueMin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].ValueMax
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].Probability
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].HueMin
+      value: 0.239
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].HueMax
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].SaturationMin
+      value: 0.893
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].SaturationMax
+      value: 0.941
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].ValueMin
+      value: 0.706
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[2].ValueMax
+      value: 0.787
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[0].Probability
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775137232880000, guid: 80f7f36e345df864494cebc24a697cb7,
+        type: 3}
+      propertyPath: ColorSchemes.Array.data[1].Probability
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}

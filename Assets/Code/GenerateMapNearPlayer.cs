@@ -4,9 +4,33 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Concurrent;
 
 [RequireComponent(typeof(MapBehaviour))]
 public class GenerateMapNearPlayer : MonoBehaviour {
+	private class ChunkEvents {
+		public readonly ConcurrentQueue<Vector3Int> CompletedChunks;
+		public readonly List<IMapGenerationCallbackReceiver> MapGenerationCallbackReceivers;
+		private readonly GenerateMapNearPlayer source;
+
+		public ChunkEvents(GenerateMapNearPlayer source) {
+			this.CompletedChunks = new ConcurrentQueue<Vector3Int>();
+			this.MapGenerationCallbackReceivers = new List<IMapGenerationCallbackReceiver>();
+			this.source = source;
+		}
+
+		public void Update() {
+			if (!this.CompletedChunks.Any()) {
+				return;
+			}
+			Vector3Int completedChunk;
+			if (this.CompletedChunks.TryDequeue(out completedChunk)) {
+				foreach (var subscriber in this.MapGenerationCallbackReceivers) {
+					subscriber.OnGenerateChunk(completedChunk, this.source);
+				}
+			}
+		}
+	}
 
 	private MapBehaviour mapBehaviour;
 	private InfiniteMap map;
@@ -23,6 +47,8 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 	private HashSet<Vector3Int> generatedChunks;
 
 	private Thread thread;
+
+	private ChunkEvents chunkEventManager;
 
 	void Start() {
 		this.generatedChunks = new HashSet<Vector3Int>();
@@ -80,6 +106,9 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 		this.map.RangeLimit = this.ChunkSize + 20;
 		this.map.Collapse(chunkAddress * this.ChunkSize, new Vector3Int(this.ChunkSize, this.map.Height, this.ChunkSize));
 		this.generatedChunks.Add(chunkAddress);
+		if (this.chunkEventManager != null) {
+			this.chunkEventManager.CompletedChunks.Enqueue(chunkAddress);
+		}
 	}
 
 	private void generatorThread() {
@@ -88,14 +117,13 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 				this.generate();
 				Thread.Sleep(50);
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			if (exception is System.Threading.ThreadAbortException) {
 				return;
 			}
 			Debug.LogError(exception);
 		}
-		
+
 	}
 
 	private IEnumerable<Slot> getSlotsInChunk(Vector3Int chunkAddress) {
@@ -107,9 +135,32 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 			}
 		}
 	}
-	
-	void Update () {
+
+	void Update() {
 		this.targetPosition = this.Target.position;
 		this.mapPosition = this.mapBehaviour.transform.position;
+
+		if (this.chunkEventManager != null) {
+			this.chunkEventManager.Update();
+		}
+	}
+
+	public void RegisterMapGenerationCallbackReceiver(IMapGenerationCallbackReceiver receiver) {
+		if (this.chunkEventManager == null) {
+			this.chunkEventManager = new ChunkEvents(this);
+		}
+		this.chunkEventManager.MapGenerationCallbackReceivers.Add(receiver);
+	}
+
+	public void UnregisterMapGenerationCallbackReceiver(IMapGenerationCallbackReceiver receiver) {
+		if (this.chunkEventManager == null) {
+			return;
+		}
+		this.chunkEventManager.MapGenerationCallbackReceivers.Remove(receiver);
+	}
+
+	public bool IsGenerated(Vector3Int chunkAddress) {
+		Debug.Assert(chunkAddress.y == 0);
+		return this.generatedChunks.Contains(chunkAddress);
 	}
 }

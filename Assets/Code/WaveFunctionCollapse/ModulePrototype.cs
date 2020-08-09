@@ -92,8 +92,7 @@ public class ModulePrototype : MonoBehaviour {
 			return mesh;
 		}
 		return null;
-	}
-	
+	}	
 	
 #if UNITY_EDITOR
 	private static ModulePrototypeEditorData editorData;

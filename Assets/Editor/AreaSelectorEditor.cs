@@ -15,6 +15,7 @@ public class AreaSelectorEditor : Editor {
 			}
 			selector.MapBehaviour.Map.Collapse(selector.StartPosition, selector.Size, true);
 			selector.MapBehaviour.BuildAllSlots();
+			GUIUtility.ExitGUI();
 		}
 	}
 }
