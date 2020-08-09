@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "com.unity.package-manager-ui": "2.2.0",
-    "com.unity.postprocessing": "2.1.7",
+    "com.unity.postprocessing": "2.2.2",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
