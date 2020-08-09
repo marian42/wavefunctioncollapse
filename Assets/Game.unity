@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000002, guid: 34b09bb8c6fc5934b80aefebc5a86798,
     type: 2}
   m_UseShadowmask: 1
@@ -132,6 +133,7 @@ GameObject:
   - component: {fileID: 282840814}
   - component: {fileID: 282840813}
   - component: {fileID: 282840811}
+  - component: {fileID: 282840812}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -199,6 +201,22 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &282840812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282840810}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4deabc7b52d63548aa3c4c2a13937bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key: 104
+  Counter: 0
+  Filename: screnshot_{0}.jpg
+  CaptureOnClick: 0
 --- !u!20 &282840813
 Camera:
   m_ObjectHideFlags: 0
@@ -281,8 +299,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750235983}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -381,7 +400,6 @@ MonoBehaviour:
   MovementSpeed: 2
   LookSensitivity: 80
   JumpStrength: 4
-  TreePrefab: {fileID: 1060604120626308, guid: 80f7f36e345df864494cebc24a697cb7, type: 3}
   CollisionLayers:
     serializedVersion: 2
     m_Bits: 1
