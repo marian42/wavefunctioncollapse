@@ -256,8 +256,6 @@ public class TreeGenerator : MonoBehaviour {
 				}
 			}
 		}
-
-		Debug.Log("Generated tree. " + this.RayCastCount + " ray casts, " + treeTriangles.Length + " tree triangles, " + (this.GenerateLeaves ? leafTriangles.Length : 0) + " leaf triangles.");
 		
 		var mesh = new Mesh();
 		mesh.subMeshCount = 2;
