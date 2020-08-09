@@ -115,10 +115,7 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		return this.mapBehaviour.GetWorldspacePosition(candidate.Position) + Vector3.down * 0.6f;
 	}
 
-	public int WaitingCoroutines = 0;
-
 	private IEnumerator PlantTree(Vector3 position, bool checkNearbySlots) {
-		this.WaitingCoroutines++;
 		var slotPosition = this.mapBehaviour.GetMapPosition(position);
 
 		if (checkNearbySlots) {
@@ -134,6 +131,5 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		if (treeGameObject.activeInHierarchy) {
 			treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
 		}
-		this.WaitingCoroutines--;
 	}
 }
