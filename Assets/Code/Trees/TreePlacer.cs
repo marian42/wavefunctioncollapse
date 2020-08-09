@@ -101,7 +101,7 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 			for (int z = chunkSize * chunkAddress.z; z < chunkSize * (chunkAddress.z + 1); z++) {
 				for (int y = startingHeight; y >= 0; y--) {
 					var slot = this.mapBehaviour.Map.GetSlot(new Vector3Int(x, y, z));
-					if (slot.Collapsed && this.modulesThatGrowTrees.Contains(slot.Module.Index)) {
+					if (slot != null && slot.Collapsed && this.modulesThatGrowTrees.Contains(slot.Module.Index)) {
 						candidates.Add(slot);
 						break;
 					}
