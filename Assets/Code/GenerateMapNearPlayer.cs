@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -124,16 +124,6 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 			Debug.LogError(exception);
 		}
 
-	}
-
-	private IEnumerable<Slot> getSlotsInChunk(Vector3Int chunkAddress) {
-		for (int x = 0; x < this.ChunkSize; x++) {
-			for (int y = 0; y < this.map.Height; y++) {
-				for (int z = 0; z < this.ChunkSize; z++) {
-					yield return this.map.GetSlot(chunkAddress * this.ChunkSize + new Vector3Int(x, y, z));
-				}
-			}
-		}
 	}
 
 	void Update() {
