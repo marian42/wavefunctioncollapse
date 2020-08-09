@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Linq;
 
 public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
+	private class NotSuitableForTreeGrowingException : Exception {}
+
 	private MapBehaviour mapBehaviour;
 
 	public int MaxHeight = 4;
@@ -12,6 +14,8 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 	public GameObject TreePrefab;
 
 	private HashSet<int> modulesThatGrowTrees = null;
+
+	private HashSet<Vector3Int> chunksWaitingForTrees = new HashSet<Vector3Int>();
 
 	private void prepareModulesThatGrowTrees() {
 		this.modulesThatGrowTrees = new HashSet<int>();
@@ -28,7 +32,7 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 			for (int y = slotPosition.y; y < this.mapBehaviour.MapHeight; y++) {
 				for (int z = slotPosition.z - range; z <= slotPosition.z + range; z++) {
 					var slot = this.mapBehaviour.Map.GetSlot(new Vector3Int(x, y, z));
-					if (!slot.ConstructionComplete) {
+					if (slot != null && !slot.ConstructionComplete) {
 						return false;
 					}
 				}
@@ -50,10 +54,51 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 		if (this.modulesThatGrowTrees == null) {
 			this.prepareModulesThatGrowTrees();
 		}
+
+		// First, find a slot for the tree to grow and check if its neighbourhood is completely generated.
+		// If nearby blocks are generated, start growing the tree.
+		// Otherwise, add the chunk address to chunksWaitingForTrees and generate the tree once all surrounding *chunks*  are generated.
+		try {
+			this.chunksWaitingForTrees.Remove(chunkAddress);
+			Vector3 treePosition = this.getTreePosition(chunkAddress, source.ChunkSize);
+			if (this.checkIfNearbySlotsAreBuilt(this.mapBehaviour.GetMapPosition(treePosition), 2)) {
+				this.StartCoroutine(this.PlantTree(treePosition, false));
+			} else {
+				this.chunksWaitingForTrees.Add(chunkAddress);
+			}
+		} catch (NotSuitableForTreeGrowingException) { }
+		
+		for (int x = chunkAddress.x - 1; x <= chunkAddress.x + 1; x++) {
+			for (int z = chunkAddress.z - 1; x <= chunkAddress.z + 1; x++) {
+				var queryChunkAddress = new Vector3Int(x, 0, z);
+				if (this.chunksWaitingForTrees.Contains(queryChunkAddress) && this.checkIfNeighbourChunksAreGenerated(queryChunkAddress, source)) {
+					try {
+						this.chunksWaitingForTrees.Remove(queryChunkAddress);
+						Vector3 treePosition = this.getTreePosition(queryChunkAddress, source.ChunkSize);
+						this.StartCoroutine(this.PlantTree(treePosition, true));
+					} catch (NotSuitableForTreeGrowingException) { }
+				}
+			}
+		}
+	}
+
+	private bool checkIfNeighbourChunksAreGenerated(Vector3Int chunkAddress, GenerateMapNearPlayer generateMapNearPlayer) {
+		for (int x = chunkAddress.x - 1; x <= chunkAddress.x + 1; x++) {
+			for (int z = chunkAddress.z - 1; x <= chunkAddress.z + 1; x++) {
+				var queryChunkAddress = new Vector3Int(x, 0, z);
+				if (!generateMapNearPlayer.IsGenerated(queryChunkAddress)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private Vector3 getTreePosition(Vector3Int chunkAddress, int chunkSize) {
 		var candidates = new List<Slot>();
 		int startingHeight = Math.Min(this.mapBehaviour.MapHeight - 1, this.MaxHeight - 1);
-		for (int x = source.ChunkSize * chunkAddress.x; x < source.ChunkSize * (chunkAddress.x + 1); x++ ) {
-			for (int z = source.ChunkSize * chunkAddress.z; z < source.ChunkSize * (chunkAddress.z + 1); z++) {
+		for (int x = chunkSize * chunkAddress.x; x < chunkSize * (chunkAddress.x + 1); x++) {
+			for (int z = chunkSize * chunkAddress.z; z < chunkSize * (chunkAddress.z + 1); z++) {
 				for (int y = startingHeight; y >= 0; y--) {
 					var slot = this.mapBehaviour.Map.GetSlot(new Vector3Int(x, y, z));
 					if (slot.Collapsed && this.modulesThatGrowTrees.Contains(slot.Module.Index)) {
@@ -64,26 +109,31 @@ public class TreePlacer : MonoBehaviour, IMapGenerationCallbackReceiver {
 			}
 		}
 		if (!candidates.Any()) {
-			return;
+			throw new NotSuitableForTreeGrowingException();
 		}
 		var candidate = candidates.GetBest(slot => -slot.Position.y);
-		var groundPosition = this.mapBehaviour.GetWorldspacePosition(candidate.Position) + Vector3.down * 0.6f;
-		this.StartCoroutine(this.PlantTree(groundPosition));
-		this.PlantTree(groundPosition);
+		return this.mapBehaviour.GetWorldspacePosition(candidate.Position) + Vector3.down * 0.6f;
 	}
 
-	private IEnumerator PlantTree(Vector3 position) {
+	public int WaitingCoroutines = 0;
+
+	private IEnumerator PlantTree(Vector3 position, bool checkNearbySlots) {
+		this.WaitingCoroutines++;
 		var slotPosition = this.mapBehaviour.GetMapPosition(position);
-		while (!this.checkIfNearbySlotsAreBuilt(slotPosition, 2)) {
-			yield return null;
+
+		if (checkNearbySlots) {
+			while (!this.checkIfNearbySlotsAreBuilt(slotPosition, 2)) {
+				yield return new WaitForSeconds(0.2f);
+			}
 		}
 
 		var treeGameObject = GameObject.Instantiate(this.TreePrefab);
-		treeGameObject.transform.SetParent(this.mapBehaviour.Map.GetSlot(slotPosition).GameObject.transform);
 		treeGameObject.transform.position = position;
+		treeGameObject.transform.SetParent(this.mapBehaviour.Map.GetSlot(slotPosition).GameObject.transform);
 		var treeGenerator = treeGameObject.GetComponent<TreeGenerator>();
 		if (treeGameObject.activeInHierarchy) {
 			treeGenerator.StartCoroutine(treeGenerator.BuildCoroutine());
 		}
+		this.WaitingCoroutines--;
 	}
 }

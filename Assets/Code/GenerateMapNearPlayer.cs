@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -157,5 +157,10 @@ public class GenerateMapNearPlayer : MonoBehaviour {
 			return;
 		}
 		this.chunkEventManager.MapGenerationCallbackReceivers.Remove(receiver);
+	}
+
+	public bool IsGenerated(Vector3Int chunkAddress) {
+		Debug.Assert(chunkAddress.y == 0);
+		return this.generatedChunks.Contains(chunkAddress);
 	}
 }
