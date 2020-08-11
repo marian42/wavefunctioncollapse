@@ -26,13 +26,6 @@ public class ModulePrototypeEditor : Editor {
 			}
 		}
 
-		if (GUILayout.Button("Guess connectors")) {
-			foreach (var face in modulePrototype.Faces) {
-				face.Fingerprint = null;
-			}
-			modulePrototype.GuessConnectors();
-		}
-
 		if (GUILayout.Button("Reset connectors")) {
 			foreach (var face in modulePrototype.Faces) {
 				face.ResetConnector();

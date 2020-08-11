@@ -12,9 +12,6 @@ public class ModulePrototype : MonoBehaviour {
 
 		public int Connector;
 
-		[HideInInspector]
-		public Fingerprint Fingerprint;
-
 		public virtual void ResetConnector() {
 			this.Connector = 0;
 		}
@@ -144,109 +141,7 @@ public class ModulePrototype : MonoBehaviour {
 		}
 	}
 #endif
-
-	public void EnsureFingerprints() {
-		var faces = this.Faces;
-		if (faces[0].Fingerprint != null) {
-			return;
-		}
-		
-		var mesh = this.GetMesh();
-
-		for (int i = 0; i < 6; i++) {
-			faces[i].Fingerprint = new Fingerprint(mesh, Orientations.Rotations[i], i == 4);
-		}
-	}
-
-	public bool ConnectorsSet {
-		get {
-			return this.Faces.Any(face => face.Connector != 0);
-		}
-	}
-
-	public void GuessConnectors() {
-		var fingerprints = new Dictionary<int, Fingerprint>();
-
-		foreach (var modulePrototype in this.transform.parent.GetComponentsInChildren<ModulePrototype>()) {
-			if (modulePrototype == this || !modulePrototype.ConnectorsSet) {
-				continue;
-			}
-			modulePrototype.EnsureFingerprints();
-			for (int direction = 0; direction < 6; direction++) {
-				var face = modulePrototype.Faces[direction];
-				if (!fingerprints.ContainsKey(face.Connector)) {
-					fingerprints[face.Connector] = face.Fingerprint;
-				}
-			}
-		}
-
-		this.EnsureFingerprints();
-
-		for (int i = 0; i < 6; i++) {
-			bool found = false;
-			var face = this.Faces[i];
-
-			if (face is HorizontalFaceDetails) {
-				var hface = face as HorizontalFaceDetails;
-				foreach (var connector in fingerprints.Keys) {
-					if (fingerprints[connector].Symmetric != hface.Fingerprint.Symmetric) {
-						continue;
-					}
-					if (Fingerprint.Compare(fingerprints[connector].Base, hface.Fingerprint.Base)) {
-						found = true;
-						hface.Connector = connector;
-						hface.Symmetric = fingerprints[connector].Symmetric;
-						hface.Flipped = false;
-						break;
-					}
-					if (!fingerprints[connector].Symmetric && Fingerprint.Compare(fingerprints[connector].Base, hface.Fingerprint.Flipped)) {
-						found = true;
-						hface.Connector = connector;
-						hface.Symmetric = false;
-						hface.Flipped = true;
-						break;
-					}
-				}
-				if (!found) {
-					hface.Connector = getNewConnector(fingerprints);
-					hface.Flipped = false;
-					hface.Symmetric = hface.Fingerprint.Symmetric;
-					fingerprints[hface.Connector] = face.Fingerprint;
-				}
-			}
-
-			if (face is VerticalFaceDetails) {
-				var vface = face as VerticalFaceDetails;
-				foreach (var connector in fingerprints.Keys) {
-					if (fingerprints[connector].Invariant != vface.Fingerprint.Invariant) {
-						continue;
-					}
-					for (int r = 0; r < (vface.Fingerprint.Invariant ? 1 : 4); r++) {
-						if (Fingerprint.Compare(fingerprints[connector].Rotated[r], vface.Fingerprint.Base)) {
-							found = true;
-							vface.Connector = connector;
-							vface.Invariant = vface.Fingerprint.Invariant;
-							vface.Rotation = r;
-							break;
-						}
-					}
-				}
-				if (!found) {
-					vface.Connector = getNewConnector(fingerprints);
-					vface.Rotation = 0;
-					vface.Invariant = vface.Fingerprint.Invariant;
-					fingerprints[vface.Connector] = vface.Fingerprint;
-				}
-			}			
-		}
-	}
-
-	private int getNewConnector(Dictionary<int, Fingerprint> dict) {
-		int result = 0;
-		while (dict.ContainsKey(result)) result++;
-		return result;
-	}
-
+	
 	public bool CompareRotatedVariants(int r1, int r2) {
 		if (!(this.Faces[Orientations.UP] as VerticalFaceDetails).Invariant || !(this.Faces[Orientations.DOWN] as VerticalFaceDetails).Invariant) {
 			return false;
