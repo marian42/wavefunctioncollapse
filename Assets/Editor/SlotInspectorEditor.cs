@@ -104,10 +104,10 @@ public class SlotInspectorEditor : Editor {
 
 		SlotInspector slotInspector = (SlotInspector)target;
 		var mapBehaviour = slotInspector.MapBehaviour;
-		var map = mapBehaviour.Map;
 		if (mapBehaviour == null) {
 			return;
 		}
+		var map = mapBehaviour.Map;
 
 		var position = slotInspector.MapBehaviour.GetMapPosition(slotInspector.transform.position);
 		GUILayout.Label("Position: " + position);
@@ -144,6 +144,9 @@ public class SlotInspectorEditor : Editor {
 
 	public void OnSceneGUI() {
 		SlotInspector slotInspector = (SlotInspector)this.target;
+		if (slotInspector.MapBehaviour == null) {
+			return;
+		}
 		slotInspector.transform.position = slotInspector.MapBehaviour.GetWorldspacePosition(slotInspector.MapBehaviour.GetMapPosition(slotInspector.transform.position));
 	}
 
