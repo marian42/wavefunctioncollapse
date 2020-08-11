@@ -40,9 +40,11 @@ public class OcclusionCulling : MonoBehaviour {
 
 	private void ShowPortal(Portal portal, bool insideOnly = false) {
 #if UNITY_EDITOR
-		portal.Draw(Color.green);
-		portal.DrawFrustum(this.Camera.transform.position, Color.red);
-		portal.Bounds.Draw(Color.green);
+		if (this.cullingData.DrawGizmo) {
+			portal.Draw(Color.green);
+			portal.DrawFrustum(this.Camera.transform.position, Color.red);
+			portal.Bounds.Draw(Color.green);
+		}
 #endif
 		var frustumPlanes = portal.GetFrustumPlanes(this.Camera.transform.position);
 		var room = portal.Follow(this.Camera.transform.position);
