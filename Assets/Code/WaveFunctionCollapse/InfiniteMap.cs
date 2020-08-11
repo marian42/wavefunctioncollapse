@@ -98,8 +98,8 @@ public class InfiniteMap : AbstractMap {
 			return;
 		}
 
-		var prototypeNames = modulesToRemove.Select(module => module.Prototype.name).Distinct();
-		Debug.LogWarning("Hit range limit at " + position + ". Module(s) to be removed:\n" + string.Join("\n", prototypeNames.ToArray()) + "\n");
+		var moduleNames = modulesToRemove.Select(module => module.Name);
+		Debug.LogWarning("Hit range limit at " + position + ". Module(s) to be removed:\n" + string.Join("\n", moduleNames.ToArray()) + "\n");
 		this.muteRangeLimitWarning = true;
 	}
 }
