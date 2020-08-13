@@ -130,6 +130,7 @@ public abstract class AbstractMap {
 			if (showProgress) {
 				EditorUtility.ClearProgressBar();
 			}
+			Debug.LogWarning("Exception in world generation thread at" + exception.StackTrace);
 			throw exception;
 		}
 #endif
