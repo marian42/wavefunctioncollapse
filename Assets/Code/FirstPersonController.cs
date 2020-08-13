@@ -8,8 +8,11 @@ public class FirstPersonController : MonoBehaviour {
 	[Range(1f, 5f)]
 	public float MovementSpeed = 1f;
 
-	[Range(1, 200f)]
-	public float LookSensitivity = 10f;
+	[Range(1, 500f)]
+	public float LookSensitivity = 200f;
+
+	[Range(1, 500f)]
+	public float MouseSensitivity = 3;
 
 	[Range(1, 100f)]
 	public float JumpStrength = 2f;
@@ -44,8 +47,8 @@ public class FirstPersonController : MonoBehaviour {
 		if (verticalMovement < 0) {
 			this.transform.position += Vector3.down * verticalMovement;
 		}
-		this.transform.rotation = Quaternion.AngleAxis(Input.GetAxis("Look X") * Time.deltaTime * this.LookSensitivity, Vector3.up) * this.transform.rotation;
-		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
+		this.transform.localRotation = Quaternion.AngleAxis(Input.GetAxis("Mouse Look X") * this.MouseSensitivity + Input.GetAxis("Look X") * this.LookSensitivity * Time.deltaTime, Vector3.up) * this.transform.rotation;
+		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Mouse Look Y") * this.MouseSensitivity - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
 
 		if (touchesGround) {
