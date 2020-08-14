@@ -63,15 +63,4 @@ public class Module {
 	public override string ToString() {
 		return this.Name;
 	}
-
-	[System.Serializable]
-	private class SerializableVectorModuleSetKVP {
-		public Vector3Int Position;
-		public ModuleSet ModuleSet;
-
-		public SerializableVectorModuleSetKVP(Vector3Int position, ModuleSet moduleSet) {
-			this.Position = position;
-			this.ModuleSet = moduleSet;
-		}
-	}
 }
