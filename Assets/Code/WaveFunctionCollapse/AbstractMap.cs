@@ -102,7 +102,7 @@ public abstract class AbstractMap {
 						this.backtrackBarrier = this.History.TotalCount;
 						this.backtrackAmount = 2;
 					} else {
-						this.backtrackAmount += 4;
+						this.backtrackAmount *= 2;
 					}
 					if (this.backtrackAmount > 0) {
 						Debug.Log(this.History.Count + " Backtracking " + this.backtrackAmount + " steps...");
