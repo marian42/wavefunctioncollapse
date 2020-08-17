@@ -124,7 +124,6 @@ public abstract class AbstractMap {
 			if (showProgress) {
 				EditorUtility.ClearProgressBar();
 			}
-			Debug.Log("Collapsed " + targets.Count() + " slots.");
 		}
 		catch (Exception exception) {
 			if (showProgress) {
