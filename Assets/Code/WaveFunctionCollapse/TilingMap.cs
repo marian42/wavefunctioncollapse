@@ -19,7 +19,7 @@ public class TilingMap : AbstractMap {
 
 		for (int x = 0; x < size.x; x++) {
 			for (int y = 0; y < size.y; y++) {
-				for (int z = 0; z < size.y; z++) {
+				for (int z = 0; z < size.z; z++) {
 					this.slots[x,y,z] = new Slot(new Vector3Int(x,y,z), this);
 				}
 			}
