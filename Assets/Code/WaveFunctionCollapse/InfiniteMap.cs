@@ -71,11 +71,7 @@ public class InfiniteMap : AbstractMap {
 						this.defaultColumn.GetSlot(new Vector3Int(0, y, 0)).ExcludeConnector(d, constraint.Connector);
 						break;
 				}
-			}			
-		}
-
-		foreach (var slot in this.defaultColumn.GetAllSlots()) {
-			float _ = slot.Modules.Entropy; // Inititalize cached value
+			}
 		}
 	}
 
