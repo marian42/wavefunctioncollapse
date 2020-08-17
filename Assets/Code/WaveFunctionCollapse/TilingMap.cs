@@ -15,7 +15,7 @@ public class TilingMap : AbstractMap {
 
 	public TilingMap(Vector3Int size) : base() {
 		this.Size = size;
-		this.slots = new Slot[size.x, size.y, size.y];
+		this.slots = new Slot[size.x, size.y, size.z];
 
 		for (int x = 0; x < size.x; x++) {
 			for (int y = 0; y < size.y; y++) {
@@ -30,13 +30,16 @@ public class TilingMap : AbstractMap {
 		if (position.y < 0 || position.y >= this.Size.y) {
 			return null;
 		}
-		return this.slots[position.x % this.Size.x + (position.x % this.Size.x < 0 ? this.Size.x : 0), position.y, position.y % this.Size.y + (position.y % this.Size.y < 0 ? this.Size.y : 0)];
+		return this.slots[
+			position.x % this.Size.x + (position.x % this.Size.x < 0 ? this.Size.x : 0),
+			position.y,
+			position.z % this.Size.z + (position.z % this.Size.z < 0 ? this.Size.z : 0)];
 	}
 
 	public override IEnumerable<Slot> GetAllSlots() {
 		for (int x = 0; x < this.Size.x; x++) {
 			for (int y = 0; y < this.Size.y; y++) {
-				for (int z = 0; z < this.Size.y; z++) {
+				for (int z = 0; z < this.Size.z; z++) {
 					yield return this.slots[x, y, z];
 				}
 			}
@@ -52,7 +55,7 @@ public class TilingMap : AbstractMap {
 			switch (constraint.Direction) {
 				case BoundaryConstraint.ConstraintDirection.Up:
 					for (int x = 0; x < this.Size.x; x++) {
-						for (int z = 0; z < this.Size.y; z++) {
+						for (int z = 0; z < this.Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
 								this.GetSlot(new Vector3Int(x, this.Size.y - 1, z)).EnforceConnector(4, constraint.Connector);
 							} else {
@@ -63,7 +66,7 @@ public class TilingMap : AbstractMap {
 					break;
 				case BoundaryConstraint.ConstraintDirection.Down:
 					for (int x = 0; x < this.Size.x; x++) {
-						for (int z = 0; z < this.Size.y; z++) {
+						for (int z = 0; z < this.Size.z; z++) {
 							if (constraint.Mode == BoundaryConstraint.ConstraintMode.EnforceConnector) {
 								this.GetSlot(new Vector3Int(x, 0, z)).EnforceConnector(1, constraint.Connector);
 							} else {
