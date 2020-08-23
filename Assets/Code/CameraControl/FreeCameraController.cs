@@ -25,15 +25,15 @@ public class FreeCameraController : MonoBehaviour
 	}
 
 	void Update() {
-		Vector3 movementVector = this.cameraTransform.forward * Input.GetAxis("Move Y") + this.cameraTransform.right * Input.GetAxis("Move X");
+		Vector3 movementVector = this.cameraTransform.forward * Input.GetAxis("Move Y")
+			+ this.cameraTransform.right * Input.GetAxis("Move X")
+			+ Vector3.up * (Input.GetAxis("Move Up/Down") + Input.GetAxisRaw("Jump"));
+
 		if (movementVector.sqrMagnitude > 1) {
 			movementVector.Normalize();
 		}
-		if (Input.GetAxisRaw("Jetpack") > 0.1f) {
-			movementVector += Vector3.up * 0.8f;
-		}
 		if (Input.GetAxisRaw("Run") > 0.1f) {
-			movementVector += Vector3.down * 0.8f;
+			movementVector *= 4;
 		}
 		this.characterController.Move(movementVector * Time.deltaTime * this.MovementSpeed);
 

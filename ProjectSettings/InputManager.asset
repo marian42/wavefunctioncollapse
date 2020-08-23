@@ -213,3 +213,35 @@ InputManager:
     type: 0
     axis: 4
     joyNum: 0
+  - serializedVersion: 3
+    m_Name: Move Up/Down
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: q
+    positiveButton: e
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 3
+    dead: 0.2
+    sensitivity: 6
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 2
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Move Up/Down
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: q
+    positiveButton: e
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 3
+    dead: 0.2
+    sensitivity: 6
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 2
+    joyNum: 0
