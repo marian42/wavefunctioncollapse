@@ -26,12 +26,11 @@ public class FirstPersonController : MonoBehaviour {
 	private bool jumpLocked = false;
 
 	public LayerMask CollisionLayers;
-
-	void Start () {
+	
+	void OnEnable() {
 		this.characterController = this.GetComponent<CharacterController>();
 		this.cameraTransform = this.GetComponentInChildren<Camera>().transform;
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Confined;
+		this.cameraTilt = this.cameraTransform.localRotation.eulerAngles.x;
 	}
 	
 	void Update () {
@@ -39,7 +38,7 @@ public class FirstPersonController : MonoBehaviour {
 		float runMultiplier = 1f + 2f * Input.GetAxis("Run");
 		float y = this.transform.position.y;
 		Vector3 movementVector = this.transform.forward * Input.GetAxis("Move Y") + this.transform.right * Input.GetAxis("Move X");
-		if (movementVector.sqrMagnitude > 1) { // this check prevents partial joystick input from becoming 100% speed
+		if (movementVector.sqrMagnitude > 1) {
 			movementVector.Normalize();  // this prevents diagonal movement form being too fast
 		}
 		this.characterController.Move(movementVector * Time.deltaTime * this.MovementSpeed * runMultiplier);
@@ -74,14 +73,6 @@ public class FirstPersonController : MonoBehaviour {
 			this.verticalSpeed = 2f;
 		}
 		this.characterController.Move(Vector3.up * Time.deltaTime * this.verticalSpeed);
-
-		if (Input.GetKeyDown(FlightController.OnOffKey)) {
-			var flyBehaviour = this.GetComponent<FlightController>();
-			if (flyBehaviour != null) {
-				this.GetComponent<FlightController>().enabled = true;
-			}
-			this.cameraTilt = 24;
-		}
 	}
 
 	public void Enable() {

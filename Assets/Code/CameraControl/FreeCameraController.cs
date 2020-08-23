@@ -18,11 +18,10 @@ public class FreeCameraController : MonoBehaviour
 
 	private float cameraTilt = 0f;
 
-	void Start() {
+	void OnEnable() {
 		this.characterController = this.GetComponent<CharacterController>();
 		this.cameraTransform = this.GetComponentInChildren<Camera>().transform;
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Confined;
+		this.cameraTilt = this.cameraTransform.localRotation.eulerAngles.x;
 	}
 
 	void Update() {
@@ -41,14 +40,5 @@ public class FreeCameraController : MonoBehaviour
 		this.transform.localRotation = Quaternion.AngleAxis(Input.GetAxis("Mouse Look X") * this.MouseSensitivity + Input.GetAxis("Look X") * this.LookSensitivity * Time.deltaTime, Vector3.up) * this.transform.rotation;
 		this.cameraTilt = Mathf.Clamp(this.cameraTilt - Input.GetAxis("Mouse Look Y") * this.MouseSensitivity - Input.GetAxis("Look Y") * this.LookSensitivity * Time.deltaTime, -90f, 90f);
 		this.cameraTransform.localRotation = Quaternion.AngleAxis(this.cameraTilt, Vector3.right);
-
-		if (Input.GetKeyDown(FlightController.OnOffKey)) {
-			this.enabled = false;
-			this.GetComponent<FirstPersonController>().enabled = true;
-		}
-	}
-
-	void OnEnable() {
-		this.GetComponent<FirstPersonController>().enabled = false;
 	}
 }

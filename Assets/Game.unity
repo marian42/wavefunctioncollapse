@@ -208,7 +208,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282840810}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4deabc7b52d63548aa3c4c2a13937bd, type: 3}
   m_Name: 
@@ -359,13 +359,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750235983}
-  m_LocalRotation: {x: -0.15860736, y: 0.82318604, z: -0.27863306, w: -0.4685853}
+  m_LocalRotation: {x: -0.014823463, y: 0.9461974, z: -0.32027012, w: -0.043794036}
   m_LocalPosition: {x: 17.763672, y: 53.035, z: 16.40332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 37.4, y: 239.3, z: 0}
+  m_LocalEulerAnglesHint: {x: 37.4, y: 185.3, z: 0}
 --- !u!1 &784786031
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +378,8 @@ GameObject:
   - component: {fileID: 784786033}
   - component: {fileID: 784786032}
   - component: {fileID: 784786035}
+  - component: {fileID: 784786036}
+  - component: {fileID: 784786037}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -398,7 +400,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovementSpeed: 2
-  LookSensitivity: 80
+  LookSensitivity: 200
+  MouseSensitivity: 3
   JumpStrength: 4
   CollisionLayers:
     serializedVersion: 2
@@ -449,6 +452,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Velocity: 3
+  LookSensitivity: 200
+--- !u!114 &784786036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784786031}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa035d3bc4e0fd49ad26f6fc7826a09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovementSpeed: 4
+  LookSensitivity: 200
+  MouseSensitivity: 3
+--- !u!114 &784786037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784786031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e284283a23c3074b8332e46d2aafa0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlModes:
+  - KeyCode: 49
+    Behaviour: {fileID: 784786032}
+  - KeyCode: 50
+    Behaviour: {fileID: 784786035}
+  - KeyCode: 51
+    Behaviour: {fileID: 784786036}
+  ModeSwitchKeys: 6d0000004d010000
 --- !u!1 &1160904002
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,18 +668,6 @@ MonoBehaviour:
     Direction: 0
     Mode: 0
     Connector: 0
-  - RelativeY: 0
-    Direction: 2
-    Mode: 1
-    Connector: 11
-  - RelativeY: 0
-    Direction: 2
-    Mode: 1
-    Connector: 37
-  - RelativeY: 0
-    Direction: 2
-    Mode: 1
-    Connector: 31
   ApplyBoundaryConstraints: 1
   ModuleData: {fileID: 11400000, guid: 11e00c257c1c9a74f97fa889218a97bd, type: 2}
   VisualizeSlots: 0
