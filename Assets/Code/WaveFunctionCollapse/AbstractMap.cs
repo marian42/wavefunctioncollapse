@@ -174,7 +174,8 @@ public abstract class AbstractMap {
 				}
 			}
 		}
-
+		
+#if UNITY_EDITOR
 		for (int i = 0; i < modules.Length; i++) {
 			for (int d = 0; d < 6; d++) {
 				if (initialModuleHealth[d][i] == 0) {
@@ -183,6 +184,8 @@ public abstract class AbstractMap {
 				}
 			}
 		}
+#endif
+
 		return initialModuleHealth;
 	}
 
