@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(CullingData))]
-public class RangeCulling : MonoBehaviour {
+public class DistanceCulling : MonoBehaviour {
 
 	private CullingData cullingData;
 
