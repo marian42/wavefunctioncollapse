@@ -114,7 +114,7 @@ public class OcclusionCulling : MonoBehaviour {
 	}
 
 	void OnDisable() {
-		foreach (var chunk in this.cullingData.ChunksInRange) {
+		foreach (var chunk in this.cullingData.Chunks.Values) {
 			chunk.SetExteriorVisibility(true);
 			chunk.SetRoomVisibility(true);
 		}

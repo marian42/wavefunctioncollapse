@@ -105,7 +105,6 @@ public class CullingData : MonoBehaviour {
 		room.Slots.Add(slot);
 		foreach (var renderer in slot.GameObject.GetComponentsInChildren<Renderer>()) {
 			room.Renderers.Add(renderer);
-			renderer.enabled = room.Visible;
 		}
 		this.RoomsByPosition[slot.Position] = room;
 

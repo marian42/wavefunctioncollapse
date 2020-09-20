@@ -19,7 +19,7 @@ public class Room {
 		this.Portals = new List<Portal>();
 		this.Renderers = new List<Renderer>();
 		this.Color = Color.HSVToRGB(Random.Range(0f, 1f), 1f, 1f);
-		this.Visible = !Application.isPlaying;
+		this.Visible = true;
 	}
 
 	public void SetVisibility(bool visible) {
