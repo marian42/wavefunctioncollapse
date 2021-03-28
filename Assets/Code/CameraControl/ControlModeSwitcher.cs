@@ -17,7 +17,7 @@ public class ControlModeSwitcher : MonoBehaviour {
 
 	void Start() {
 		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.lockState = CursorLockMode.Locked;
 		if (this.ControlModes.Any()) {
 			this.SetMode(this.ControlModes[0]);
 		}
